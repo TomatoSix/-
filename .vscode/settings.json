@@ -1,5 +1,12 @@
 {
   "cSpell.ignoreWords": [
+    "eval",
+    "instanceof",
+    "proto",
+    "typeof",
     "vuex"
+  ],
+  "cSpell.words": [
+    "unshift"
   ]
 }
