@@ -4,6 +4,7 @@
     "instanceof",
     "proto",
     "typeof",
+    "undefiend",
     "vuex"
   ],
   "cSpell.words": [
