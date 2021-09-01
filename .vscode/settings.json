@@ -1,9 +1,12 @@
 {
   "cSpell.ignoreWords": [
+    "csrf",
     "eval",
     "instanceof",
     "proto",
+    "temprary",
     "typeof",
+    "unavailabel",
     "undefiend",
     "vuex"
   ],
