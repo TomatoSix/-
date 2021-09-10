@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.0-beta.7/vue.cjs.js"></script>
+</head>
+<style>
+.parent{
+    /* width: 100%; */
+    height: 500px;
+    display: flex;
+}
+.left {
+    width: 100px;
+    background-color: #f00;
+}
+.right {
+    flex: 1; /*均分了父元素剩余空间*/
+    background-color: #0f0;
+}
+</style>
+<body>
+  <div class="parent">
+    <div class="left">左列定宽</div>
+    <div class="right">右列自适应</div>
+  </div>
+  <script>
+    let BubbleSort = function (arr, flag = 0) {    let len = arr.length    for (let i = 0; i < len - 1; i++) {        for (let j = 0; j < len - 1 - i; j++) {            if (arr[j] > arr[j + 1]) {                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]            }        }    }    return flag ? arr.reverse() : arr}let arr = [2, 9, 6, 7, 4, 3, 1, 7]console.log(BubbleSort(arr, 1))
+
+作者：TianTianUp
+链接：https://juejin.cn/post/6856546833025237006
+来源：掘金
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+  </script>
+</body>
+</html>

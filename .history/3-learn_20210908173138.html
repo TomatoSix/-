@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.0-beta.7/vue.cjs.js"></script>
+</head>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+}
+#left {
+    background-color: #f00;
+    float: left;
+    width: 100px;
+    height: 500px;
+}
+#right {
+    background-color: #0f0;
+    height: 500px;
+    margin-left: 100px; /*大于等于#left的宽度*/
+}
+
+作者：Sweet_KK
+链接：https://juejin.cn/post/6844903574929932301
+来源：掘金
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+</style>
+<body>
+<div class="container">
+  <div class="center">
+      <div class="inner">双飞翼布局</div>
+  </div>
+  <div class="left"></div>
+  <div class="right"></div>
+</div>
+
+</body>
+</html>

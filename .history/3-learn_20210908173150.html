@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.2.0-beta.7/vue.cjs.js"></script>
+</head>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+}
+#left {
+    background-color: #f00;
+    float: left;
+    width: 100px;
+    height: 500px;
+}
+#right {
+    background-color: #0f0;
+    height: 500px;
+    margin-left: 100px; /*大于等于#left的宽度*/
+}
+
+</style>
+<body>
+  <body>
+    <div id="left">左列定宽</div>
+    <div id="right">右列自适应</div>
+    </body>
+    
+
+</body>
+</html>
