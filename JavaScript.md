@@ -158,6 +158,12 @@ start, deleteCount, item1, item2, item3
 返回一个新的 Array Iterator 对象，该对象包含数组每个索引的值
 
 
+# String有哪些方法
+charAt() 从一个字符串中返回指定的字符
+concat() 将一个或多个字符串与原字符串连接合并，形成一个新的字符串并返回
+endsWith()方法用来判断当前字符串是否是以另外一个给定的子字符串“结尾”的，根据判断结果返回 true 或 false。
+includes() 方法用于判断一个字符串是否包含在另一个字符串中，根据情况返回 true 或 false。
+indexOf() 方法返回调用它的 String 对象中第一次出现的指定值的索引，从 fromIndex 处进行搜索。如果未找到该值，则返回 -1。
 # JS中类型转换有哪几种？
 * 转换成数字
 * 转换成布尔值
@@ -300,6 +306,61 @@ Array.apply(null, arrayLike)
 Array.prototype.concat.apply([], arrayLike)
 
 
+# new 原理
+1. 创建了一个全新的对象。
+2. 这个对象会被执行[[Prototype]]（也就是__proto__）链接。
+3. 生成的新对象会绑定到函数调用的this。
+4. 通过new创建的每个对象将最终被[[Prototype]]链接到这个函数的prototype对象上。
+5. 如果函数没有返回对象类型Object(包含Functoin, Array, Date, RegExg, Error)，那么new表达式中的函数调用会自动返回这个新的对象。
+```javascript
+    function myNew(func, ...args) {
+  // 1. 判断方法体
+  if (typeof func !== 'function') {
+    throw '第一个参数必须是方法体';
+  }
+
+  // 2. 创建新对象
+  const obj = {};
+
+  // 3. 这个对象的 __proto__ 指向 func 这个类的原型对象
+  // 即实例可以访问构造函数原型（constructor.prototype）所在原型链上的属性
+  // const me = Object.create(person); // me.__proto__ === person
+  obj.__proto__ = Object.create(func.prototype);
+
+  // 为了兼容 IE 可以让步骤 2 和 步骤 3 合并
+  // const obj = Object.create(func.prototype);
+
+  // 4. 通过 apply 绑定 this 执行并且获取运行后的结果
+  let result = func.apply(obj, args);
+  
+  // 5. 如果构造函数返回的结果是引用数据类型，则返回运行后的结果
+  // 否则返回新创建的 obj
+  const isObject = typeof result === 'object' && result !== null;
+  const isFunction = typeof result === 'function';
+  return isObject || isFunction ? result : obj;
+  // 或者
+  // return result instanceof Object ? result:obj
+}
+
+// 测试
+function Person(name) {
+  this.name = name;
+  return function() { // 用来测试第 5 点
+    console.log('返回引用数据类型');
+  };
+}
+// 用来测试第 2 点和第 3 点
+Person.prototype.sayName = function() {
+  console.log(`My name is ${this.name}`);
+}
+const me = myNew(Person, 'jsliang'); // 用来测试第 4 点
+me.sayName(); // My name is jsliang
+console.log(me); // Person {name: 'jsliang'}
+
+// 用来测试第 1 点
+// const you = myNew({ name: 'jsliang' }, 'jsliang'); // 报错：第一个参数必须是方法体
+```
+
 # bind、call、apply的区别
 bind
 call
@@ -346,7 +407,9 @@ https://juejin.cn/post/6844904083707396109
 
 
 # prototype和__proto__的关系与区别
-
+https://mp.weixin.qq.com/s/1UDILezroK5wrcK-Z5bHOg
+ 等式 1：person.constructor === Person  实例的constructor指向构造函数
+ 等式 2：Person.prototype.constructor === Person  构造函数原型的constructor指向构造函数
 # 封装
 https://juejin.cn/post/6844904094948130824
 
@@ -354,7 +417,7 @@ https://juejin.cn/post/6844904094948130824
 1. 私有属性、公有属性、静态属性概念
 * 私有属性和方法：只能在构造函数内访问，不能被外部所访问(即在构造函数内使用var声明的属性)
 * 公有属性和方法：对象外可以访问到对象内的属性和方法(在构造函数内使用this设置，或者设置在构造函数原型对象上)
-* 静态属性和方法：定义在构造函数的方法(比如Cat.***)  不需要实例就可以调用
+* 静态属性和方法：定义在构造函数的方法(比如Cat.***)  不需要实例就可以调用，实例调用不到
 
 
 ## ES6之后的封装
@@ -390,7 +453,7 @@ https://juejin.cn/post/6844903929705136141
 深拷贝：将一个对象从内存中完整的拷贝一份出来，从堆内存中开辟一个新的区域存放新对象，且修改新对象不会影响原对象
 
 
-```
+```javascript
 const mapTag = '[object Map]';
 const setTag = '[object Set]';
 const arrayTag = '[object Array]';
@@ -623,6 +686,8 @@ DOM：文档对象模型，是HTML和XML文档的编程接口
 https://juejin.cn/post/6844903604445249543#heading-0
 
 # Array.sort()方法与实现机制
+插入排序和快速排序
+
 在V8引擎中，sort函数只给出了两种排序insertSort和quickSort，数组长度小于等于22的用insertSort大于22的用quickSort
 
 # Ajax的请求过程
@@ -694,7 +759,7 @@ From表示正在使用的内存  To表示目前闲置的内存
 
 * 老生代垃圾回收 标记清除算法
 
-# Js的String、Array和Math方法
+# Math方法
 
 
 
