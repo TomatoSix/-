@@ -1,6 +1,38 @@
 ## CSS 层叠样式表(Cascading Style Sheets)
 
 **浏览器 CSS 匹配不是从左到右进行查找，而是从右到左进行查找，这是为了尽早过滤掉一些无关的样式规则和元素**
+# css引入方式
+1. 行内样式: 在网页上通过style=""属性直接写样式
+```css
+<div style="color: green; margin-top: 30px;border: 1px solid red;width: 500px">行内样式实例1</div>
+```
+
+2. 内部样式表：在网页上创建嵌入的样式表，通常写在<head></head>
+```css
+<style>
+    p {
+        color: #6478de;
+        border: red 1px solid;
+    }
+</style>
+```
+
+3. 链入外部样式表 - link,通常写在<style></style>里面
+
+4. 导入外部样式表： 通过@import引入其他的CSS文件
+```css
+<style>
+    @import "qt_02_style.css";
+</style>
+```
+
+## 外部样式分为 <link> 引入和 @import 引入两种方式。这两种方式的区别为：
+
+<link> 是 XHTML 标签，除了可以加载 CSS 外，还可以定义 RSS 等其他事务，通过 <link> 标签中的 href="" 属性来引入外部文件。@import 属于 CSS 范畴，只能加载 CSS ，应该写在 CSS 中，且导入语句应写在样式表的开头，否则无法正确导入外部文件。
+<link> 引用 CSS 时，在页面载入的时候可以同时加载样式，样式加载和结构加载是异步操作。可以防止访问网页时先加载完文字、图片等结构数据，然后再加载样式的问题。@import 需要网页结构完全载入以后加载样式文件。
+<link> 是 XHTML 标签，无兼容问题。@import 是在 CSS2.1 提出的，低版本浏览器不支持。
+<link> 支持使用 JavaScript 控制 DOM 来改变样式。@import 不支持。
+
 
 # css 浏览器前缀有哪些？
 
@@ -43,7 +75,7 @@ ctx.stroke();
 .item {flex: ;} .item { flex-grow: 1; flex-shrink: 1; flex-basis: 0%; }
 ```
 
-# flex: 1 是什么意思？
+## flex: 1 是什么意思？
 
 CSS 属性 flex 规定了弹性元素如何伸长或缩短以适应 flex 容器中的可用空间。
 flex 属性是 flex-grow,flex-shrink,flex-basis 的缩写，默认值为 0 1 auto
@@ -150,10 +182,11 @@ div .class1 #people的权值 等于 1+10+100=111
 如果第二个选择器后定义样式，则第二个的优先级要高
 ```
 
-3. 伪类和伪元素的区别
+# 伪类和伪元素的区别
 
 - 伪类(pseudo-classes)
   其核心就是用来选择 DOM 树之外的信息，不能够被普通选择器选择的文档之外的元素，用来添加一些选择器的特殊效果。比如`:hover, :active`等，由于状态的变化是非静态的，所以元素达到一个特定状态时，它可能得到一个伪类的样式；当状态改变时，它又会失去这个样式，由此可以看出，它的功能和`class`有些类似，但它是基于文档之外的抽象，所以叫伪类
+
 - 伪元素(pseudo-elements)
   DOM 树中没有定义的虚拟元素，核心就是需要创建通常不存在于文档中的元素，比如`::before, ::after`它选择的元素指定内容，表示选择元素内容的之前内容或之后内容。伪元素控制的内容和元素是没有差别的，但是它本身只是基于元素的抽象，并不存在于文档中，所以称为伪元素，用于将特殊的效果添加到某些选择器
 
@@ -169,7 +202,7 @@ div .class1 #people的权值 等于 1+10+100=111
 - 伪类和伪元素分别用单冒号`:`和双冒号`::`来表示;
 - 伪类和伪元素的区别，关键点在于如果没有伪元素(或伪类)是否需要添加元素才能达到效果，如果是则是伪元素，反之则是伪类
 
-3. px, em, rem， vw/vh
+# px, em, rem， vw/vh
 
 px: 相对长度单位，像素 px 是相对于显示器屏幕分辨率而言的;
 
@@ -179,7 +212,7 @@ rem: 相对长度单位，相对于 HTML 根元素字体尺寸大小, 通过修�
 
 vw/vh: 相对于 viewport 相对视口的宽度和高度而定的
 
-4. 可以继承的属性
+# 可以继承的属性
    (1) 字体系列属性
    font、font-family、font-weight、font-size、font-style、font-variant、font-stretch、font-size-adjust
    (2) 文本系列属性
@@ -206,7 +239,7 @@ vw/vh: 相对于 viewport 相对视口的宽度和高度而定的
 
 `link`最大限度支持并行下载，`@import`过多嵌套导致串行下载，出现 FOUC(白屏)
 
-6. `block`, `inline`, `inline-block` | 块元素、行内元素与行内块元素的区别
+# display `block`, `inline`, `inline-block` | 块元素、行内元素与行内块元素的区别
 
 `block`元素: `div`, `form`, `table`, `p`, `pre`, `h1~h6`, `dl`, `ol`, `ul`;
 
@@ -237,14 +270,8 @@ vw/vh: 相对于 viewport 相对视口的宽度和高度而定的
 
 opacity：0 则仅仅不可见，但仍可被浏览器发现，也就能触发各种事件。通过浏览器调试工具即可得出此结论。
 
-8. `<a href=""></a>`全部作用
 
-(1). 外部页面链接;
-(2). 本地页面链接;
-(3). 锚点链接: 在浏览一些网页的时候大都在网页的上方有一个固定住的导航条，上边会列出下方显示内容的版块分区。当点击导航条中的一个版块的时候他会自动的跳转到指定的版块，这是页面内部的区域跳转。;
-(4). 其他功能性的链接;
-
-10. flex 布局
+# flex 布局
 
 容器属性:
 
@@ -279,27 +306,35 @@ opacity：0 则仅仅不可见，但仍可被浏览器发现，也就能触发�
     flex-basis: 0%
     ```
 
-11. position
+# 定位方式及其区别
 
 static: 默认值, 没有定位，元素出现在正常的流中;
 
 relative: 相对于默认位置(即 static 时的位置)进行偏移，即定位基点是元素的默认位置;
 
-fixed: 相对于视口进行偏移,即定位基点是浏览器窗口;
+fixed: 相对于视口进行偏移,即定位基点是浏览器窗口;脱离标准文档流
 
-absolute: 相对于上级元素(一般是父元素(值不为 static))进行偏移，即定位基点是父元素;
+absolute: 相对于最近一级有定位祖先元素(一般是父元素(值不为 static))进行偏移，即定位基点是父元素;脱离标准文档流
 
-sticky: 它会产生动态效果，很像 relative 和 fixed 的结合 当页面滚动，父元素开始脱离视口时，只要与 sticky 元素的距离达到生效门槛，relative 定位自动切换为 fixed 定位,等到父元素完全脱离视口时(即完全不可见),fixed 定位自动切换回 relative 定位;
+sticky: 它会产生动态效果，很像 relative 和 fixed 的结合 
+        在目标区域以内，它的行为就像 position:relative;在滑动过程中，某个元素距离其父元素的距离达到sticky粘性定位的要求时(比如top：100px)；position:sticky这时的效果相当于fixed定位，固定到适当位置。
 
 inherit: 从父元素继承 position 属性的值
 
+# margin塌陷及合并问题
+https://juejin.cn/post/6976272394247897101
+塌陷解决方案：父级增加overflow:hidden  bfc
+合并解决方案：margin取最大值
+
+
+# 浮动模型及清除浮动的方法
 12. 浮动与清除浮动
 
 脱离文档流，也就是将元素从普通的布局排版中拿走，其他盒子在定位的时候，会当作脱离文档流的元素不存在而进行定位
 
 当容器的高度为 auto，且容器的内容中有浮动的元素，在这种情况下，容器的高度不能自动伸长以适应内容的高度，使得内容溢出到容器外面而影响(甚至破坏)布局的现象叫浮动溢出，为了防止这个现象的出现，叫 CSS 清除浮动
 
-```
+```css
 .news {
   background-color: gray;
   border: solid 1px black;
@@ -338,38 +373,15 @@ p {
 
 (2). 方法二: 使用 CSS 的`overflow`属性
 
-(3). 方法三: 给浮动的元素的容器也添加浮动
+(3). 方法三: :after伪元素法
 
-(4). 使用邻接元素处理 (给浮动元素后面的元素添加 clear 属性)
+(4). 方法四：双伪元素清除浮动
 
-(5). 使用 CSS 的`:after`伪元素
 
-给浮动元素的容器添加一个 clearfix 的 class，然后给这个 class 添加一个`:after`伪元素
 
-13. BFC 以及高度塌陷
+# 实现单行文本溢出显示
 
-BFC 是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面元素，反之亦然。我们可以利用 BFC 的这个特性来做很多事。
-
-    阻止元素被浮动元素覆盖
-    可以包含浮动元素
-    阻止相邻元素的margin合并
-
-BFC(Block Formatting Context) 块级格式化上下文 + BFC 是一个 CSS 中的一个隐含的属性，可以为一个元素开启 BFC
-开启 BFC 该元素会变成一个独立的布局区域 + 元素开启 BFC 后的特点： 1. 开启 BFC 的元素不会被浮动元素所覆盖 2. 开始 BFC 的元素子元素和父元素外边距不会重叠 3. 开启 BFC 的元素可以包含浮动的子元素
-
-    + 可以通过一些特殊方式来开启元素的BFC：
-        1. 设置元素的浮动(不推荐)
-        2. 将元素设置为行内块元素（不推荐）
-        3. 将元素的overflow设置为非visible的值
-            + 常用的方式 为元素设置 overflow:hidden 开启其BFC 以使其可以包含浮动元素
-
-    使元素开启BFC功能，开启BFC的方法有(1). 浮动(float值不为none); (2). 行内块元素(display: inline-block); (3)设置overflow（overflow不为visible）; (4). 开启定位position(absolute, fixed)
-
-    可以使用伪元素`::after`解决这个问题(开启浮动导致的高度塌陷问题)
-
-14. 实现单行文本溢出显示
-
-```
+```css
 .text {
   width: 100px;
   margin: 0 auto;
@@ -426,7 +438,7 @@ ul li:not(:last-child) {
 }
 ```
 
-16. CSS 如何实现一个半圆
+# CSS 如何实现一个半圆
 
 ```
 /*上半圆*/
@@ -462,7 +474,7 @@ ul li:not(:last-child) {
 }
 ```
 
-17. CSS 实现三角形
+# CSS 实现三角形
 
 ```
 .triangle {
@@ -626,7 +638,7 @@ inline-block + line-height
 
 ## 水平垂直居中
 
-```
+```css
 <div class="outer">
     <div class="inner">Hello, world</div>
 </div>
@@ -648,7 +660,7 @@ inline-block + line-height
 
 `flex`
 
-```
+```css
 .outer {
   display: flex;
   justify-content: center; /* 水平居中 */
@@ -658,7 +670,7 @@ inline-block + line-height
 
 `flex + margin`
 
-```
+```css
 .outer {
   display: flex;
 }
@@ -668,11 +680,22 @@ inline-block + line-height
 }
 ```
 
+```css
+.outer {
+  display: flex;
+  justify-content: center; /* 水平居中 */
+}
+
+.inner {
+  align-self: center; /* 垂直居中 */
+}
+```
+
 (2)`grid`方案
 
 `grid`
 
-```
+```css
 .outer {
   display: grid;
 }
@@ -685,7 +708,7 @@ inline-block + line-height
 
 `grid + margin`
 
-```
+```css
 .outer {
   display: grid;
 }
@@ -697,7 +720,7 @@ inline-block + line-height
 
 (3)`absolute + transform`
 
-```
+```css
 .outer {
   position: relative;
 }
@@ -712,15 +735,21 @@ inline-block + line-height
 
 # a标签的作用
 
-* 跳转到外部网址
-```
+1. 跳转到外部网址
+```css
 <a href="http://www.baidu.com" target="_blank">百度</a>
 ```
-* 实现本地页面文件跳转      
-* 设置锚点。在网页任意位置添加一个标记，可以由任何地方跳转到这个标记处
+2. 实现本地页面文件跳转      
+3. 设置锚点。在网页任意位置添加一个标记，可以由任何地方跳转到这个标记处
   定义锚点时，如果用a标签当做锚点，给a标签设置name属性，如果用其它标签当做锚点，给该标签设置id属性
 
-
+```css
+/* 在HTML文档中插入 id */
+<h3 id="tips">详细说明</h3>
+<p>内容</p>
+/* 在HTML文档中创建一个链接到“详细说明” */
+<a href="#tips">详细说明</a>
+```
 
 
 
@@ -746,8 +775,8 @@ BFC全称： Block Formatting Context 块级格式化上下文
 ## 如何生成BFC？
 1. 根元素
 2. float的值不为none
-3. overflow的值不为visible 
-4. display的值为inline-block、table-cell、table-caption
+3. overflow的值不为visible    hidden|auto|scroll
+4. display的值为inline-block、table-cell、table-caption、flex
 5. position的值为absolute或者fixed
 
 ## BFC的约束规则
