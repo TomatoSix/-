@@ -4,6 +4,7 @@
     "eval",
     "funfilled",
     "instanceof",
+    "keyup",
     "proto",
     "temprary",
     "typeof",
