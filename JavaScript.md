@@ -885,8 +885,8 @@ son -> father -> body -> html -> document
 
 ## 事件对象 event
 1. 常见事件对象的属性和方法
-event.target 返回的是触发事件的对象(元素) 如div(不是绑定事件的对象)
-event.type   返回事件的类型(click, blur)
+* event.target 返回的是触发事件的对象(元素) 如div(不是绑定事件的对象)
+* event.type   返回事件的类型(click, blur)
 
 2. 阻止默认行为(事件), 让链接不跳转 或者让提交按钮不提交
 event.preventDefault()
