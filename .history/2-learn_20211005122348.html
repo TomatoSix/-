@@ -33,19 +33,21 @@
 
 <script>
   function sort(arr) {
-  for (let i=1; i<arr.length; i++) {
-    let curValue = arr[i]
-    let j = i-1
-    while (j >= 0 && curValue < arr[j]) {
-      arr[j+1] = arr[j]
-      j--
+    let curMinIndex = 0
+    for (let i=0; i<arr.length-1; i++) {
+
+      let curMinIndex = i
+      for (let j=i; j<arr.length; j++) {
+        if (arr[j] < arr[curMinIndex]) {
+          curMinIndex = j
+        }
+      }
+      [arr[curMinIndex], arr[i]] = [arr[i], arr[curMinIndex]]
     }
-    arr[j+1] = curValue
+    return arr
   }
-  return arr
-}
-    let arr = [2, 9, 6, 7, 4, 3, 1, 7, 0, -1, -2]
-    console.log(sort(arr))
+  let arr = [1,5,6,9,0,3,4]
+  console.log(sort(arr));
 </script>
 
 <style lang="less" module>
