@@ -44,37 +44,9 @@
       return inner
     }
 
-    function add1() {
-      const numberList = Array.from(arguments);
-      console.log(numberList);
-      // 进一步收集剩余参数
-      const calculate = function() {
-        numberList.push(...arguments);
-        return add(numberList);
-      }
-
-      // 利用 toString 隐式转换，最后执行时进行转换
-      calculate.toString = function() {
-        return numberList.reduce((a, b) => a + b, 0);
-      }
-
-      return calculate;
-    }
-
-    function add2() {
-            let args = [].slice.call(arguments);
-            let fn = function(){
-                let fn_args = [].slice.call(arguments)
-                return add.apply(null,args.concat(fn_args))
-            }
-            fn.toString = function(){
-                return args.reduce((a,b)=>a+b)
-            }
-            return fn
-        }
 
 
-    console.log(add2(1)(2)(3)); // 6
+    console.log(add1(1)(2)(3)); // 6
     // console.log(add(1, 2, 3)(4)); // 10;
     // console.log(add(1)(2)(3)(4)(5)); // 15;
 </script>

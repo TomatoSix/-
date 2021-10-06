@@ -61,7 +61,7 @@
       return calculate;
     }
 
-    function add2() {
+    function add() {
             let args = [].slice.call(arguments);
             let fn = function(){
                 let fn_args = [].slice.call(arguments)
@@ -73,8 +73,9 @@
             return fn
         }
 
+        console.log(add(1)(2)(3,4))
 
-    console.log(add2(1)(2)(3)); // 6
+    console.log(add1(1)(2)(3)); // 6
     // console.log(add(1, 2, 3)(4)); // 10;
     // console.log(add(1)(2)(3)(4)(5)); // 15;
 </script>
