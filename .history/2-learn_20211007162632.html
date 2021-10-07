@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      
+    </style>
+    
+  </body>
+</html>
+
+<input type="text" id="txt">
+<p id="show-txt"></p>
+
+<script>
+    var obj={};
+    let writeDom=document.getElementById("txt");
+    let showDom=document.getElementById("show-txt");
+    Object.defineProperty(obj,"txt",{
+        get:function(){
+            return obj;
+        },
+        set:function(value){
+            showDom.innerHTML=value;
+        }
+    });
+    writeDom.addEventListener("keyup",function(e){
+        obj.txt=e.target.value;
+    })
+</script>
+
+<style lang="less" module>
+
+</style>
