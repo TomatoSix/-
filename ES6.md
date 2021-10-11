@@ -354,6 +354,34 @@ Reflect.setPrototypeOf(target, prototype)
 ## 观察者模式
 指函数自动观察数据对象，一旦对象有变化，函数就会自动执行
 
+
+# Map
+概念： 它类似于对象，也是键值对的集合，但是"键"的范围不限于字符串，各种类型的值都可以当做键。
+       对象只接受字符串作为键名，提供了"字符串-值"的对应，map结构提供了"值-值"的对应。
+* map的操作方法
+  map.set(key,value)
+  map.get(key)
+  map.has(key)
+  map.delete(key)
+  map.clear()
+
+* map的遍历方法
+  map.keys()  //返回键名
+  ```js
+  for (let key of map.keys()) {
+    console.log(key);
+  }
+  ```
+  map.values() //返回键值
+  map.entries()  //返回所有成员
+  map.forEach()
+  ```js
+  for (let [key, value] of map.entries()) {
+    console.log(key, value);
+  }
+  ```
+
+
 # Set
 Set的操作方法  
   Set.prototype.add(value)：添加某个值，返回 Set 结构本身。  
