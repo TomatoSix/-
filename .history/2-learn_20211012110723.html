@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      
+    </style>
+    
+  </body>
+</html>
+<input type="text" id="input">
+  <span id="span"></span>
+
+<script>
+    class Parent {
+      constructor(name, age) {
+        this.name = name
+        this.age = age
+      }
+
+      speak() {
+        console.log(this.name, this.age, '付琴');
+      }
+    }
+    class Child extends Parent {
+      constructor(name, age) {
+        super(name, age)
+      }
+
+      speak() {
+        console.log('孩子', this.name, this.age);
+      }
+    } 
+
+    let child1 = new Child('liu', 18) 
+    child1.speak()
+</script>
+
+<style lang="less" module>
+
+</style>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      
+    </style>
+    
+  </body>
+</html>
+<input type="text" id="input">
+  <span id="span"></span>
+
+<script>
+  class SingletonLogin {
+    constructor(name, password) {
+      this.name = name;
+      this.password = password;
+    }
+    static getInstance(name, password) {
+      // 判断对象是否已经被创建,若创建则返回旧对象
+      if (!this.instance) {
+        this.instance = new SingletonLogin(name, password);
+      }
+      return this.instance;
+    }
+  }
+
+  let obj1 = SingletonLogin.getInstance('jsliang', '123456')
+  let obj2 = SingletonLogin.getInstance('zhazhaliang', '654321')
+
+  console.log(obj1 === obj2)    // true
+  console.log(obj1)           // SingletonLogin { name: 'jsliang', password: '123456' }
+  console.log(obj2)           // SingletonLogin { name: 'jsliang', password: '123456' }
+</script>
+
+<style lang="less" module>
+
+</style>

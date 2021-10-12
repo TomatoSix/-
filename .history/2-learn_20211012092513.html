@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      
+    </style>
+    
+  </body>
+</html>
+<input type="text" id="input">
+  <span id="span"></span>
+
+<script>
+    function myInstanceof(a, b) {
+        // 模拟 a instanceof b
+        let protoB = b.prototype;
+        let protoA = a.__proto__;
+        while (true) {
+
+            if (protoA == null) { // 可能是undefined
+                return false
+            }
+            if (protoB === protoA) {
+                return true
+            }
+            protoA = protoA.__proto__
+        }
+    }
+
+    console.log(myInstanceof([], Array));
+</script>
+
+<style lang="less" module>
+
+</style>

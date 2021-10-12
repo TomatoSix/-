@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      
+    </style>
+    
+  </body>
+</html>
+<input type="text" id="input">
+  <span id="span"></span>
+
+<script>
+   const Person = function() {
+  const [name, age, sex] = [...arguments];
+  this.name = name;
+  this.age = age;
+  this.sex = sex;
+  this.sayName = () => {
+    console.log(`我叫 ${this.name}，性别 ${this.sex}，今年 ${this.age}`);
+  }
+};
+
+const p1 = new Person('jsliang', 25, '男');
+const p2 = new Person('靓女', 25, '女');
+
+p1.sayName(); // 我叫 jsliang，性别 男，今年 25
+p2.sayName(); // 我叫 靓女，性别 女，今年 25
+</script>
+
+<style lang="less" module>
+
+</style>
