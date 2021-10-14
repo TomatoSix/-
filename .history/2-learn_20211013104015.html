@@ -16,13 +16,14 @@
 
 
 <script>
-  let item = '@@##--1234slgdshg'
-    
-      let res = item.replace(/[\s\S]/ig, '*')
-    
+    function desenAll(item) {
+      return Object.keys(item).forEach(function(k) {
+        '*';
+      });
+    }
 
-    console.log(item, '0000');
-    console.log(res, 'res');
+    let res = desenAll('12345678')
+    console.log(res);
 </script>
 
 
