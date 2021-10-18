@@ -6,14 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
-      div {
-        height: 2000px;
-        background-color: pink;
-      }
+
     </style>
   </head>
   <body>
-    <div></div>
+    
   </body>
 </html>
 
@@ -40,12 +37,11 @@ let flag = 0; // 记录当前函数调用次数
 // 当用户滚动时被调用的函数
 function foo() {
     flag += 1
-    console.log('都点击了好几遍了');
     console.log('Number of calls: %d', flag)
 }
 
 // 在 debounce 中包装我们的函数，过 2 秒触发一次
-document.body.addEventListener('click', debounce(foo, 200))
+document.body.addEventListener('scroll', debounce(foo, 2000))
 
 
 

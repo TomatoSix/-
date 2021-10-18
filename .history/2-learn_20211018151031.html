@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+
+    </style>
+  </head>
+  <body>
+    
+  </body>
+</html>
+
+
+<script>
+// 冒泡排序
+
+function bubbleSort(arr) {
+  for (let i=0; i<arr.length-1; i++) {
+    for (let j=0; j <arr.length - i -1; j++) {
+      if (arr[j] > arr[j+1]) {
+        [arr[j+1], arr[j]] = [arr[j], arr[j+1]]
+      }
+    }
+  }
+  return arr
+}
+let arr = [1,5,4,32,7]
+console.log(bubbleSort(arr), '9999');
+
+
+// let bubbleSort = function(arr, flag = 0) {
+//   let len = arr.length
+
+//   // 最外层for循环表示循环次数，需循环len - 1次
+//   for (let i = 0; i < len - 1; i++) {
+//     for (let j = 0; j < len - 1 - i; j++) {
+//       //比较相邻两者之间的关系大小
+//       if (arr[j] > arr[j+1]) {
+//         [arr[j], arr[j+1]] = [arr[j+1], arr[j]]
+//       }
+//     }
+//   }
+//   return flag ? arr.reverse() : arr
+// }
+// let arr = [2,10,8,3,0,5]
+// console.log(bubbleSort(arr, 1)) //flag 0-正序 1-倒序
+</script>
+
+

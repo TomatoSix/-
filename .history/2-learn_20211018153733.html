@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+
+    </style>
+  </head>
+  <body>
+    
+  </body>
+</html>
+
+
+<script>
+// 插入排序
+
+function selectSort(arr) {
+  let len =  arr.length
+  let temp = 0
+  for (let i=0; i<len-1; i++) {
+
+    for (let j=i; j<len; j++) {
+       temp = i
+
+      if (arr[j] < arr[temp]) {
+        temp = j
+      }
+    }
+    [arr[temp], arr[i]] = [arr[i], arr[temp]]
+  } 
+  return arr
+}
+
+// // 基本原理：每一次从待排序的数组元素中选择最大的一个元素作为首元素，直到排完为止
+// let selectSort = function (arr) {    
+//       let len = arr.length,curMinIndex= 0;    
+//       // 一共需要排序len-1次, 即循环次数
+//       for (let i = 0; i < len - 1; i++) {        
+//         curMinIndex= i;  
+//         // 取出后续数字中最小数字的索引      
+//         for (let j = i ; j < len; j++) {            
+//           if (arr[j] < arr[curMinIndex]) {
+//             curMinIndex= j;        
+//           }             
+//         }        
+//         // 每一趟保证第i位为最小值, 此时的temp为后续最小数字的索引                    
+//         [arr[i], arr[curMinIndex]] = [arr[curMinIndex], arr[i]]        
+//       }    
+//       return arr
+//     }
+//       let arr = [2, 9, 6, 7, 4, 3, 1, 7, 0, -1, -2]
+//       console.log(selectSort(arr))
+
+let arr = [1,6,2,4,5,3]
+let res = selectSort(arr)
+console.log(res, '3333');
+</script>
+
+
