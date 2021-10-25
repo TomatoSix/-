@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      div {
+        height: 2000px;
+      }
+    </style>
+  </head>
+  <body>
+    <div></div>
+  </body>
+</html>
+
+
+<script>
+// let add = function() {
+
+//   let args = Array.from(arguments);
+//   let inner = function() {
+//       args.push(...arguments)
+//       return inner
+//   }
+//   add.toString = function() {
+//       return args.reduce((pre, cur) => {
+//           return pre + cur
+//       })
+//   }
+// }
+
+// add(1)(2)(3)(4)(5)
+
+
+// let add = function() {
+
+//   let args = Array.from(arguments);
+//   let inner = function() {
+//       args.push(...arguments)
+//       return add.apply(this, args)
+//   }
+//   inner.toString = function() {
+//       return args.reduce((pre, cur) => {
+//           return pre + cur
+//       })
+//   }
+//   return inner
+// }
+
+// add(1)(2)(3,4)
+
+
+
+
+ 
+
+
+function multi() {
+    var args = Array.prototype.slice.call(arguments);
+	  var fn = function() {
+		var newArgs = args.concat(Array.prototype.slice.call(arguments));
+        return multi.apply(this, newArgs);
+    }
+    fn.toString = function() {
+        return args.reduce(function(a, b) {
+            return a * b;
+        })
+    }
+    return fn;
+}
+
+let res= multi(1)(2)(3)(4)
+console.log(res);
+</script>
+
+

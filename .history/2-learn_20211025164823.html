@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      div {
+        height: 2000px;
+      }
+    </style>
+  </head>
+  <body>
+    <div></div>
+  </body>
+</html>
+
+
+<script>
+const myInstanceof = function(left, right) {
+  let LP = left.__proto__
+  let RP = right.prototype
+
+  while(true) {
+    if (LP == null) {
+      return false
+    }
+    if (LP == RP) {
+      return true
+    }
+    LP = LP.__proto__
+  }
+}
+
+
+
+</script>
+
+
