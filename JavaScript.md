@@ -1348,7 +1348,6 @@ style.width是可读属性，可以获取也可以赋值
 
 
 
-
 # axios
 ## 特点
 1. 基本promise的异步ajax请求库

@@ -18,78 +18,15 @@
 
 
 <script>
-// let add = function() {
-
-//   let args = Array.from(arguments);
-//   let inner = function() {
-//       args.push(...arguments)
-//       return inner
-//   }
-//   add.toString = function() {
-//       return args.reduce((pre, cur) => {
-//           return pre + cur
-//       })
-//   }
-// }
-
-// add(1)(2)(3)(4)(5)
-
-
-// let add = function() {
-
-//   let args = Array.from(arguments);
-//   let inner = function() {
-//       args.push(...arguments)
-//       return add.apply(this, args)
-//   }
-//   inner.toString = function() {
-//       return args.reduce((pre, cur) => {
-//           return pre + cur
-//       })
-//   }
-//   return inner
-// }
-
-// add(1)(2)(3,4)
-
-
-// let add = function() {
-
-//     let args = Array.from(arguments);
-//     let inner = function() {
-//         args.push(...arguments)
-//         return inner
-//     }
-//     inner.toString = function() {
-//         return args.reduce((pre, cur) =>{
-//             return pre + cur
-//         })
-//     }
-// }
-// add(1)(2)(3)
-// add(1, 2, 3)(4)
-// add(1)(2)(3)(4)(5)
-
- 
-
-
-function add() {
-    var args = Array.prototype.slice.call(arguments);
-	  var fn = function() {
-		    var newArgs = args.concat(Array.prototype.slice.call(arguments));
-        return add.apply(this, newArgs);
-    }
-    fn.toString = function() {
-        return args.reduce(function(a, b) {
-            return a + b;
-        })
-    }
-    return fn;
+const arr = [[1,2,3], [4,5,6], [7,8,9],[10,11,12]]
+const newArr = [[],[],[]]
+for (let i=0; i<arr.length; i++) {
+  for (let j=0; j<arr[0].length; j++) {
+    newArr[j][i] = arr[i][j]
+  }
 }
-
-add(1)(2)(3)(4)
-// let res= multi(1)(2)(3)(4)
-// console.log(res,'0000');
+console.log(arr, '1111');
+console.log(newArr, '0000');
 </script>
 
 
