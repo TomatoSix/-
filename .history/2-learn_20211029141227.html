@@ -18,9 +18,15 @@
 
 
 <script>
-for (let i=3; i<=2; i++) {
-  console.log((i));
+const arr = [[1,2,3], [4,5,6], [7,8,9],[10,11,12]]
+const newArr = [[],[],[]]
+for (let i=0; i<arr.length; i++) {
+  for (let j=0; j<arr[0].length; j++) {
+    newArr[j][i] = arr[i][j]
+  }
 }
+console.log(arr, '1111');
+console.log(newArr, '0000');
 </script>
 
 
