@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .box {
+        height: 20px;
+        width: 200px;
+        background-color: pink;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      let str = '13 1 2 3 4 5 6 7 8 9 10 20 16 18'
+      let arr = str.split(' ').map(item => parseInt(item))
+      let arrRes = arr.map(item => item%5)
+      let a=0,b=0,c=0,d=0,e=0,count=0
+      let flag = true
+      for (let i=0; i<arr.length; i++) {
+        let number = arr[i]
+        let numberRes = arrRes[i]
+
+        switch(numberRes) {
+          case 0:
+            a += number%2 === 0? number:0
+            break
+          case 1:
+            if (flag) {
+              b += number
+            } else {
+              b -= number
+            }
+            break
+          case 2:
+            c++
+            break
+          case 3:
+            d += number
+            count++
+            break
+          case 4:
+            e = Math.max(e,number)
+            break
+        }
+
+      }
+    </script>
+  </body>
+</html>
+
+
+
+

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .box {
+        height: 20px;
+        width: 200px;
+        background-color: pink;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      let from = 5, to = 27
+      let number = 2
+      let index = 0
+      let arr = []
+      while (arr.length === to) {
+        for (let i=2; i<=number; i++) {
+          if (number % i === 0) {
+            break
+          }
+          index++
+          arr.push(i)
+        }
+      }
+      console.log(arr,'1111');
+    </script>
+  </body>
+</html>
+
+
+
+

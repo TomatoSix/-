@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .box {
+        height: 20px;
+        width: 200px;
+        background-color: pink;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      function merge(left, right) {
+      let result = []
+      let i = 0, j = 0
+      while(i < left.length && j < right.length) {
+        if (left[i] <= right[j]) {
+          result.push(left[i++])
+        } else {
+          result.push(right[j++])
+        }
+      }
+      if (i < left.length) {
+        result.push(...left.slice(i))
+      } else {
+        result.push(...right.slice(j))
+      }
+      return result
+    }
+
+    function mergeSort(array) {
+      if (array.length < 2) {
+        return array
+      }
+      let m = Math.floor(array.length / 2)
+      let left = mergeSort(array.slice(0, m))
+      let right = mergeSort(array.slice(m))
+      return merge(left, right)
+    } 
+
+    let arr = [1,8,9,5,4,3,6,2]
+    </script>
+  </body>
+</html>
+
+
+
+
