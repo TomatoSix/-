@@ -42,35 +42,39 @@
         return [...quickSort(left), pivot, ...quickSort(right)]
       }
 
-      function mergeSort(arr) {
-        if (arr.length <2) return arr
-        let mid = Math.floor(arr.length /2)
-        let left = mergeSort(arr.slice(0,mid))
-        let right = mergeSort(arr.slice(mid))
-        return merge(left,right)
+      // 直接插入排序
+      function insertSort(arr) {
+        for (let i=1; i<arr.length; i++) {
+          let minValue = arr[i]
+          let j = i-1
+
+          while ( j>=0 && minValue < arr[j]) {
+            arr[j+1] = arr[j]
+            j--
+          }
+          arr[j+1] = minValue
+        }
+        return arr
       }
 
-      function merge(left, right) {
-        let res = []
-        let i=0,j=0
-        while (i < left.length && j < right.length) {
-          if (left[i] <= right[j]) {
-            res.push(left[i++])
-          } else {
-            res.push(right[j++])
+      // 选择排序
+      function selectSort(arr) {
+        
+        for (let i=0; i<arr.length-1; i++) {
+          let minIndex = i,
+
+          for (let j=i; j<arr.length; j++) {
+            if (arr[minIndex] > arr[j]) {
+              minIndex = j
+            }
           }
+          [arr[minIndex], arr[i]] = [arr[i], arr[minIndex]]
         }
-        if (i < left.length) {
-          res.push(...left.slice(i))
-        } else {
-          res.push(...right.slice(j))
-        }
-        return res
       }
 
 
       let arr = [1,4,3,2,6,5,7,9]
-      console.log(mergeSort(arr));
+      console.log(insertSort(arr));
   
       
     </script>

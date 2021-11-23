@@ -46,7 +46,7 @@
         if (arr.length <2) return arr
         let mid = Math.floor(arr.length /2)
         let left = mergeSort(arr.slice(0,mid))
-        let right = mergeSort(arr.slice(mid))
+        let right = mergeSort(m)
         return merge(left,right)
       }
 
@@ -55,22 +55,22 @@
         let i=0,j=0
         while (i < left.length && j < right.length) {
           if (left[i] <= right[j]) {
-            res.push(left[i++])
+            res.push(i++)
           } else {
-            res.push(right[j++])
+            res.push(j++)
           }
-        }
-        if (i < left.length) {
-          res.push(...left.slice(i))
-        } else {
-          res.push(...right.slice(j))
+          if (i < left.length) {
+            res.push(...left.slice(i))
+          } else {
+            res.push(...right.slice(j))
+          }
         }
         return res
       }
 
 
       let arr = [1,4,3,2,6,5,7,9]
-      console.log(mergeSort(arr));
+      console.log(selectSort(arr));
   
       
     </script>
