@@ -93,37 +93,26 @@
       
 
       var combinationSum = function(candidates, target) {
-        let res = []
-        var getPath = function(number, sum, path) {
-            console.log(number, sum, path);
-            if (target - sum === number) {
-                path.push(number)
-                res.push([...path])
-                return
-            }
-            console.log(path, 'path');
-            for (let i=0; i<candidates.length-1; i++) {
-                path.push(candidates[i])
-                getPath(candidates[i+1], target - candidates[i], path)
-                path.pop()
-            }
-        }
-        getPath(candidates[0], target, [])
-        return res
-      };
-      var isHuiwen = function(str) {
-        let left=0, right=str.length-1
-        let flag = true
-        while(left < right) {
-            if (str[left] !== str[right]) {
-                flag = false
-            }
-            left++
-            right--
-        }
-        return flag
-    }
-    console.log(isHuiwen('aba'));
+      let res = []
+      var getPath = function(number, sum, path) {
+        console.log(number, sum, path);
+          if (target - sum === number) {
+              path.push(number)
+              res.push([...path])
+              return
+          }
+          for (let i=0; i<candidates.length-1; i++) {
+              if (candidates[i] < target - sum) {
+                  path.push(candidates[i])
+                  getPath(candidates[i+1], target - candidates[i], path)
+                  path.pop()
+              }
+          }
+      }
+      return res
+    };
+    let res = combinationSum([2,3,6,7], 7)
+    console.log(res, '22222');
     </script>
   </body>
 </html>
