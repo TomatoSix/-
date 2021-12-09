@@ -54,13 +54,16 @@ sessionStorage - 用于临时保存同一窗口或标签页的数据，在关闭
 
 
 
-CSS3
-1. 边框
-# box-shadow: h-shadow v-shadow blur spread color inset;
+# CSS3
+https://www.nowcoder.com/discuss/123161?channel=-1&source_id=profile_follow_post_nctrack
+# 边框
+
+1. 边框阴影
+box-shadow: h-shadow v-shadow blur spread color inset;
 box-shaow: 水平阴影的位置 垂直阴影的位置 模糊距离 阴影的大小 阴影的颜色 
 
 2. 圆角
-# border-radius: 用于创建圆角
+border-radius: 用于创建圆角
 四个border-top-left-radius | border-top-right-radius | border-bottom-right-radius | border-bottom-left-radius 属性的缩写
 
 四个值： 左上 右上 右下 左下
@@ -68,23 +71,23 @@ box-shaow: 水平阴影的位置 垂直阴影的位置 模糊距离 阴影的大
 两个值： 左上与右下  右上与左下
 一个值： 四个圆角值相同
 
-3. 背景
+# 背景
+border-image: 使用图像创建一个边框
 
-# border-image: 使用图像创建一个边框
 border-image: source slice width outset repeat|initial|inherit;
 
 4. 渐变
 CSS3定义了两种类型的渐变：线性渐变 和 径向渐变（由它的中心定义）
 
 线性渐变
-
-# background-image: linear-gradient(direction, color-stop1, color-stop2, ...);
-
+```css
+background-image: linear-gradient(direction, color-stop1, color-stop2, ...);
+```
 径向渐变
-
-# background-image: radial-gradient(shape size at position, start-color, ..., last-color);
-
-4. 文本效果
+```css
+background-image: radial-gradient(shape size at position, start-color, ..., last-color);
+```
+# 文本效果
 hanging-punctuation	规定标点字符是否位于线框之外。	
 punctuation-trim	规定是否对标点字符进行修剪。	
 text-align-last	设置如何对齐最后一行或紧挨着强制换行符之前的行。	
@@ -97,10 +100,10 @@ text-wrap	规定文本的换行规则。
 word-break	规定非中日韩文本的换行规则。	
 word-wrap	允许对长的不可分割的单词进行分割并换行到下一行。
 
-5. 字体
+# 字体
 
-# @font-face
-例如
+* @font-face
+```css
 @font-face
 {
     font-family: myFirstFont;  //规定字体的名称
@@ -110,23 +113,33 @@ div
 {
     font-family:myFirstFont;
 }
+```
+# 2D转换 
 
-6. 2D转换 
+* translate()：元素从其当前位置移动，根据给定的 left（x 坐标） 和 top（y 坐标） 位置参数。 transform: translate(50px,100px);
+* rotate()：元素顺时针旋转给定的角度。允许负值，元素将逆时针旋转。transform: rotate(30deg);
+* scale()：元素的尺寸会增加或减少，根据给定的宽度（X 轴）和高度（Y 轴）参数。transform: scale(2,4);
+* skew()：元素翻转给定的角度，根据给定的水平线（X 轴）和垂直线（Y 轴）参数。transform: skew(30deg,20deg);
+* matrix()： 把所有 2D 转换方法组合在一起，需要六个参数，包含数学函数，允许您：旋转、缩放、移动以及倾斜元素。transform:matrix(0.866,0.5,-0.5,0.866,0,0);
 
-# transform
-translate()方法，根据左(X轴)和顶部(Y轴)位置给定的参数，从当前元素位置移动
-rotate()方法，在一个给定度数顺时针旋转的元素
 
-scale()方法，该元素增加或减少的大小，取决于宽度(X轴)和高度(Y轴)的参数
-scale(2,3)表示转变宽度为原来的大小的2倍，和其原始大小3倍的高度
-skew()方法
-matrix()方法
+# 3D转换
 
+* rotateX()：元素围绕其 X 轴以给定的度数进行旋转。transform: rotateX(120deg);
+* rotateY()：元素围绕其 Y 轴以给定的度数进行旋转。transform: rotateY(130deg);
+
+# transition 过渡效果，使页面更平滑
+
+
+# 动画 animation
 # web worker
 WebWorker 允许在主线程之外再创建一个 worker 线程，在主线程执行任务的同时，worker 线程也可以在后台执行它自己的任务，互不干扰。
 
 # web socket
 WebSocket的出现，让服务器端可以主动向客户端发送信息，使得浏览器具备了实时双向通信的能力
+
+* 应用
+体育赛事、聊天室、实时位置等场景
 
 
 # 动画

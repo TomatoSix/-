@@ -389,8 +389,9 @@ p {
 
 
 
-# 实现单行文本溢出显示
+# 实现单行文本溢出显示和多行
 
+## 单行文本
 ```css
 .text {
   width: 100px;
@@ -410,44 +411,30 @@ p {
 </div>
 ```
 
-15. `ul`内部除最后一个`li`以外设置右边框效果
-
-    1). `last-child`
-
-```
-ul li {
-    border-right: 1px solid blue;
-}
-ul li:last-child {
-    border-right: unset
+## 多行文本
+```css
+.text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 ```
 
-2). `nth-last-of-type/nth-last-child`
-
-```
-ul li {
-    border-right: 1px solid blue;
-}
-
-ul li:nth-last-of-type(1) {
-    border-right: unset
-}
-
-/* or */
-ul li:nth-last-of-child(1) {
-    border-right:unset
-}
+```html
+<div class="text">
+  浮动元素是如何定位的
+正如我们前面提到的那样，当一个元素浮动之后，它会被移出正常的文档流，然后向左或者向右平移，一直平移直到碰到了所处的容器的边框，或者碰到另外一个浮动的元素。
+</div>
 ```
 
-3). `not`
 
-```
-ul li:not(:last-child) {
-    border-right: 1px solid blue;
-}
-```
 
+# css哪些属性可以继承
+* 字体: line-height, font-family, font-size, font-style, font-weight, font
+* 文本: letter-spacing, text-align, text-indent, text-transform, word-spacing
+* 列表: list-style-image, list-style-position, list-style-type, list-style
+* 颜色: color
 # CSS 如何实现一个半圆
 
 ```
@@ -486,7 +473,7 @@ ul li:not(:last-child) {
 
 # CSS 实现三角形
 
-```
+```css
 .triangle {
   width: 0;
   height: 0;
@@ -529,7 +516,7 @@ ul li:not(:last-child) {
 (3) 绝对定位
 ` 绝对定位 + margin: auto`
 
-```
+```css
 .outer {
   position: relative;
 }
@@ -544,7 +531,7 @@ ul li:not(:last-child) {
 
 `绝对定位 + margin-left`
 
-```
+```css
 .outer {
   position: relative;
 }
@@ -561,7 +548,7 @@ ul li:not(:last-child) {
 
 `绝对定位 + translate`
 
-```
+```css
 .outer {
   position: relative;
 }
@@ -574,18 +561,20 @@ ul li:not(:last-child) {
 ```
 
 (4) flex 布局
+```css
 .parent{
-display: flex;
-justify-content: center; // 水平布局
-align-items: center // 垂直布局
+  display: flex;
+  justify-content: center; // 水平布局
+  align-items: center // 垂直布局
 }
+```
 
 ## 垂直居中
 
 (1) 文本/行内元素/行内块元素
 `height + line-height`
 
-```
+```css
 .inner {
   height: 100px;
   ling-height: 100px
@@ -595,7 +584,7 @@ align-items: center // 垂直布局
 (2) table-cell
 `table-cell + vertical-align`
 
-```
+```css
 .outer {
   display: table-cell;
   vertical-align: middle;
@@ -616,7 +605,7 @@ inline-block + line-height
 (3) 绝对定位
 `absolute + translate`
 
-```
+```css
 .outer {
   position: relative;
 }
@@ -630,7 +619,7 @@ inline-block + line-height
 
 `absolute + margin-top`
 
-```
+```css
 .outer {
   position: relative;
 }
@@ -1081,6 +1070,10 @@ BFC全称： Block Formatting Context 块级格式化上下文
 </div>
 ```
 
+
+# 画一条0.5px的线
+https://juejin.cn/post/6844903845617729549
+https://juejin.cn/post/6844903582370643975
 # 原知识点
 
 21. 两栏布局的方法

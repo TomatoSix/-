@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      div {
+        padding: 20px 20px;
+        height: 40px;
+        width: 100px;
+        background: pink;
+      }
+      .text {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="text">
+      浮动元素是如何定位的
+    正如我们前面提到的那样，当一个元素浮动之后，它会被移出正常的文档流，然后向左或者向右平移，一直平移直到碰到了所处的容器的边框，或者碰到另外一个浮动的元素。
+    </div>
+    <script>
+    var singleNonDuplicate = function(nums) {
+        let map = new Map()
+        for (let i=0; i<nums.length; i++) {
+            let number = nums[i]
+            map.has(number, map.has(number) ? map.get(number)+1: 1)
+        }
+        for (let [key, value] of map) {
+          console.log(key, value,'1111');
+            if (value === 1) {
+                return key
+            }
+        }
+    };
+    let nums = [1,1,2,3,3,4,4,8,8]
+    singleNonDuplicate(nums)
+      
+    </script>
+  </body>
+</html>
+
+
+
+

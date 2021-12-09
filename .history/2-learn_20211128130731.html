@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      div {
+        padding: 20px 20px;
+        height: 40px;
+        width: 100px;
+        background: pink;
+      }
+      .text {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="text">
+      浮动元素是如何定位的
+    正如我们前面提到的那样，当一个元素浮动之后，它会被移出正常的文档流，然后向左或者向右平移，一直平移直到碰到了所处的容器的边框，或者碰到另外一个浮动的元素。
+    </div>
+    <script>
+      // 冒泡排序
+      function bubbleSort(arr) {
+        let len = arr.length
+        for (let i=0; i<len-1; i++) {
+          for (let j=0; j<len-i-1; j++) {
+            if (arr[j] > arr[j+1]){
+              [arr[j], arr[j+1]] = [arr[j+1], arr[j]]
+            }
+          }
+        }
+        return arr
+      }
+
+      // 快速排序
+      function quickSort(arr) {
+        if (arr.length < 2) return arr
+        let pivot = arr[arr.length-1]
+        let left = arr.filter((item, index) => {
+          return item <= pivot && index !== arr.length-1
+        })
+        let right = arr.filter(item => {
+          return item > pivot
+        })
+
+        return [...quickSort(left), pivot, ...quickSort(right)]
+      }
+
+      function mergeSort(arr) {
+        if (arr.length <2) return arr
+        let mid = Math.floor(arr.length /2)
+        let left = mergeSort(arr.slice(0,mid))
+        let right = mergeSort(arr.slice(mid))
+        return merge(left,right)
+      }
+
+      function merge(left, right) {
+        let res = []
+        let i=0,j=0
+        while (i < left.length && j < right.length) {
+          if (left[i] <= right[j]) {
+            res.push(left[i++])
+          } else {
+            res.push(right[j++])
+          }
+        }
+        if (i < left.length) {
+          res.push(...left.slice(i))
+        } else {
+          res.push(...right.slice(j))
+        }
+        return res
+      }
+
+
+      let arr = [1,4,3,2,6,5,7,9]
+      console.log(mergeSort(arr));
+  
+      
+    </script>
+  </body>
+</html>
+
+
+
+
