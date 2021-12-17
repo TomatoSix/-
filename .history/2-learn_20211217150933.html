@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+
+      
+    </style>
+  </head>
+  <body>
+    <button>点击</button>
+    <button>点击</button>
+    <button>点击</button>
+    <button>点击</button>
+    <script>
+      function foo(m,n) {
+        console.log(m,n)  //['我', '叫', '番茄炒小六', '!'] 1
+      }
+      const a = 1, b=2, c=3
+      foo`我${a}叫${b}番茄炒小六${c}!`
+
+      function add(info = {name: '番茄', age:18}) {
+        console.log(info.name, info.age);
+      }
+      add({name: '小六'})
+
+    </script>
+  </body>
+</html>
+
+
+
+
