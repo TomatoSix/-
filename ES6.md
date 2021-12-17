@@ -981,3 +981,4 @@ Reflect.setPrototypeOf(target, prototype)
 # ES12
 
 1. finalizationRegistry
+2. 第二个知识点
