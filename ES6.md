@@ -33,38 +33,47 @@
     9. promise
 
 2.  ES7
-    includes
-    指数运算符(2\*\*10)
+
+    - includes
+    - 指数运算符(2\*\*10)
 
 3.  ES8
-    async/await
-    String Padding
-    Object.getOwnPropertyDescriptors
-    Object.values() Object.entries()
+
+    - async/await
+    - String Padding
+    - Object.getOwnPropertyDescriptors
+    - Object.values() Object.entries()
 
 4.  ES9
-    Async iterators 迭代器
-    Object spread operators 展开运算符
-    Promise finally
+
+    - Async iterators 迭代器
+    - Object spread operators 展开运算符
+    - Promise finally
+    - replaceAll
 
 5.  ES10
-    flat 铺平数组
-    flatMap 首先使用映射函数映射每个元素，然后将结果铺平成数组
-    Object.fromEntries() 将 entries 转为对象
-    trimStart trimEnd
-    Symbol description
+
+    - flat 铺平数组
+    - flatMap 首先使用映射函数映射每个元素，然后将结果铺平成数组
+    - Object.fromEntries() 将 entries 转为对象
+    - trimStart trimEnd
+    - Symbol description
 
 6.  ES11
-    BigInt
-    Nullish Coalescing Operator 空值合并运算
-    可选链
-    globalThis 浏览器和 nodejs 中都可以使用的全局对象
-    for...in 标准化 用于遍历对象的 key(针对不同浏览器有不同的实现)
-    import 动态导入
-    promise.allSettled
-    import meta
+
+    - BigInt
+    - Nullish Coalescing Operator 空值合并运算
+    - 可选链
+    - globalThis 浏览器和 nodejs 中都可以使用的全局对象
+    - for...in 标准化 用于遍历对象的 key(针对不同浏览器有不同的实现)
+    - import 动态导入
+    - promise.allSettled
+    - import meta
 
 7.  ES12
+    - finalizationRegistry
+    - WeakRef
+    - logical assignment operator 逻辑赋值运算
 
 # 1. var let const 定义变量三者区别 和 暂时性死区
 
@@ -664,39 +673,123 @@ Promise.race()的作用是接受一组异步任务，然后并行执行异步任
     }
 ```
 
-# Generator 异步编程解决方案
+# Iterator 迭代器
 
-https://es6.ruanyifeng.com/#docs/generator
+- 确使用户在容器对象上遍访的对象，使用该接口无需关心对象的内部实现细节
+- 帮助我们对某个数据进行遍历的对象
 
-```js
-function* helloWorldGenerator() {
-  yield "hello";
-  yield "world";
-  return "ending";
-}
+1. 迭代器概念
 
-var hw = helloWorldGenerator();
+   迭代器是一个对象，符合迭代器协议
+   `const iterator = { next: function() { return {} }}`
 
-hw.next();
-// { value: 'hello', done: false }
+   1. next 函数
+      一个无参函数，返回一个拥有 done 和 value 两个属性的对象
 
-hw.next();
-// { value: 'world', done: false }
+   2. 创建一个数组迭代器
 
-hw.next();
-// { value: 'ending', done: true }
+   ```js
+   const name = ["abc", "def", "ghi"];
+   const nums = [1, 2, 3, 4, 5];
 
-hw.next();
-// { value: undefined, done: true }
-```
+   function createArrayIterator(arr) {
+     let index = 0;
+     return {
+       next: function () {
+         if (index < arr.length) {
+           return { done: false, value: arr[index++] };
+         } else {
+           return { done: true, value: undefined };
+         }
+       },
+     };
+   }
 
-第一次调用，Generator 函数开始执行，直到遇到第一个 yield 表达式为止。next 方法返回一个对象，它的 value 属性就是当前 yield 表达式的值 hello,done 属性的值为 false,表示遍历还没有结束。
+   let namesIterator = createArrayIterator(name);
+   console.log(namesIterator.next());
+   console.log(namesIterator.next());
+   console.log(namesIterator.next());
+   console.log(namesIterator.next());
+   ```
 
-- 特征
-  1. function 关键字与函数名之间有一个星号
-  2. 函数体内部使用 yield 表达式，定义不同的内部状态
+2. 可迭代对象概念
 
-# async await
+   当一个对象实现了可迭代协议(iterable protocol)时，它就是一个可迭代对象。要求必须实现@@iterator 方法，在代码中使用 Symbol.iterator 访问该属性
+   `const iterableObj = { [Symbol.iterator]: function() { return 迭代器}}`
+
+3. 原生迭代器对象
+
+   事实上我们平时创建的很多原生对象已经实现了可迭代协议，会生成一个迭代器对象
+   String, Array, Map, Set, arguments 对象, NodeList 对象
+
+   1. 应用场景
+      展开运算符、 解构赋值、for of
+
+4. 自定义类的迭代
+
+# Generator 生成器(特殊的迭代器)
+
+1. ES6 知识点
+   异步编程解决方案
+
+   https://es6.ruanyifeng.com/#docs/generator
+
+   ```js
+   function* helloWorldGenerator() {
+     yield "hello";
+     yield "world";
+     return "ending";
+   }
+
+   var hw = helloWorldGenerator();
+
+   console.log(hw.next());
+   // { value: 'hello', done: false }
+
+   console.log(hw.next());
+   // { value: 'world', done: false }
+
+   console.log(hw.next());
+   // { value: 'ending', done: true }
+
+   console.log(hw.next());
+   // { value: undefined, done: true }
+   ```
+
+   第一次调用，Generator 函数开始执行，直到遇到第一个 yield 表达式为止。next 方法返回一个对象，它的 value 属性就是当前 yield 表达式的值 hello,done 属性的值为 false,表示遍历还没有结束。
+
+   - 特征
+     1. function 关键字与函数名之间有一个星号
+     2. 函数体内部使用 yield 表达式，定义不同的内部状态
+
+2. 生成器概念
+   生成器是 ES6 新增的一种函数控制、使用的方案。它可以让我们更加灵活的控制函数什么时候继续执行、暂停执行
+
+   ```js
+   function* foo() {
+     console.log("函数开始执行");
+     console.log(1);
+     yield;
+
+     console.log(2);
+     yield;
+
+     console.log(3);
+     yield;
+
+     console.log("函数执行结束");
+   }
+
+   // 函数调用会返回一个迭代器
+   const generator = foo();
+
+   generator.next(); //函数执行开始 1
+   generator.next(); //2
+   generator.next(); //3
+   generator.next(); //函数执行结束
+   ```
+
+# Async await
 
 ## async 函数
 
@@ -867,6 +960,17 @@ Reflect.setPrototypeOf(target, prototype)
 
 2. Object.values() Object.entries()
 
+```js
+let map = { name: "1", age: 10 };
+for (let [key, value] of Object.entries(map)) {
+  console.log(key, value); // name 1 age 10
+}
+
+for (let value of Object.values(map)) {
+  console.log(value); // 1 10
+}
+```
+
 3. String Padding
 
 4. Object.getOwnPropertyDescriptors
@@ -981,4 +1085,16 @@ Reflect.setPrototypeOf(target, prototype)
 # ES12
 
 1. finalizationRegistry
-2. 第二个知识点
+2. WeakRef
+3. logical assignment operator 逻辑赋值运算
+
+```js
+// 判断Info有没有值
+let res = info && info.name;
+```
+
+```js
+// 语法糖
+let res &&= info.name
+
+```
