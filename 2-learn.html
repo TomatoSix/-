@@ -16,38 +16,65 @@
     <button>点击</button>
     <button>点击</button>
     <script>
-      function* helloWorldGenerator() {
-        console.log(1);
-        yield "hello";
+      Function.prototype.myCall = function (thisArg, ...args) {
+         // this指向xxx.call()中的xxx
+         const fn = this;
+         // 将传入的基本数据类型转化成对象， 利用Object()
+         // 当传入null或者undefined, 则绑定window
+         thisArg =
+           thisArg !== null && thisArg !== undefined ? Object(thisArg) : window;
+         // 在对象上绑定xxx函数
+         thisArg.fn = fn;
+         var result = thisArg.fn(...args);
+         delete thisArg.fn;
+         return result;
+       };
+      // call
+      Function.prototype.myCall = function(thisArg, ...args) {
+        thisArg = thisArg !== undefined && thisArg !== null ? Object(thisArg): window
 
-        console.log(2);
-        // yield后面的值会放到value中
-        yield "world";
+        let fn = this
+        thisArg.fn = fn
 
-        console.log(3);
-        // return是一个特殊的yield 后面的值会放到value中,done会变为true
-        return "ending";
+        let result = thisArg.fn(...args)
+
+        delete thisArg.fn
+        return result
       }
 
-      var hw = helloWorldGenerator();
+      Function.prototype.apply = function (thisArg, argArray) {
+         fn = this;
+
+         thisArg =
+           thisArg !== null && thisArg !== undefined ? Object(thisArg) : window;
+
+         thisArg.fn = fn;
+
+         // 判断argArray是否存在
+         argArray = argArray || [];
+         var result = thisArg.fn(...argArray);
+
+         delete thisArg.fn;
+         return result;
+       };
+
+      Function.prototype.myApply = function(thisArg, args) {
+        thisArg = thisArg !== undefined && thisArg !== null ? Object(thisArg): window
+
+        let fn = this
+        thisArg.fn = fn
+        let result
+        if (!args) {
+          result = thisArg.fn()
+        } else {
+          result = thisArg.fn(...args)
+        }
+        delete thisArg.fn
+        return result
+      }
+
 
       
-      console.log(hw.next());
-      // { value: 'hello', done: false }
-
-      console.log(hw.next());
-
-      // { value: 'world', done: false }
-
-      console.log(hw.next());
-
-      // { value: 'ending', done: true }
-
-      console.log(hw.next());
-
-      // { value: undefined, done: true }
-
-
     </script>
   </body>
 </html>
