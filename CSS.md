@@ -1,28 +1,35 @@
 ## CSS 层叠样式表(Cascading Style Sheets)
 
 **浏览器 CSS 匹配不是从左到右进行查找，而是从右到左进行查找，这是为了尽早过滤掉一些无关的样式规则和元素**
-# css引入方式
-1. 行内样式: 在网页上通过style=""属性直接写样式
+
+# css 引入方式
+
+1. 行内样式: 在网页上通过 style=""属性直接写样式
+
 ```html
-<div style="color: green; margin-top: 30px;border: 1px solid red;width: 500px">行内样式实例1</div>
+<div style="color: green; margin-top: 30px;border: 1px solid red;width: 500px">
+  行内样式实例1
+</div>
 ```
 
 2. 内部样式表：在网页上创建嵌入的样式表，通常写在<head></head>
+
 ```html
 <style>
-    p {
-        color: #6478de;
-        border: red 1px solid;
-    }
+  p {
+    color: #6478de;
+    border: red 1px solid;
+  }
 </style>
 ```
 
 3. 链入外部样式表 - link,通常写在<style></style>里面
 
-4. 导入外部样式表： 通过@import引入其他的CSS文件
+4. 导入外部样式表： 通过@import 引入其他的 CSS 文件
+
 ```html
 <style>
-    @import "qt_02_style.css";
+  @import "qt_02_style.css";
 </style>
 ```
 
@@ -32,7 +39,6 @@
 <link> 引用 CSS 时，在页面载入的时候可以同时加载样式，样式加载和结构加载是异步操作。可以防止访问网页时先加载完文字、图片等结构数据，然后再加载样式的问题。@import 需要网页结构完全载入以后加载样式文件。
 <link> 是 XHTML 标签，无兼容问题。@import 是在 CSS2.1 提出的，低版本浏览器不支持。
 <link> 支持使用 JavaScript 控制 DOM 来改变样式。@import 不支持。
-
 
 # css 浏览器前缀有哪些？
 
@@ -91,7 +97,9 @@ flex 属性是 flex-grow,flex-shrink,flex-basis 的缩写，默认值为 0 1 aut
 
 XHTML 与 HTML 4.01 几乎是相同的
 
-1. CSS 盒模型
+2. CSS 选择器以及优先级
+
+# CSS 盒模型
 
 页面上任何一个元素我们都可以看成是一个盒子，盒子会占用一定的空间和位置，他们之间相互制约，就形成了网页的布局
 
@@ -100,7 +108,7 @@ XHTML 与 HTML 4.01 几乎是相同的
 W3C 标准盒模型 属性 width,height 只包含内容 content
 IE 盒模型(怪异盒模型) 属性 width,height = content + padding + border
 
-```
+```css
 box-sizing: content-box || border-box || inherit;
 
 /*
@@ -109,63 +117,65 @@ box-sizing: content-box || border-box || inherit;
 */
 ```
 
-2. CSS 选择器以及优先级
-
-
 # 有哪些选择器？
-## 基础选择器
 
-1). 通配符(\*) ; 2). 标签选择器(div,p); 3). class 类选择器; 4). id 选择器
+1.  基础选择器
 
-## 组合选择器
+    1. id 选择器
+    2. class 类选择器
+    3. 标签选择器(div,p)
+    4. 通配符(\*)
 
-1). 多元素选择器 `E,F`;
-2). 后代元素选择器 `E F`; 匹配 E 元素的后代元素 F
-3). 子元素选择器 `E>F`; 匹配 E 元素的子元素 F
-4). 相邻兄弟选择器 `E+F`; E 元素后面紧跟着的 F 元素将被选中
-当第二个元素紧跟在第一个元素之后，并且两个元素都是属于同一个父元素的子元素，则第二个元素将被选中。
-5). 兄弟选择器 `E~F` 选择 E 元素之后所有同层级 F 元素
+2.  组合选择器
 
-## 属性选择器
+    1. 多元素选择器 `E,F`;
+    2. 后代元素选择器 `E F`; 匹配 E 元素的后代元素 F
+    3. 子元素选择器 `E>F`; 匹配 E 元素的子元素 F
+    4. 相邻兄弟选择器 `E+F`; E 元素后面紧跟着的 F 元素将被选中
+       当第二个元素紧跟在第一个元素之后，并且两个元素都是属于同一个父元素的子元素，则第二个元素将被选中。
+    5. 兄弟选择器 `E~F` 选择 E 元素之后所有同层级 F 元素
 
-1). 匹配所有具有`att`属性的 E 元素`E[att]`;
-2). 匹配所有`att`属性等于`val`的 E 元素`E[att=val]`;
-3). 匹配所有`att`属性具有多个空格分隔的值，其中一个值等于`val`的 E 元素`E[att~=val]`;
-4). 匹配所有`att`属性具有多个连字号分隔(hyphen-separated)的值，其中一个值以`val`开头的 E 元素`E[att |= val]`
-5). 匹配存在`att`属性并且属性值结尾是`val`的 E 元素`E[att$=val]`
+3.  属性选择器
 
-链接：https://developer.mozilla.org/zh-CN/docs/Learn/CSS/Building_blocks/Selectors/Pseudo-classes_and_pseudo-elements
+    1. 匹配所有具有`att`属性的 E 元素`E[att]`;
+    2. 匹配所有`att`属性等于`val`的 E 元素`E[att=val]`;
+    3. 匹配所有`att`属性具有多个空格分隔的值，其中一个值等于`val`的 E 元素`E[att~=val]`;
+    4. 匹配所有`att`属性具有多个连字号分隔(hyphen-separated)的值，其中一个值以`val`开头的 E 元素`E[att |= val]`
+    5. 匹配存在`att`属性并且属性值结尾是`val`的 E 元素`E[att$=val]`
 
-## 伪类选择器 --用于选择处于特定状态的元素，开头为冒号的关键字
+    链接：https://developer.mozilla.org/zh-CN/docs/Learn/CSS/Building_blocks/Selectors/Pseudo-classes_and_pseudo-elements
 
-:first 匹配分页媒体的第一页。
+4.  伪类选择器 --用于元素处于某个状态时，为其添加对应的样式，开头为冒号的关键字
 
-:first-child 匹配其父元素的子元素中的第一个元素。
+    1. :first 匹配分页媒体的第一页。
 
-:nth-child 匹配其父元素的子元素中的第 n 个元素。
+    2. :first-child 匹配其父元素的子元素中的第一个元素。
 
-:first-of-type 匹配兄弟元素中第一个某种类型的元素。
+    3. :nth-child 匹配其父元素的子元素中的第 n 个元素。
 
-:link 未点击前的样式
-:hover 当用户悬浮到一个元素之上的时候匹配。
-:active 点击时
-:visited 
+    4. :first-of-type 匹配兄弟元素中第一个某种类型的元素。
 
+    5. LVHA
 
-四个顺序
-link -> hover -> active -> visited
+       1. :link 未点击前的样式
+       2. :hover 当用户悬浮到一个元素之上的时候匹配。
+       3. :active 点击时
+       4. :visited
 
-## 伪元素，开头为双冒号::
+       四个顺序
+       link -> hover -> active -> visited
 
-::before 匹配出现在原有元素的实际内容之后的一个可样式化元素。
+5.  伪元素，创建一些不在文档树中的元素，并为其添加样式，开头为双冒号::
 
-::after 匹配出现在原有元素的实际内容之前的一个可样式化元素。
+    1. ::before 匹配出现在原有元素的实际内容之后的一个可样式化元素。
 
-::first-line 该伪元素可改变段落首行文字的样式
+    2. ::after 匹配出现在原有元素的实际内容之前的一个可样式化元素。
 
-::first-letter 该伪元素向文本的第一个字母添加特殊样式
+    3. ::first-line 该伪元素可改变段落首行文字的样式
 
-::selection 匹配文档中被选择的那部分。
+    4. ::first-letter 该伪元素向文本的第一个字母添加特殊样式
+
+    5. ::selection 匹配文档中被选择的那部分。
 
 ## CSS 选择器的优先级
 
@@ -182,18 +192,16 @@ id 选择器 100
 权值相同的，后定义的优先级较高
 样式值含有`!important`，优先级最高
 
-```
-div .class1 #people的权值 等于 1+10+100=111
-.class2 li #age的权值 等于 10+1+100=111
+`div .class1 #people{}`的权值 等于 1+10+100=0,1,1,1
+`.class2 li #age{}`的权值 等于 10+1+100=0,1,1,1
 如果第二个选择器后定义样式，则第二个的优先级要高
-```
 
 # 伪类和伪元素的区别
 
 - 伪类(pseudo-classes)
   其核心就是用来选择 DOM 树之外的信息，不能够被普通选择器选择的文档之外的元素，用来添加一些选择器的特殊效果。比如`:hover, :active`等，由于状态的变化是非静态的，所以元素达到一个特定状态时，它可能得到一个伪类的样式；当状态改变时，它又会失去这个样式，由此可以看出，它的功能和`class`有些类似，但它是基于文档之外的抽象，所以叫伪类
 
-- 伪元素(pseudo-elements)
+- 伪元素(pseudo-elements)-不存在于文档中的抽象元素
   DOM 树中没有定义的虚拟元素，核心就是需要创建通常不存在于文档中的元素，比如`::before, ::after`它选择的元素指定内容，表示选择元素内容的之前内容或之后内容。伪元素控制的内容和元素是没有差别的，但是它本身只是基于元素的抽象，并不存在于文档中，所以称为伪元素，用于将特殊的效果添加到某些选择器
 
 - 伪类与伪元素的区别
@@ -219,18 +227,19 @@ rem: 相对长度单位，相对于 HTML 根元素字体尺寸大小, 通过修�
 vw/vh: 相对于 viewport 相对视口的宽度和高度而定的
 
 # 可以继承的属性
-   (1) 字体系列属性
-   font、font-family、font-weight、font-size、font-style、font-variant、font-stretch、font-size-adjust
-   (2) 文本系列属性
-   text-indent、text-align、text-shadow、line-height、word-spacing、letter-spacing、text-transform、direction、color
-   (3) 表格布局属性
-   caption-side border-collapse empty-cells
-   (4) 列表属性
-   list-style-type、list-style-image、list-style-position、list-style
-   (5) 光标属性
-   cursor
-   (6) 元素可见性
-   visibility
+
+(1) 字体系列属性
+font、font-family、font-weight、font-size、font-style、font-variant、font-stretch、font-size-adjust
+(2) 文本系列属性
+text-indent、text-align、text-shadow、line-height、word-spacing、letter-spacing、text-transform、direction、color
+(3) 表格布局属性
+caption-side border-collapse empty-cells
+(4) 列表属性
+list-style-type、list-style-image、list-style-position、list-style
+(5) 光标属性
+cursor
+(6) 元素可见性
+visibility
 
 5. CSS 实现 0.5px
 
@@ -276,7 +285,6 @@ vw/vh: 相对于 viewport 相对视口的宽度和高度而定的
 
 opacity：0 则仅仅不可见，但仍可被浏览器发现，也就能触发各种事件。通过浏览器调试工具即可得出此结论。
 
-
 # flex 布局
 
 容器属性:
@@ -297,6 +305,8 @@ opacity：0 则仅仅不可见，但仍可被浏览器发现，也就能触发�
     flex: flex-grow, flex-shrink, flex-basis的简写
     align-self: 属性允许单个项目有与其他项目不一样的对齐方式(auto表示继承父类无父类等同于stretch)
 
+## flex: 1
+
     首先`flex`属性是`flex-grow`, `flex-shrink`, `flex-basis`的简写形式;
 
     `flex-grow`: 定义项目的放大比例，即如果子元素未充满父元素，会按照一定的比例放大各个子元素，默认值为0, 按比例放大
@@ -312,10 +322,14 @@ opacity：0 则仅仅不可见，但仍可被浏览器发现，也就能触发�
     flex-basis: 0%
     ```
 
+# grid 布局
+
 # 元素隐藏方式
+
 1. display: none
 2. visibility: hidden
 3. opacity: 0
+
 # 定位方式及其区别
 
 static: 默认值, 没有定位，元素出现在正常的流中;
@@ -326,18 +340,19 @@ fixed: 相对于视口进行偏移,即定位基点是浏览器窗口;脱离标�
 
 absolute: 相对于最近一级有定位祖先元素(一般是父元素(值不为 static))进行偏移，即定位基点是父元素;脱离标准文档流
 
-sticky: 它会产生动态效果，很像 relative 和 fixed 的结合 
-        在目标区域以内，它的行为就像 position:relative;在滑动过程中，某个元素距离其父元素的距离达到sticky粘性定位的要求时(比如top：100px)；position:sticky这时的效果相当于fixed定位，固定到适当位置。
+sticky: 它会产生动态效果，很像 relative 和 fixed 的结合
+在目标区域以内，它的行为就像 position:relative;在滑动过程中，某个元素距离其父元素的距离达到 sticky 粘性定位的要求时(比如 top：100px)；position:sticky 这时的效果相当于 fixed 定位，固定到适当位置。
 
 inherit: 从父元素继承 position 属性的值
 
-# margin塌陷及合并问题
-https://juejin.cn/post/6976272394247897101
-塌陷解决方案：父级增加overflow:hidden  bfc
-合并解决方案：margin取最大值
+# margin 塌陷及合并问题
 
+https://juejin.cn/post/6976272394247897101
+塌陷解决方案：父级增加 overflow:hidden bfc
+合并解决方案：margin 取最大值
 
 # 浮动模型及清除浮动的方法
+
 12. 浮动与清除浮动
 
 脱离文档流，也就是将元素从普通的布局排版中拿走，其他盒子在定位的时候，会当作脱离文档流的元素不存在而进行定位
@@ -383,364 +398,369 @@ p {
 
 (2). 方法二: 使用 CSS 的`overflow`属性
 
-(3). 方法三: :after伪元素法
+(3). 方法三: :after 伪元素法
 
 (4). 方法四：双伪元素清除浮动
 
+# css 哪些属性可以继承
 
+- 字体: line-height, font-family, font-size, font-style, font-weight, font
+- 文本: letter-spacing, text-align, text-indent, text-transform, word-spacing
+- 列表: list-style-image, list-style-position, list-style-type, list-style
+- 颜色: color
 
-# 实现单行文本溢出显示和多行
-
-## 单行文本
-```css
-.text {
-  width: 100px;
-  margin: 0 auto;
-}
-
-.inner {
-  overflow: hidden;
-  /*文本不会换行*/
-  white-space: nowrap;
-  /*当文本溢出包含元素时，以省略号表示超出的文本*/
-  text-overflow: ellipsis;
-}
-
-<div class="text">
-  <div class="inner">前几天的美团笔试五道题就a了半道，今天下午两点通知我七点面试，总共40分钟，面试管知识面也太广了吧 </div>
-</div>
-```
-
-## 多行文本
-```css
-.text {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-```
-
-```html
-<div class="text">
-  浮动元素是如何定位的
-正如我们前面提到的那样，当一个元素浮动之后，它会被移出正常的文档流，然后向左或者向右平移，一直平移直到碰到了所处的容器的边框，或者碰到另外一个浮动的元素。
-</div>
-```
-
-
-
-# css哪些属性可以继承
-* 字体: line-height, font-family, font-size, font-style, font-weight, font
-* 文本: letter-spacing, text-align, text-indent, text-transform, word-spacing
-* 列表: list-style-image, list-style-position, list-style-type, list-style
-* 颜色: color
-# CSS 如何实现一个半圆
-
-```
-/*上半圆*/
-.semi-circle {
-    width: 100px;
-    height: 50px;
-    color: #bfa;
-    border-radius: 50px 50px 0 0;
-}
-
-/*下半圆*/
-.semi-circle2 {
-    width: 100px;
-    height: 50px;
-    color: #bfa;
-    border-radius: 0 0 50px 50px;
-}
-
-/*左半圆*/
-.semi-circle3 {
-    width: 50px;
-    height: 100px;
-    color: #bfa;
-    border-radius: 50px 0 0 50px;
-}
-
-/*右半圆*/
-.semi-circle4 {
-    width: 50px;
-    height: 100px;
-    color: #bfa;
-    border-radius: 0 50px 50px 0
-}
-```
-
-# CSS 实现三角形
-
-```css
-.triangle {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 250px 250px 250px 250px;
-  border-color: red transparent transparent transparent;
-}
-```
-
-# 实现水平、垂直、水平垂直居中对齐?
+# 实现对齐
 
 ## 水平居中
 
-(1) 文本/行内元素/行内块元素
-`text-align + inline-block`
+1. 文本/行内元素/行内块元素
+   `text-align + inline-block`
 
-```
-.outer {
-  text-align: center
-}
+   ```css
+   .outer {
+     text-align: center;
+   }
 
-.inner {
-  display: inline-block;
-  text-align: left
-}
-/*上面代码中的 text-align: center; 会使文本居中，但是对块级元素无效，如果将元素设置为 inline-block，该元素就会被当做文本对待，从而实现元素居中。*/
-```
+   .inner {
+     display: inline-block;
+     text-align: left;
+   }
+   /*上面代码中的 text-align: center; 会使文本居中，但是对块级元素无效，如果将元素设置为 inline-block，该元素就会被当做文本对待，从而实现元素居中。*/
+   ```
 
-(2) 单个块元素
-`margin: auto`
+2. 单个块元素
+   `margin: 0 auto`
 
-```
-.inner {
-    display: block;
-    width: 100px  // width必须定宽，否则会继承父元素的宽度
-    margin: 0 auto;
-}
-```
+   ```css
+   .inner {
+     display: block;
+     width: 100px; // width必须定宽，否则会继承父元素的宽度
+     margin: 0 auto;
+   }
+   ```
 
-(3) 绝对定位
-` 绝对定位 + margin: auto`
+3. 绝对定位
 
-```css
-.outer {
-  position: relative;
-}
+   1. ` 绝对定位 + margin: auto`
 
-.inner {
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin: auto;
-}
-```
+      ```css
+      .outer {
+        position: relative;
+      }
 
-`绝对定位 + margin-left`
+      .inner {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: auto;
+      }
+      ```
 
-```css
-.outer {
-  position: relative;
-}
+   2. `绝对定位 + margin-left`
 
-.inner {
-  position: absolute;
-  left: 50%;
-  margin-left: -50px;  // 水平居中
-  margin-top: -50px; // 垂直居中
-  width: 100px;
-  height: 100px
-}
-```
+      ```css
+      .outer {
+        position: relative;
+      }
 
-`绝对定位 + translate`
+      .inner {
+        position: absolute;
+        left: 50%;
+        margin-left: -50px; // 水平居中
+        margin-top: -50px; // 垂直居中
+        width: 100px;
+        height: 100px;
+      }
+      ```
 
-```css
-.outer {
-  position: relative;
-}
+   3. `绝对定位 + translate`
 
-.inner {
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, 0); // 或者transform: translateX(-50%) 水平居中
-}
-```
+      ```css
+      .outer {
+        position: relative;
+      }
 
-(4) flex 布局
-```css
-.parent{
-  display: flex;
-  justify-content: center; // 水平布局
-  align-items: center // 垂直布局
-}
-```
+      .inner {
+        position: absolute;
+        left: 50%;
+        transform: translate(
+          -50%,
+          0
+        ); // 或者transform: translateX(-50%) 水平居中
+      }
+      ```
+
+4. flex 布局
+
+   ```css
+   .parent {
+     display: flex;
+     justify-content: center; // 水平布局
+     align-items: center; // 垂直布局
+   }
+   ```
 
 ## 垂直居中
 
-(1) 文本/行内元素/行内块元素
-`height + line-height`
+1. 单行文本/行内元素/行内块元素
+   `height = line-height`
 
-```css
-.inner {
-  height: 100px;
-  ling-height: 100px
-}
-```
+   ```css
+   .inner {
+     height: 100px;
+     line-height: 100px;
+   }
+   ```
 
-(2) table-cell
-`table-cell + vertical-align`
+2. 多行文本垂直居中(不能使用 line-height)
+   `table-cell + vertical-align`
 
-```css
-.outer {
-  display: table-cell;
-  vertical-align: middle;
-}
+   1. 示例 1
 
-inline-block + line-height
-.outer {
-  line-height: 300px;
-}
+      ```css
+      footer {
+        width: 100%;
+      }
+      footer .blue_bg {
+        height: 40px;
+        background-color: #304b5e;
 
-.inner {
-  line-height: initial; /* 重置 */
-  vertical-align: middle;
-  display: inline-block;
-}
-```
+        font-size: 1em;
+        color: #fff;
+        line-height: 40px; /* 垂直居中 */
+        text-align: center; /* 水平居中 */
+        cursor: pointer;
+      }
+      footer .footer_bottom {
+        width: 100%;
+        /* height:100px; */
+        background-color: #f3f3f3;
+        font-size: 1em;
+        display: table; /*关键语句*/
+        text-align: center;
+      }
+      .cell {
+        display: table-cell; /*关键语句*/
+        vertical-align: middle; /*关键语句  垂直居中*/
+      }
+      ```
 
-(3) 绝对定位
-`absolute + translate`
+      ```html
+      <footer>
+        <div class="blue_bg">联系我们 | 网站声明 | 广告合作</div>
+        <div class="footer_bottom">
+          <div class="cell">
+            <p>
+              鄂ICP备05011509号 水利部长江水利委员会主办
+              长江委宣传出版中心制作维护
+            </p>
+            <p>
+              新闻线索：027-82927755 电话总机：027-82828114
+              投稿信箱：cjslw＠126.com
+            </p>
+            <p>作者: 番茄炒小六</p>
+          </div>
+        </div>
+      </footer>
+      ```
 
-```css
-.outer {
-  position: relative;
-}
+   2. 示例 2
 
-.inner {
-  position: absolute;
-  top: 50%;
-  transform: translate(0, -50%) // 垂直居中
-}
-```
+      ```css
+      .parent {
+        background-color: pink;
+        display: table;
+        width: 300px;
+        height: 400px;
+        text-align: center;
+      }
+      .son {
+        display: table-cell;
+        background-color: yellow;
+        vertical-align: middle;
+      }
+      ```
 
-`absolute + margin-top`
+      ```html
+      <div class="parent">
+        <p class="son">
+          会议认为，党的十八大以来，我国经济发展取得历史性成就、
+          发生历史性变革，为其他领域改革发展提供了重要物质条件。经济实力
+          再上新台阶，经济年均增长7.1%，成为世界经济增长的主要动力源和稳定器。
+        </p>
+      </div>
+      ```
 
-```css
-.outer {
-  position: relative;
-}
+3. 绝对定位
 
-.inner {
-  position: absolute;
-  top: 50%;
-  margin-top: -50px;
-  width: 100px;
-  height: 100px;
-}
+   1. `absolute + translate`
 
-<!-- transform中translate偏移的百分比就是相对于元素自身的尺寸而言的。 -->
-```
+      ```css
+      .outer {
+        position: relative;
+      }
+
+      .inner {
+        position: absolute;
+        top: 50%;
+        /*  transform中translate偏移的百分比就是相对于元素自身的尺寸而言的。*/
+        transform: translate(0, -50%); /* 垂直居中 */
+      }
+      ```
+
+   2. `absolute + margin-top`
+
+      ```css
+      .outer {
+        position: relative;
+      }
+
+      .inner {
+        position: absolute;
+        top: 50%;
+        margin-top: -50px;
+        width: 100px;
+        height: 100px;
+      }
+      ```
 
 ## 水平垂直居中
 
-```css
-<div class="outer">
-    <div class="inner">Hello, world</div>
+```html
+<div class="outer" style="width: 200px; height: 200px; background-color: red">
+  <div
+    class="inner"
+    style="width: 20px; height: 20px; background-color: yellow"
+  ></div>
 </div>
-
-.outer {
-  width: 300px;
-  height: 300px;
-  border: 1px solid #999;
-}
-
-.inner {
-  width: 100px;
-  height: 100px;
-  border: 1px solid #999;
-}
 ```
 
-(1)`flex`方案
+1. `flex`方案
 
-`flex`
+   1. `flex` 容器
 
-```css
-.outer {
-  display: flex;
-  justify-content: center; /* 水平居中 */
-  align-items: center; /* 垂直居中 */
-}
-```
+      ```css
+      .outer {
+        display: flex;
+        justify-content: center; /* 水平居中 */
+        align-items: center; /* 垂直居中 */
+      }
+      ```
 
-`flex + margin`
+   2. `flex` 容器+项目
 
-```css
-.outer {
-  display: flex;
-}
+      ```css
+      .outer {
+        display: flex;
+        justify-content: center; /* 水平居中 */
+      }
+      .inner {
+        align-self: center; /* 垂直居中 */
+      }
+      ```
 
-.inner {
-  margin: auto;
-}
-```
+   3. `flex + margin`
 
-```css
-.outer {
-  display: flex;
-  justify-content: center; /* 水平居中 */
-}
+      ```css
+      .outer {
+        display: flex;
+      }
 
-.inner {
-  align-self: center; /* 垂直居中 */
-}
-```
+      .inner {
+        margin: auto;
+      }
+      ```
 
-(2)`grid`方案
+2. 绝对定位
 
-`grid`
+   1. `absolute + transform` 未知宽高
 
-```css
-.outer {
-  display: grid;
-}
+      ```css
+      .outer {
+        position: relative;
+      }
 
-.inner {
-  justify-self: center;
-  align-self: center;
-}
-```
+      .inner {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+      ```
 
-`grid + margin`
+   2. `absolute + margin` 绝对定位+负 margin 值(已知宽高)
 
-```css
-.outer {
-  display: grid;
-}
+      ```css
+      .outer {
+        position: relative;
+      }
 
-.inner {
-  margin: auto;
-}
-```
+      .inner {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-top: -10px;
+        margin-left: -10px;
+      }
+      ```
 
-(3)`absolute + transform`
+   3. `left/right/bottom/top + margin(auto)`
 
-```css
-.outer {
-  position: relative;
-}
+      ```css
+      .outer {
+        position: relative;
+      }
 
-.inner {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-```
+      .inner {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        margin: auto;
+      }
+      ```
 
-# a标签的作用
+3. `grid`方案
+
+   1. `grid`
+
+      ```css
+      .outer {
+        display: grid;
+      }
+
+      .inner {
+        justify-self: center;
+        align-self: center;
+      }
+      ```
+
+   2. `grid + margin`
+
+      ```css
+      .outer {
+        display: grid;
+      }
+
+      .inner {
+        margin: auto;
+      }
+      ```
+
+# 包含块
+
+# a 标签的作用
 
 1. 跳转到外部网址
+
 ```css
 <a href="http://www.baidu.com" target="_blank">百度</a>
 ```
-2. 实现本地页面文件跳转      
+
+2. 实现本地页面文件跳转
 3. 设置锚点。在网页任意位置添加一个标记，可以由任何地方跳转到这个标记处
-  定义锚点时，如果用a标签当做锚点，给a标签设置name属性，如果用其它标签当做锚点，给该标签设置id属性
+   定义锚点时，如果用 a 标签当做锚点，给 a 标签设置 name 属性，如果用其它标签当做锚点，给该标签设置 id 属性
 
 ```css
 /* 在HTML文档中插入 id */
@@ -750,57 +770,46 @@ inline-block + line-height
 <a href="#tips">详细说明</a>
 ```
 
+# BFC 是什么？
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# BFC是什么？
 https://github.com/zuopf769/notebook/blob/master/fe/BFC%E5%8E%9F%E7%90%86%E5%89%96%E6%9E%90/README.md
-BFC全称： Block Formatting Context 块级格式化上下文
-简单来说，BFC就是一个完全独立的空间(布局环境)，让空间里的子元素不会影响到外面的布局
+BFC 全称： Block Formatting Context 块级格式化上下文
+简单来说，BFC 就是一个完全独立的空间(布局环境)，让空间里的子元素不会影响到外面的布局
 
-## 如何生成BFC？
+## 如何生成 BFC？
+
 1. 根元素
-2. float的值不为none
-3. overflow的值不为visible    hidden|auto|scroll
-4. display的值为inline-block、table-cell、table-caption、flex
-5. position的值为absolute或者fixed
+2. float 的值不为 none
+3. overflow 的值不为 visible hidden|auto|scroll
+4. display 的值为 inline-block、table-cell、table-caption、flex
+5. position 的值为 absolute 或者 fixed
 
-## BFC的约束规则
-* 内部的Box会在垂直方向上一个接一个的放置
-* 垂直方向上的距离由margin决定。（完整的说法是：属于同一个BFC的两个相邻Box的margin会发生重叠（塌陷），与方向无关。）
-* 每个元素的左外边距与包含块的左边界相接触（从左向右），即使浮动元素也是如此。（这说明BFC中子元素不会超出他的包含块，而position为absolute的元素可以超出他的包含块边界）
-* BFC的区域不会与float的元素区域重叠
-* 计算BFC的高度时，浮动子元素也参与计算
-* BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面元素，反之亦然
+## BFC 的约束规则
 
-## BFC的作用
-1. 当两个相邻块级子元素分属于不同的BFC时可以阻止margin重叠(塌陷)
+- 内部的 Box 会在垂直方向上一个接一个的放置
+- 垂直方向上的距离由 margin 决定。（完整的说法是：属于同一个 BFC 的两个相邻 Box 的 margin 会发生重叠（塌陷），与方向无关。）
+- 每个元素的左外边距与包含块的左边界相接触（从左向右），即使浮动元素也是如此。（这说明 BFC 中子元素不会超出他的包含块，而 position 为 absolute 的元素可以超出他的包含块边界）
+- BFC 的区域不会与 float 的元素区域重叠
+- 计算 BFC 的高度时，浮动子元素也参与计算
+- BFC 就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面元素，反之亦然
 
-2. 使用float脱离文档流，高度塌陷，即父元素高度不会被撑开。可以给父元素触发BFC
+## BFC 的作用
+
+1. 当两个相邻块级子元素分属于不同的 BFC 时可以阻止 margin 重叠(塌陷)
+
+2. 使用 float 脱离文档流，高度塌陷，即父元素高度不会被撑开。可以给父元素触发 BFC
 
 3. 两栏布局
 
 4. 清除内部浮动(应该就是解决高度塌陷)
+
 ```
 <style>
     .par {
         border: 5px solid #fcc;
         width: 300px;
     }
- 
+
     .child {
         border: 5px solid #f66;
         width:100px;
@@ -816,7 +825,7 @@ BFC全称： Block Formatting Context 块级格式化上下文
 </body>
 ```
 
-为达到清除内部浮动，我们可以触发par生成BFC，那么par在计算高度时，par内部的浮动元素child也会参与计算。
+为达到清除内部浮动，我们可以触发 par 生成 BFC，那么 par 在计算高度时，par 内部的浮动元素 child 也会参与计算。
 
 ```
 .par {
@@ -824,256 +833,624 @@ BFC全称： Block Formatting Context 块级格式化上下文
 }
 ```
 
+# 层叠上下文 层叠等级 层叠顺序 z-index
 
+https://juejin.cn/post/6844903667175260174
 
-# 两列布局
-1. 左列定宽，右列自适应
+1. 层叠上下文
+   元素在页面 z 轴上的层叠关系
 
-(1) float + margin
-```html
- <body>
-    <div class="left">左列定宽</div>
-    <div class="right">右列自适应</div>
-  </body>
-```
+2. 层叠等级
+   指层叠上下文中的层叠上下文元素在 z 轴上的上下顺序
 
-```css
-* {
-  margin: 0;
-  padding: 0;
-}
-.left {
-    background-color: rgb(231, 160, 160);
-    float: left;
-    width: 100px;
-    height: 500px;
-}
-.right {
-    background-color: rgb(166, 216, 166);
-    height: 500px;
-    /* 大于等于#left的宽度 */
-    margin-left: 100px;
-}
-```
+3. 层叠准则
+   1. 谁大谁上
+   2. 后来居上
 
-(2) float + overflow
-```html
- <body>
-    <div class="left">左列定宽</div>
-    <div class="right">右列自适应</div>
-  </body>
-```
+# style 写在 body 前后的区别
 
-```css
-.left {
-    background-color: #f00;
-    float: left;
-    width: 100px;
-    height: 500px;
-}
-.right {
-    background-color: #0f0;
-    height: 500px;
-    overflow: hidden; /*触发bfc达到自适应*/
-}
-```
+# 实现轮播图
 
+# 实现类
 
+1.  实现一个宽高自适应的正方形
 
-(3) flex实现
-```html
-<div class="parent">
-    <div class="left">左列定宽</div>
-    <div class="right">右列自适应</div>
-</div>
-```
+    1. 利用 vw
 
-```css
-.parent{
-    width: 100%;
-    height: 500px;
-    display: flex;
-}
-.left {
-    width: 100px;
-    background-color: #f00;
-}
-.right {
-    flex: 1; /*均分了父元素剩余空间*/
-    background-color: #0f0;
-}
-```
+       ```css
+       .square {
+         width: 10vw;
+         height: 10vw;
+         background: tomato;
+       }
+       ```
 
+    2. 实现父元素宽高未知的内部实现正方形
 
+       ```css
+       .box {
+         width: 200px;
+         height: 200px;
+         background-color: pink;
+       }
+       .square {
+         width: 50%;
+         /* padding的百分比数值是相对父元素width计算的*/
+         padding-bottom: 50%;
+         background-color: tomato;
+       }
+       ```
 
-# 圣杯布局
-(1). flex
+       ```html
+       <div class="box">
+         <div class="square"></div>
+       </div>
+       ```
 
-```css
-* {
-  margin: 0;
-  padding: 0;
-}
-.container {
-  display: flex;
-  height: 600px;
-}
-.left {
-  width: 200px;
-  height: 100%;
-  background: blue;
-}
-.center {
-  flex-grow: 1;
-  height: 100%;
-  background: gray;
-}
-.right {
-  width: 150px;
-  height: 100%;
-  background: orange;
-}
-```
+2.  一个自适应矩形，水平垂直居中， 且宽高比为 2:1
 
-```html
-<div class="container">
-    <div class="left"></div>
-    <div class="center"></div>
-    <div class="right"></div>
-  </div>
-```
+    ```css
+    .box {
+      width: 200px;
+      height: 400px;
+      background-color: pink;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .square {
+      width: 40%;
+      padding-bottom: 20%;
+      background-color: tomato;
+    }
+    ```
 
-(2). float
+    ```html
+    <div class="box">
+      <div class="square"></div>
+    </div>
+    ```
 
-```css
-  * {
-    margin: 0;
-    padding: 0;
-  }
-  .container {
-    padding-left: 220px; 
-    padding-right: 220px;
-  }
-  .left {
-    float: left;
-    width: 220px;
-    height: 400px;
-    background: pink;
-    /* -100%会移动到中间center的最左边 */
-    margin-left: -100%; 
-    position: relative;
-    left: -220px; 
-  }
-  .center {
-    float: left;
-    width: 100%;
-    height: 500px;
-    background: rgb(226, 226, 211);
-  }
-  .right {
-    float: left;
-    width: 220px;
-    height: 400px;
-    background: rgb(85, 202, 187);
-    /* -220px会移动到中间center的最右边 */
-    margin-left: -220px;
-    position: relative;
-    right: -220px;
-  }
-```
+3.  设计一个 9:16 的盒子 ，不限制宽度
 
-```html
-<div class="container">
-  <div class="center">
-    <h2>圣杯布局</h2>
-  </div>
-  <div class="left"></div>
-  <div class="right"></div>
-</div>
-```
+    1. 设计 1(整屏幕设计)
 
-总结: 1). 先写 middle,然后是 left 和 right, 因为要先渲染 middle; 2). left, right 需设置`position: relative`以及相应的 left, right 值; 3). 负边距的作用, left 的`margin-left: -100%`使它上移一行, 同时 right 向左移占据 left 原先位置，同理, right 的`margin-left: -100px`使它上移并靠右
+       ```css
+       html,
+       body {
+         padding: 0;
+         margin: 0;
+       }
+       .scale {
+         height: 100%;
+         padding-bottom: 56.25%;
+         background-color: tomato;
+       }
+       ```
 
+       ```html
+       <div class="scale"></div>
+       ```
 
+    2. 设计二
 
+       ```css
+       .box {
+         width: 200px;
+         height: 200px;
+         background-color: pink;
+       }
+       .square {
+         width: 80%;
+         padding-bottom: 45%;
+         background-color: tomato;
+       }
+       ```
 
+       ```html
+       <div class="box">
+         <div class="square"></div>
+       </div>
+       ```
 
-# 双飞翼布局
+4.  三栏布局实现-flex
+    概念: 页面中有三栏， 左右两栏宽度固定， 中间自适应的布局
 
-```html
-<div class="container">
-  <div class="center">
-      <div class="inner">双飞翼布局</div>
-  </div>
-  <div class="left"></div>
-  <div class="right"></div>
-</div>
-```
+    ```css
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      display: flex;
+      height: 600px;
+    }
+    .left {
+      width: 200px;
+      height: 100%;
+      background: blue;
+    }
+    .center {
+      flex: 1;
+      height: 100%;
+      background: gray;
+    }
+    .right {
+      width: 150px;
+      height: 100%;
+      background: orange;
+    }
+    ```
 
-```css
-* {
-  margin: 0;
-  padding: 0;
-}
-.container {
-    min-width: 600px;
-}
-.left {
-    float: left;
-    width: 200px;
-    height: 400px;
-    background: rgb(206, 163, 163);
-    margin-left: -100%;
-}
-.center {
-    float: left;
-    width: 100%;
-    height: 500px;
-    background: rgb(226, 226, 181);
-}
-.center .inner {
-    margin: 0 200px; 
-}
-.right {
-    float: left;
-    width: 200px;
-    height: 400px;
-    background: rgb(138, 138, 229);
-    margin-left: -200px;
-}
-```
-总结: 跟圣杯布局没多大区别，就是 middle 的实现不一样，圣杯布局是 middle+padding,双飞翼布局采用子元素+margin
+    ```html
+    <div class="container">
+      <div class="left"></div>
+      <div class="center"></div>
+      <div class="right"></div>
+    </div>
+    ```
 
+5.  圣杯布局
 
+    利用浮动+padding+负边距来实现
 
-# 设计一个9:16的盒子 ，不限制宽度
-```css
-.scale {
-  width: 100%;
-  padding-bottom: 56.25%;
-  height: 0;
-  position: relative;
-  background-color: blue;
-}
+    ```css
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      padding-left: 220px;
+      padding-right: 220px;
+    }
+    .left {
+      float: left;
+      width: 220px;
+      height: 400px;
+      background: pink;
+      /* -100%会移动到中间center的最左边 */
+      margin-left: -100%;
+      position: relative;
+      left: -220px;
+    }
+    .center {
+      float: left;
+      width: 100%;
+      height: 500px;
+      background: rgb(226, 226, 211);
+    }
+    .right {
+      float: left;
+      width: 220px;
+      height: 400px;
+      background: rgb(85, 202, 187);
+      /* -220px会移动到中间center的最右边 */
+      margin-left: -220px;
+      position: relative;
+      right: -220px;
+    }
+    ```
 
-.item {
-  width: 100%;
-  height: 100%;
-  background-color: pink;
-  position: absolute;
-}
-```
+    ```html
+    <div class="container">
+      <div class="center">
+        <h2>圣杯布局</h2>
+      </div>
+      <div class="left"></div>
+      <div class="right"></div>
+    </div>
+    ```
 
-```html
-<div class="scale">
-  <div  class="item"></div>
-</div>
-```
+    总结: 1). 先写 middle,然后是 left 和 right, 因为要先渲染 middle; 2). left, right 需设置`position: relative`以及相应的 left, right 值; 3). 负边距的作用, left 的`margin-left: -100%`使它上移一行, 同时 right 向左移占据 left 原先位置，同理, right 的`margin-left: -100px`使它上移并靠右
 
+6.  双飞翼布局
 
-# 画一条0.5px的线
-https://juejin.cn/post/6844903845617729549
-https://juejin.cn/post/6844903582370643975
+    利用浮动+margin+负边距
+
+    ```html
+    <div class="box">
+      <div class="center">
+        <div class="inner">center</div>
+      </div>
+      <div class="left">left</div>
+      <div class="right">right</div>
+    </div>
+    ```
+
+    ```css
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    .box {
+      min-width: 600px;
+    }
+    .center {
+      background-color: pink;
+      width: 100%;
+      float: left;
+      height: 500px;
+    }
+    .center .inner {
+      /* margin一定要写里面， 其它写外面*/
+      margin-left: 200px;
+      margin-right: 220px;
+    }
+    .left {
+      background-color: tomato;
+      width: 200px;
+      float: left;
+      margin-left: -100%;
+      height: 500px;
+    }
+    .right {
+      background-color: blue;
+      width: 220px;
+      float: left;
+      margin-left: -220px;
+      height: 500px;
+    }
+    ```
+
+    总结: 跟圣杯布局没多大区别，就是 middle 的实现不一样，圣杯布局是 middle+padding,双飞翼布局采用子元素+margin
+
+7.  两列布局
+
+    左列定宽，右列自适应
+
+    1. float + margin
+
+       ```html
+       <body>
+         <div class="left">左列定宽</div>
+         <div class="right">右列自适应</div>
+       </body>
+       ```
+
+       ```css
+       * {
+         margin: 0;
+         padding: 0;
+       }
+       .left {
+         background-color: rgb(231, 160, 160);
+         float: left;
+         width: 100px;
+         height: 500px;
+       }
+       .right {
+         background-color: rgb(166, 216, 166);
+         height: 500px;
+         /* 大于等于left的宽度 */
+         margin-left: 100px;
+       }
+       ```
+
+    2. float + overflow
+
+       ```html
+       <body>
+         <div class="left">左列定宽</div>
+         <div class="right">右列自适应</div>
+       </body>
+       ```
+
+       ```css
+       .left {
+         background-color: #f00;
+         float: left;
+         width: 100px;
+         height: 500px;
+       }
+       .right {
+         background-color: #0f0;
+         height: 500px;
+         overflow: hidden; /*触发bfc达到自适应*/
+       }
+       ```
+
+    3. flex 实现
+
+       ```html
+       <div class="box">
+         <div class="left">左列定宽</div>
+         <div class="right">右列自适应</div>
+       </div>
+       ```
+
+       ```css
+       .box {
+         height: 500px;
+         display: flex;
+       }
+       .left {
+         width: 100px;
+         background-color: #f00;
+       }
+       .right {
+         flex: 1; /*均分了父元素剩余空间*/
+         background-color: #0f0;
+       }
+       ```
+
+    4. 绝对定位 实现
+       父级设置为相对定位，left 设置绝对定位，宽 200px, right 设置 margin-left 为 200px
+
+       ```html
+       <div class="box">
+         <div class="left">左列定宽</div>
+         <div class="right">右列自适应</div>
+       </div>
+       ```
+
+       ```css
+       * {
+         padding: 0;
+         margin: 0;
+       }
+       .box {
+         width: 100%;
+         position: relative;
+       }
+       .left {
+         width: 200px;
+         height: 500px;
+         position: absolute;
+         background-color: pink;
+       }
+       .right {
+         height: 500px;
+         margin-left: 200px;
+         background-color: tomato;
+       }
+       ```
+
+8.  上下固定中间自适应布局实现
+
+    1.  flex 布局实现
+
+        ```css
+        /* 一定要加height */
+        html,
+        body {
+          padding: 0;
+          margin: 0;
+          height: 100%;
+        }
+        .box {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+        .header {
+          background-color: tomato;
+          height: 100px;
+        }
+        .center {
+          background-color: pink;
+          flex: 1;
+          overflow: auto;
+        }
+        .footer {
+          background-color: tomato;
+          height: 100px;
+        }
+        ```
+
+        ```html
+        <div class="box">
+          <div class="header">header</div>
+          <div class="center">center</div>
+          <div class="footer">footer</div>
+        </div>
+        ```
+
+    2.  定位实现
+        ```css
+        /* 所有的width一定要加, html同上 */
+        html,
+        body {
+          padding: 0;
+          margin: 0;
+        }
+        .header {
+          position: absolute;
+          top: 0;
+          width: 100%;
+          background-color: tomato;
+          height: 100px;
+        }
+        .center {
+          position: absolute;
+          width: 100%;
+          top: 100px;
+          bottom: 100px;
+          background-color: pink;
+        }
+        .footer {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          background-color: tomato;
+          height: 100px;
+        }
+        ```
+
+9.  单行文本和多行文本溢出省略
+    https://juejin.cn/post/6844903461209767944
+    https://zhuanlan.zhihu.com/p/30707916
+
+    1. 单行文本
+
+       ```css
+       .text {
+         width: 100px;
+         margin: 0 auto;
+       }
+
+       .inner {
+         /*实现该元素隐藏自身溢出的效果*/
+         overflow: hidden;
+         /*文本不会换行*/
+         white-space: nowrap;
+         /*当文本溢出包含元素时，以省略号表示超出的文本，该属性依赖于overflow: hidden*/
+         text-overflow: ellipsis;
+       }
+       ```
+
+       ```html
+       <div class="text">
+         <div class="inner">
+           前几天的美团笔试五道题就a了半道，今天下午两点通知我七点面试，总共40分钟，面试管知识面也太广了吧
+         </div>
+       </div>
+       ```
+
+    2. 多行文本
+
+       1. Webkit 内核浏览器(谷歌, QQ, safari 浏览器)的 css 扩展属性实现， 存在跨浏览器兼容性问题
+
+          ```css
+          .text {
+            /* 将对象作为弹性伸缩盒子模型显示 */
+            display: -webkit-box;
+            /* 用来限制在一个块元素显示的文本的行数 */
+            -webkit-line-clamp: 3;
+            /* 设置或检索伸缩盒对象的子元素的排列方式 */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+          ```
+
+          ```html
+          <div class="text">
+            浮动元素是如何定位的
+            正如我们前面提到的那样，当一个元素浮动之后，它会被移出正常的文档流，然后向左或者向右平移，一直平移直到碰到了所处的容器的边框，或者碰到另外一个浮动的元素。
+          </div>
+          ```
+
+       2. 其他浏览器解决方案
+
+          ```html
+          <div class="box">
+            <p class="text">
+              将元素的透明度设置为将元素的透明度设置为将元素的透明度设置为将元素的透明度设置为将元素的透明度设置为将元素的透明度设置为将元素的透明度设置为将元素的透明度设置为将元素的透明度设置为
+            </p>
+          </div>
+          ```
+
+          ```css
+          .text {
+            position: relative;
+            line-height: 1.5em;
+            /* 显示两行，  */
+            height: 3em;
+            overflow: hidden;
+            background-color: pink;
+          }
+          .text:after {
+            content: "...";
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            padding: 0 5px;
+            background-color: pink;
+          }
+          ```
+
+       3. JS 代码解决方案
+
+10. 画一条 0.5px 的线
+
+    https://juejin.cn/post/6844903845617729549
+    https://juejin.cn/post/6844903582370643975
+
+11. 实现各种图形
+    https://segmentfault.com/a/1190000002780453
+
+    1. CSS 如何实现一个半圆
+
+       ```css
+       /*上半圆*/
+       .semi-circle {
+         width: 100px;
+         height: 50px;
+         color: #bfa;
+         border-radius: 50px 50px 0 0;
+       }
+
+       /*下半圆*/
+       .semi-circle2 {
+         width: 100px;
+         height: 50px;
+         color: #bfa;
+         border-radius: 0 0 50px 50px;
+       }
+
+       /*左半圆*/
+       .semi-circle3 {
+         width: 50px;
+         height: 100px;
+         color: #bfa;
+         border-radius: 50px 0 0 50px;
+       }
+
+       /*右半圆*/
+       .semi-circle4 {
+         width: 50px;
+         height: 100px;
+         color: #bfa;
+         border-radius: 0 50px 50px 0;
+       }
+       ```
+
+    2. CSS 实现三角形
+
+       1. 上三角形
+          ```css
+          .triangle {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 250px 250px 250px 250px;
+            border-color: red transparent transparent transparent;
+          }
+          ```
+       2. 右上三角形
+
+          ```css
+          .triangle {
+            width: 0;
+            height: 0;
+            border-top: 100px solid red;
+            border-right: 100px solid transparent;
+          }
+          ```
+
+    3. 扇形
+
+       ```css
+       .circle {
+         width: 50px;
+         height: 50px;
+         border-radius: 50px 0 0 0;
+         background-color: tomato;
+       }
+       ```
+
+    4. 圆形
+
+       ```css
+       .circle {
+         width: 100px;
+         height: 100px;
+         border-radius: 50px;
+         background-color: tomato;
+       }
+       ```
+
+12. 轮播图
+
 # 原知识点
 
 21. 两栏布局的方法
@@ -1327,10 +1704,6 @@ aside{
   <aside></aside>
 </div>
 ```
-
-
-
-
 
 25. CSS 实现一个自适应的正方形
 

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+
+      
+    </style>
+  </head>
+  <body>
+  
+    <script>
+      // 设置常量
+      const PROMISE_STATUS_PENDING = 'pending'
+      const PROMISE_STATUS_FULFILLED = 'fulfilled'
+      const PROMISE_STATUS_REJECTED = 'rejected'
+      // Promise类
+      class Promise {
+        constructor(executor) {
+          this.status = PROMISE_STATUS_PENDING
+          this.value = undefined
+          this.reason = undefined
+
+          // 解决then多次调用
+          this.onFulfilledCbs = []
+          this.onRejectedCbs = []
+
+          const resolve = (value) => {
+            if (this.status === PROMISE_STATUS_PENDING) {
+              
+              // 保证代码的执行顺序为本轮事件循环的末尾
+              queueMicrotask(() => {
+                if (this.status !== PROMISE_STATUS_PENDING) return
+                this.status = PROMISE_STATUS_FULFILLED
+                this.value = value
+                this.onFulfilledCbs.forEach(fn => {
+                  fn(this.value)
+                })
+              })
+            }
+          }
+
+          const reject = (reason) => {
+            if (this.status === PROMISE_STATUS_PENDING) {
+              
+              queueMicrotask(() => {
+                if (this.status !== PROMISE_STATUS_PENDING) return
+
+                this.status = PROMISE_STATUS_REJECTED
+                this.reason = reason
+                this.onRejectedCbs.forEach(fn => {
+                  fn(this.reason)
+                })
+              });
+            }
+          }
+          try {
+            executor(resolve, reject)  
+          } catch(err) {
+            reject(err)
+          }
+        }
+
+        // then方法
+        then(onFulfilled, onRejected) {
+          return new Promise((resolve, reject) => {
+
+            // 解决setTimeout后再调用then
+            if (this.status === PROMISE_STATUS_FULFILLED && onFulfilled) {
+              try {
+                const value = onFulfilled(this.value)
+                resolve(value)
+              } catch(err) {
+                reject(err)
+              }
+            }
+            // 如果在then调用的时候，状态就已经确定下来
+            if (this.status === PROMISE_STATUS_REJECTED && onRejected) {
+              try {
+                const reason = onRejected(this.reason)
+                reject(reason)
+              } catch(err) {
+                reject(err)
+              }
+            }
+            // 解决then多次调用
+            if (this.status === PROMISE_STATUS_PENDING) {
+              this.onFulfilledCbs.push(() => {
+                try {
+                  // 解决链式调用
+                  const value = onFulfilled(this.value)
+                  resolve(value)
+                } catch(err) {
+                  reject(err)
+                }
+                
+              })
+              this.onRejectedCbs.push(() => {
+                try {
+                  const reason = onRejected(this.reason)
+                  resolve(reason)
+                } catch(err) {
+                  reject(err)
+                }
+              })
+            }    
+          })
+          
+        }
+      }
+
+      // 实践
+      const p = new Promise((resolve, reject) => {
+        throw('55555')
+        // resolve('1111')
+
+      })
+      p.then(res => {
+        console.log(res, 'res');
+      }, err => {
+        console.log(err, 'err');
+      })
+      p.then(res => {
+        console.log(res, '第二次调用');
+      }, err => {
+        console.log(err, '第二次');
+      })
+
+      setTimeout(() => {
+        p.then(res => {
+          console.log(res, '延时调用');
+        })
+      }, 1000);
+
+      p.then(res => {
+        console.log(res, '第三次调用');
+        throw '88888'
+      }, err => {
+        console.log(err, '第三次调用');
+      }).then(res => {
+        console.log(res, '链式调用');
+      }, err => {
+        console.log(err, '链式调用');
+      })
+
+      
+    </script>
+  </body>
+</html>
+
+
+
+

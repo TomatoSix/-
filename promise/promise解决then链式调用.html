@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+
+      
+    </style>
+  </head>
+  <body>
+    <button>点击</button>
+    <button>点击</button>
+    <button>点击</button>
+    <button>点击</button>
+    <script>
+      // 设置常量
+      const PROMISE_STATUS_PENDING = 'pending'
+      const PROMISE_STATUS_FULFILLED = 'fulfilled'
+      const PROMISE_STATUS_REJECTED = 'rejected'
+      // Promise类
+      class Promise {
+        constructor(executor) {
+          this.status = PROMISE_STATUS_PENDING
+          this.value = undefined
+          this.reason = undefined
+
+          // 解决then多次调用
+          this.onFulfilledCbs = []
+          this.onRejectedCbs = []
+
+          const resolve = (value) => {
+            if (this.status === PROMISE_STATUS_PENDING) {
+              
+              // 保证代码的执行顺序为本轮事件循环的末尾
+              queueMicrotask(() => {
+                if (this.status !== PROMISE_STATUS_PENDING) return
+                this.status = PROMISE_STATUS_FULFILLED
+                this.value = value
+                this.onFulfilledCbs.forEach(fn => {
+                  fn(this.value)
+                })
+              })
+            }
+          }
+
+          const reject = (reason) => {
+            if (this.status === PROMISE_STATUS_PENDING) {
+              
+              queueMicrotask(() => {
+                if (this.status !== PROMISE_STATUS_PENDING) return
+
+                this.status = PROMISE_STATUS_REJECTED
+                this.reason = reason
+                this.onRejectedCbs.forEach(fn => {
+                  fn(this.reason)
+                })
+              });
+            }
+          }
+          executor(resolve, reject)  
+        }
+
+        // then方法
+        then(onFulfilled, onRejected) {
+          // 解决setTimeout后再调用then
+          if (this.status === PROMISE_STATUS_FULFILLED && onFulfilled) {
+            onFulfilled(this.value)
+          }
+          // 如果在then调用的时候，状态就已经确定下来
+          if (this.status === PROMISE_STATUS_REJECTED && onRejected) {
+            onRejected(this.reason)
+          }
+          // 解决then多次调用
+          if (this.status === PROMISE_STATUS_PENDING) {
+            this.onFulfilledCbs.push(onFulfilled)
+            this.onRejectedCbs.push(onRejected)
+          } 
+          
+        }
+      }
+
+      const p = new Promise((resolve, reject) => {
+        resolve('123')
+        // resolve('1111')
+
+      })
+      p.then(res => {
+        console.log(res, 'res');
+      }, err => {
+        console.log(err, 'err');
+      })
+      p.then(res => {
+        console.log(res, '第二次调用');
+      }, err => {
+        console.log(err, '第二次');
+      })
+
+      setTimeout(() => {
+        p.then(res => {
+          console.log(res, '延时调用');
+        })
+      }, 1000);
+
+      
+    </script>
+  </body>
+</html>
+
+
+
+

@@ -1441,7 +1441,7 @@ keypress 区分字母大小写
 
 原理：不是给每个子节点设置事件监听器，而是事件监听器设置在其父节点上，然后利用冒泡原理影响设置每个子节点
 
-# BOM 浏览器对象模型
+# BOM 浏览器对象模型 Browser Object Module
 
 DOM 的顶级对象是 document
 BOM 的顶级对象时 window
@@ -1659,9 +1659,16 @@ https://github.com/LiangJunrong/document-library/tree/master/%E7%B3%BB%E5%88%97-
 
 3. 观察者模式-发布订阅模式
 
-   - 描述
-     当一个对象被修改时，所有依赖它的对象都将得到通知
-   - 举例 Redux 的 subscribe、Vue 的双向绑定、Vue 的 watch 声明周期钩子
+   1. 描述
+      当一个对象的状态发生改变时， 所有依赖于它的对象都得到通知并被自动更新
+   2. 举例
+
+   DOM 的事件绑定
+
+   Vue 的双向绑定
+   原理: 利用 Object.defineProperty 对数据进行劫持，设置一个监听器 Observer,用来监听所有属性，如果属性发生了变化，就需要告诉订阅者 Watcher 去更新数据，最后指令解析器 Compile 解析对应的指令，进而会执行对应的更新数据，从而更新视图，实现了双向绑定
+
+   Redux 的 subscribe、Vue 的双向绑定、Vue 的 watch 声明周期钩子
 
 4. 装饰器模式
 
@@ -1685,6 +1692,71 @@ https://github.com/LiangJunrong/document-library/tree/master/%E7%B3%BB%E5%88%97-
    - 描述
      中介者使各个对象不需要显示地相互引用，从而使其耦合性松散，而且可以独立地改变它们之间的交互
 
+# 设计模式手写
+
+1. 发布订阅/观察者模式
+
+   ```js
+   // 手写发布订阅模式
+   const Observe = function () {
+     const _message = {};
+
+     return {
+       // 订阅消息 on
+       on: function (type, fn) {
+         if (typeof _message[type] === "undefined") {
+           _message[type] = [fn];
+         } else {
+           _message[type].push(fn);
+         }
+       },
+
+       // 发布消息 subscribe
+       subscribe: function (type, args) {
+         if (!_message[type]) return;
+
+         let event = {
+           type: type,
+           args: args || {},
+         };
+         for (let i = 0; i < _message[type].length; i++) {
+           _message[type][i].call(this, event);
+         }
+       },
+
+       // 移除消息 off
+       off: function (type, fn) {
+         if (!_message[type] instanceof Array) {
+           for (let i = _message[type].length - 1; i >= 0; i--) {
+             _message[type][i] === fn && _message[type].splice(i, 1);
+           }
+         }
+       },
+     };
+   };
+   const observe = new Observe();
+
+   observe.on("say", function (data) {
+     console.log(data, "我获得数据了");
+   });
+   observe.on("animal", function () {
+     console.log("七七");
+   });
+
+   observe.subscribe("say", "123456");
+   // {type: 'say', args: '123456'}args: "123456"type: "say"[[Prototype]]: Object '我获得数据了'
+   observe.subscribe("animal");
+   // 七七
+   ```
+
+# 问题类
+
+1. Object.keys()是否排序？
+   https://juejin.cn/post/6844903646614781966
+
+2. 文件上传
+   https://juejin.cn/post/6844904046436843527
+
 # 原内容
 
 ## 作用域
@@ -1700,12 +1772,11 @@ JS 采用词法作用域(静态作用域),即函数的作用域在函数定义�
 2. const
    const 实际上保证的，并不是变量的值不得改动，而是变量指向的那个内存地址所保存的数据不得改动
 
+   对于简单类型的数据（数值、字符串、布尔值），值就保存在变量指向的那个内存地址，因此等同于常量
 
-    对于简单类型的数据（数值、字符串、布尔值），值就保存在变量指向的那个内存地址，因此等同于常量
+   对于复合类型的数据（主要是对象和数组），变量指向的内存地址，保存的只是一个指向实际数据的指针，const 只能保证这个指针是固定的（即总是指向另一个固定的地址），至于它指向的数据结构是不是可变的，就完全不能控制了
 
-    对于复合类型的数据（主要是对象和数组），变量指向的内存地址，保存的只是一个指向实际数据的指针，const只能保证这个指针是固定的（即总是指向另一个固定的地址），至于它指向的数据结构是不是可变的，就完全不能控制了
-
-    总结：const声明不允许修改绑定，但允许修改值
+   总结：const 声明不允许修改绑定，但允许修改值
 
 ## 块级作用域
 

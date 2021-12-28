@@ -1,3 +1,5 @@
+https://juejin.cn/post/6844903959283367950
+
 # ES6 新增内容（说出 12 种）
 
 1. let、const 和 var 的概念与区别
@@ -450,6 +452,8 @@ console.log(s1); //Symbol(name)
 
 JS 中进行异步编程的新解决方案
 
+https://juejin.cn/post/6844904077537574919#heading-16
+
 ## 异步编程有哪些？
 
 1. fs 文件操作
@@ -481,14 +485,119 @@ asyncFunc1(opt, (...args) => {
 将回调函数封装成返回 promise 对象
 传入一个遵循常见的错误优先的回调风格的函数(即以(err, value) => ...回调作为最后一个参数)，并返回一个 promise 的版本
 
+## promise 方法
+
+1.  Promise.race
+    接受一组异步任务，然后并行执行异步任务，只保留第一个执行完成的一步操作的结果，其他的方法仍然在执行，不过执行结果会被抛弃
+
+    ```js
+    const p1 = new Promise((resolve, reject) => {
+      reject("p1");
+    });
+    const p2 = new Promise((resolve, reject) => {
+      resolve("p2");
+    });
+    const p3 = new Promise((resolve, reject) => {
+      resolve("p3");
+    });
+
+    Promise.race([p1, p2, p3])
+      .then((res) => {
+        console.log(res, "res"); //p1
+      })
+      .catch((res) => {
+        console.log(res, "2222");
+      });
+    ```
+
+2.  Promise.all
+    所有 Promise 结果成功才返回
+    接收一组异步任务，然后并行执行异步任务，并且在所有异步操作执行完后才执行回调
+
+    ```js
+    const p1 = new Promise((resolve, reject) => {
+      resolve("p1");
+    });
+    const p2 = new Promise((resolve, reject) => {
+      reject("p2");
+    });
+    const p3 = new Promise((resolve, reject) => {
+      reject("p3");
+    });
+
+    Promise.all([p1, p2, p3])
+      .then((res) => {
+        console.log(res, "res");
+      })
+      .catch((res) => {
+        console.log(res, "2222"); // p2 2222
+      });
+    ```
+
+3.  Promise.allSettled
+    返回所有结果
+
+    ```js
+    const p1 = new Promise((resolve, reject) => {
+      resolve("p1");
+    });
+    const p2 = new Promise((resolve, reject) => {
+      reject("p2");
+    });
+    const p3 = new Promise((resolve, reject) => {
+      reject("p3");
+    });
+
+    Promise.allSettled([p1, p2, p3])
+      .then((res) => {
+        console.log(res, "res");
+        // [{status: 'fulfilled', value: 'p1'},
+        // {status: 'rejected', reason: 'p2'},
+        // {status: 'rejected', reason: 'p3'}]
+      })
+      .catch((res) => {
+        console.log(res, "2222");
+      });
+    ```
+
+4.  Promise.any
+    any 方法会等到一个 fulfilled 状态，才会决定新 Promise 状态;
+    如果过所有的 promise 都是 reject 的， 也会等到所有的 Promise 都变成 rejected 状态
+
+    ```js
+    const p1 = new Promise((resolve, reject) => {
+      reject("p1");
+    });
+    const p2 = new Promise((resolve, reject) => {
+      resolve("p2");
+    });
+    const p3 = new Promise((resolve, reject) => {
+      resolve("p3");
+    });
+
+    Promise.any([p1, p2, p3])
+      .then((res) => {
+        console.log(res, "res"); //p2
+      })
+      .catch((res) => {
+        console.log(res, "2222");
+      });
+    ```
+
+5.  Promise.resolve
+6.  Promise.reject
+7.  Promise.prototype.then
+8.  Promise.prototype.catch
+9.  Promise.prototype.finally
+    1. finally 不管 Promise 对象最后的状态如何都会执行
+    2. finally 方法的回调函数不接受任何的参数
+    3. 它最终返回的默认会是上一次的 Promise 对象值，不过如果抛出的是一个异常则返回异常的 Promise 对象
+
 ## promise 手写
 
 Promise 是一个对象，从它可以获取异步操作的消息
 
 Promise 的状态一经改变就不能再改变
-
-Promise.all()的作用是接收一组异步任务，然后并行执行异步任务，并且在所有异步操作执行完后才执行回调
-Promise.race()的作用是接受一组异步任务，然后并行执行异步任务，只保留第一个执行完成的一步操作的结果，其他的方法仍然在执行，不过执行结果会被抛弃
 
 ```js
     let p = new Promise((resolve,reject) => {
@@ -500,176 +609,17 @@ Promise.race()的作用是接受一组异步任务，然后并行执行异步任
         console.log(reason)
     })
 
-    ----------------------------------------------------
-    //声明构造函数
-    function Promise(executor){
-
-        //添加属性
-        this.promiseState = 'pending'
-        this.promiseResult = null
-        //保存实例对象的this值
-        const self = this
-
-        //resolve函数
-        function resolve(data){
-            //判断状态，保证一经修改不能再改变
-            if (self.promiseState !== 'pending') return
-
-            //1.修改对象状态（promiseState）
-            self.promiseState = 'funfilled';
-            //2.设置对象结果值(promiseResult)
-            self.promiseResult = data;
-        }
-
-        //reject函数
-        function reject(data){
-            //判断状态，保证一经修改不能再改变
-            if (self.promiseState !== 'pending') return
-
-            //1.修改对象状态（promiseState）
-            self.promiseState = 'rejected'
-            //2.设置对象结果值(promiseResult)
-            self.promiseResult = data
+    -----------------------------------------------
+    class Promise {
+      constructor(executor) {
+        const resolve = () => {
 
         }
 
-        //同步调用执行器函数
-        try{
-           executor(resolve,reject);
-        }catch(e){
-            reject(e);
-        }
-
-
-    }
-
-    //Promise.then实现
-    Promise.prototype.then = function(onResolved,onRejected){
-
-        //调用回调函数
-        if(this.promiseState === 'fulfilled'){
-            onResolved(this.promiseResult);
-        }
-        if(this.promiseState === 'rejected'){
-            onRejected(this.promiseReuslt);
-        }
-    }
-
-    --------------------------------------------------------
-    //异步完善
-
-    //声明构造函数
-    function Promise(executor){
-
-        //添加属性
-        this.promiseState = 'pending'
-        this.promiseResult = null
-        //声明回调属性
-        this.callbacks =[]
-        //保存实例对象的this值
-        const self = this
-
-
-        //resolve函数
-        function resolve(data){
-            //判断状态，保证一经修改不能再改变
-            if (self.promiseState !== 'pending') return
-
-            //1.修改对象状态（promiseState）
-            self.promiseState = 'funfilled';
-            //2.设置对象结果值(promiseResult)
-            self.promiseResult = data;
-
-            //调用成功的回调函数(指定多个)
-            self.callbacks.forEach(item =>{
-                item.onResolved(data)
-            })
-        }
-
-        //reject函数
-        function reject(data){
-            //判断状态，保证一经修改不能再改变
-            if (self.promiseState !== 'pending') return
-
-            //1.修改对象状态（promiseState）
-            self.promiseState = 'rejected'
-            //2.设置对象结果值(promiseResult)
-            self.promiseResult = data
-
-            //执行失败的回调函数(指定多个回调)
-            self.callbacks.forEach(item =>{
-                item.onRejected(data)
-            })
+        const reject = () => {
 
         }
-
-        //同步调用执行器函数
-        try{
-            executor(resolve,reject);
-        }catch(e){
-            reject(e);
-        }
-
-
-    }
-
-    //Promise.then实现
-    Promise.prototype.then = function(onResolved,onRejected){
-
-        //调用回调函数
-        if(this.promiseState === 'fulfilled'){
-            onResolved(this.promiseResult);
-        }
-        if(this.promiseState === 'rejected'){
-            onRejected(this.promiseReuslt);
-        }
-
-        //判断pending状态
-        if(this.promiseState === 'pending' ){
-            //保存回调函数
-            this.callbacks.push({
-                onResolved: onResolved,
-                onRejected: onRejected
-            })
-
-        }
-    }
-    ---------------------------------------------------------
-    //promise的all方法封装
-    Promise.all = function(promise){
-        return new Promise((resolve, reject) =>{
-            let count = 0
-            let arr = []
-            //遍历
-            for (let i=0; i<promise.length; i++){
-                promise[i].then(v =>{
-                    //得知对象的状态是成功,且每个promise都是成功的
-                    count ++
-                    //将当前promise对象成功的结果 存入到数组中
-                    arr[i] = v
-                    //判断 如果count值等于Promise的长度，说明每个promise都成功
-                    if(count === promise.length){
-                        resolve(arr)
-                    }
-
-                }，r =>{
-                    reject(r)
-                })
-            }
-        })
-    }
-    -------------------------------------------------------------
-    //promise的race方法封装
-    Promise.race = function(promise){
-        return new Promise((resolve,reject) =>{
-            for(let i=0; i<promise.length; i++){
-                promise[i].then(v=>{
-                    resolve(v)
-                },r =>{
-                    reject(r)
-                })
-            }
-        });
+      }
     }
 ```
 
@@ -887,21 +837,6 @@ async function test6() {
 }
 ```
 
-# ES6 模块加载与 CommonJS 加载的原理
-
-## 为什么要使用模块化
-
-1. 防止命名冲突
-2. 更好的分离，按需加载
-3. 更好的复用性
-4. 更高的维护性
-
-## ES6 模块和 CommonJS 模块的差异
-
-(1)CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用
-(2)CommonJS 模块是运行时加载，ES6 模块是编译时输出接口
-(3)CommonJS 模块的 require()是同步加载模块，ES6 模块的 import 命令是异步加载，有一个独立的模块依赖的解析阶段
-
 # proxy 代理
 
 Proxy 就像在目标对象之间的一个代理，任何对目标的操作都要经过代理。代理就可以对外界的操作进行过滤和改写。
@@ -937,6 +872,226 @@ Reflect.setPrototypeOf(target, prototype)
 ## 观察者模式
 
 指函数自动观察数据对象，一旦对象有变化，函数就会自动执行
+
+# ES6 模块加载与 CommonJS 加载的原理
+
+https://juejin.cn/post/6994224541312483336
+
+## CommonJS 使用
+
+node 中对 CommonJS 进行了支持和实现
+
+1. 使用
+
+   ```js
+   let name = "六";
+   let age = 18;
+   exports.name = name;
+   exports.age = age;
+   ```
+
+   ```js
+   const info = {
+     name: "六",
+     age: 18,
+   };
+
+   // 将对象暴露出去
+   module.exports = info;
+   ```
+
+   ```js
+   const bar = require("./bar.js");
+   ```
+
+2. 原理 | module.export 和 exports 区别
+   对象赋值，通过 require 函数把导出的对象赋值到另一个模块的标识符上， 通过标识符拿到同一个对象
+
+   ```js
+   module.exports = {}
+   exports = module.exports
+   真正导出的是 module.exports
+   ```
+
+3. require 查找规则
+   require(X)
+
+   1. X 是一个 Node 核心模块， 比如 path, http
+      直接返回核心模块
+   2. X 是以./等开头
+      1. 第一步： X 作为一个文件进行查找
+         1. 如果有后缀名，按照后缀名的格式查找对应的文件
+         2. 如果没有后缀名
+            1. 直接查找文件 X
+            2. 查找 X.js 文件
+            3. 查找 X.json 文件
+            4. 查找 X.node 文件
+      2. 第二步： X 作为一个目录，去查找目录下面的 index 文件
+         1. X/index.js 文件
+         2. X/index.json 文件
+         3. X/index.node 文件
+   3. X 不是路径，也不是核心模块, 第三方自定义模块
+      去 node_modules 找， 从内向外
+      例如`require('axios')`
+
+4. 模块的加载过程
+
+   1. 模块在被第一次引入时，模块中的 js 代码会被运行一次
+   2. 模块被多次引入时，会缓存(每个模块对象 module 都一个 loaded 属性)，最终只加载(运行)一次
+   3. 有循环引入， 加载顺序为深度优先算法
+
+5. 缺点
+   Commonjs 加载模块是同步的，只有等到对应的模块加载完毕，当前模块中的内容才能被运行。
+   如果将它应用到浏览器， 浏览器加载 js 文件需要从服务器将文件下载下来再运行
+
+## ES Module 使用
+
+采用 export 和 import 关键字来实现模块化，自动采用严格模式
+
+1. 导出使用
+
+   1. export 声明语句
+
+   ```js
+   export const name = "six";
+   ```
+
+   2. export 导出和声明分开
+
+   ```js
+   const name = "six";
+   const age = 18;
+   function foo() {
+     console.log("hello");
+   }
+   // {}是固定语法，不是对象
+   export { name, age, foo };
+   ```
+
+2. 导入使用
+
+   ```js
+   // 分别导入
+   import { name, age, foo } from "./foo.js";
+   ```
+
+   ```js
+   // 起别名
+   import { name, age, foo as Ifoo } from "./foo.js";
+   ```
+
+   ```js
+   // 将导出的所有内容放到一个标识符中
+   import * as foo from "./foo.js";
+   ```
+
+3. 结合使用(例如工具库的封装)
+   建立 index.js 文件，全部导入文件，再统一导出
+
+   1. 方法一
+
+   ```js
+   //index.js文件
+   import { add, sub } from "./utils/math.js";
+   import { format, timeFormat } from "./utils/time.js";
+
+   export { add, sub, format, timeFormat };
+   ```
+
+   2. 方法二
+
+   ```js
+   //index.js文件
+   export { add, sub } from "./utils/math.js";
+   export { format, timeFormat } from "./utils/time.js";
+   ```
+
+   3. 方法三
+
+   ```js
+   //index.js文件
+   export * from "./utils/math.js";
+   export * from "./utils/time.js";
+   ```
+
+4. 默认导出(default)
+
+   ```js
+   // 默认导出只能有一个
+   const name = "六";
+   const age = 18;
+   const foo = "foo";
+
+   export { name, age };
+   export default foo;
+   ```
+
+   ```js
+   import foo from "./foo.js";
+   ```
+
+5. import 异步加载
+
+   ```js
+   // import 函数返回的结果是一个Promise
+   // 不会阻塞后续代码的进行
+   import("./foo.js").then((res) => {
+     // res是一个模块
+     console.log(res);
+   });
+   ```
+
+6. ES11 meta 属性
+
+   ```js
+   // 一个对象， import的url
+   console.log(import.meta);
+   ```
+
+7. ES Module 原理
+   1. 构建阶段
+      根据地址查找 js 文件，并且下载，将其解析成模块记录(Module Record)
+   2. 实例化
+      对模块记录进行实例化，并且分配内存空间，解析模块的导入和导出语句，把模块指向对应的内存地址
+   3. 运行
+      运行代码，计算值，并且将值填充到内存地址中
+
+## 其它
+
+1. 为什么要使用模块化
+
+   1. 防止命名冲突
+   2. 更好的分离，按需加载
+   3. 更好的复用性
+   4. 更高的维护性
+
+2. 没有模块化之前,利用立即执行函数
+
+   ```js
+   const moduleA = (function () {
+     var name = "six";
+     var age = 18;
+     var isFlag = true;
+     return {
+       name,
+       age,
+     };
+   })();
+   ```
+
+   ```js
+   (function () {
+     if (moduleA.isFlag) {
+       console.log("我的名字是" + moduleA.name);
+     }
+   })();
+   ```
+
+3. ES6 模块和 CommonJS 模块的差异
+
+   (1)CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用
+   (2)CommonJS 模块是运行时加载，ES6 模块是编译时输出接口
+   (3)CommonJS 模块的 require()是同步加载模块，ES6 模块的 import 命令是异步加载，有一个独立的模块依赖的解析阶段
 
 # ES7
 
