@@ -47,14 +47,6 @@
 -ms- ie
 -o- opera
 
-# 如何画圆？
-
-var c=document.getElementById("myCanvas");
-var ctx=c.getContext("2d");
-ctx.beginPath();
-ctx.arc(95,50,40,0,2\*Math.PI);
-ctx.stroke();
-
 # 区别 flex:1 flex:0 flex:auto
 
 - flex 是 flex-grow,flex-shrink,flex-basis 3 个属性结合在一起的缩写形式
@@ -93,12 +85,6 @@ flex 属性是 flex-grow,flex-shrink,flex-basis 的缩写，默认值为 0 1 aut
 - flex-basis 属性定义了在分配多余空间之前，项目占据的主轴空间。默认值为 auto，负值不被允许
   该值的单位可以是 width 单位 px, 也可以是一个相对于其父弹性盒容器主轴尺寸的百分数
 
-# XHTML 可扩展超文本标记语言
-
-XHTML 与 HTML 4.01 几乎是相同的
-
-2. CSS 选择器以及优先级
-
 # CSS 盒模型
 
 页面上任何一个元素我们都可以看成是一个盒子，盒子会占用一定的空间和位置，他们之间相互制约，就形成了网页的布局
@@ -109,12 +95,11 @@ W3C 标准盒模型 属性 width,height 只包含内容 content
 IE 盒模型(怪异盒模型) 属性 width,height = content + padding + border
 
 ```css
-box-sizing: content-box || border-box || inherit;
-
 /*
 当设置为box-sizing: content-box时， 将采用标准模式解析计算，也是默认模式；
 当设置为box-sizing: border-box时，将采用IE盒模式解析计算
 */
+box-sizing: content-box || border-box || inherit;
 ```
 
 # 有哪些选择器？
@@ -849,7 +834,7 @@ https://juejin.cn/post/6844903667175260174
 
 # style 写在 body 前后的区别
 
-# 实现轮播图
+写在 body 标签后由于浏览器以逐行方式对 html 文档进行解析，当解析到写在尾部的样式表（外联或写在 style 标签）会导致浏览器停止之前的渲染，等待加载且解析样式表完成之后重新渲染，在 windows 的 IE 下可能会出现 FOUC 现象（即样式失效导致的页面闪烁问题）
 
 # 实现类
 

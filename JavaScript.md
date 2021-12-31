@@ -1749,6 +1749,8 @@ https://github.com/LiangJunrong/document-library/tree/master/%E7%B3%BB%E5%88%97-
    // 七七
    ```
 
+# 位运算符
+
 # 问题类
 
 1. Object.keys()是否排序？
@@ -1923,58 +1925,7 @@ var person2={
 
     现在，如果我们在 weakMap 中使用一个对象作为键，并且没有其他对这个对象的引用 —— 该对象将会被从内存（和 map）中自动清除。
 
-8.
-
-9.  `new`操作符做了哪些事情
-
-    用`new`操作符调用构造函数实际上会经历以下 5 个步骤:
-
-    (1). 创建一个新的对象;
-
-    (2). 将构造函数的`prototype`关联到实例的`__proto__`;
-
-    (3). 将构造函数的作用域赋给新对象(因此 this 就指向了这个新对象);
-
-    (4). 执行构造函数中的代码(为这个新对象添加属性);
-
-    (5). 返回新对象;
-
-    ```
-    function Mynew() {
-        let Constructor = Array.prototype.shift.call(arguments) // 1. 取出构造函数
-
-        let obj = {} // 2. 创建一个新的对象
-
-        obj.__proto__ = Constructor.prototype // 3. 该对象的原型等于构造函数的prototype
-
-        let result = Constructor.apply(obj, arguments) // 4. 执行函数中的代码
-
-        return typeof reuslt === 'object' ? result : obj // 5. 返回值必须是对象
-
-    }
-    ```
-
-    new 与直接引用的区别
-
-        如果函数返回值为常规意义上的值类型（Number、String、Boolean）时，new函数将会返回一个该函数的实例对象，而如果函数返回一个引用类型（Object、Array、Function），则new函数与直接调用函数产生的结果等同
-
-10. `this`的指向问题
-
-    在普通函数中
-
-    (1)如果一个函数中有 this，但是它没有被上一级的对象调用，那么 this 的指向就是 window;
-
-    (2)如果一个函数中有 this，这个函数有被上一级调用，那么 this 指向的就是上一级的对象;
-
-    (3)如果一个函数中有 this，这个函数中包含多个对象，尽管这个函数是被最外层的对象所调用，this 指向的也只是它上一级的对象
-
-    **this 永远指向的是最后调用它的对象**
-
-    在构造函数中: new 关键字是可以改变 this 的指向的
-
-    当 this 碰到 return 时，如果返回值是一个对象，那么 this 指向的就是那个返回的对象，如果返回值不是一个对象那么 this 还是指向函数的实例
-
-11. 箭头函数与普通函数的区别
+8.  箭头函数与普通函数的区别
 
     (1). 箭头函数不会创建自己的`this`只会从自己的作用链上一层继承`this`;
 
@@ -1986,69 +1937,7 @@ var person2={
 
     (5). 箭头函数没有原型`prototype`
 
-12. `arguments`
-
-    在调用函数时，我们所传递的实参都会在`arguments`中保存，是一个类似于数组的对象，只有数组的 length，没有数组方法
-
-13. call, apply 和 bind 的用法
-
-    call, apply, bind 都是用来改变`this`的指向
-
-    apply 接收两个参数，第一个参数是`this`的指向，第二个参数是函数接收的参数，以数组的形式进行传递
-
-    call 第一个参数也是用来改变`this`的指向，后面的参数均是函数接收的参数
-
-    **apply 与 call 均只改变 this 的指向一次**
-
-    bind 第一个参数也是改变`this`的指向，后面与 call 类似也是传入参数列表，但与 call 不同的是，bind 的可以不需要一次性传入所有参数，并且 bind 改变`this`指向后不会立即执行而是返回一个永久改变`this`指向的函数
-
-    三者的区别:
-
-    (1). 都可以改变`this`的指向;
-    (2). 第一个参数都是`this`要指向的对象;
-    (3). 三个都可以传参，但是方法各不相同，apply 是数组，bind 和 call 都是利用参数列表进行传参但是 bind 可以分多次传参，call 只可以传一次;
-    (4). bind 是返回绑定`this`之后的函数，apply 和 call 是立即调用
-
-    ```
-    // step 1: 调用函数的上下文指向obj
-    // step 2: 传参
-    // step 3: 执行函数并返回结果
-
-    let myApply = (context) => {
-
-      context = context ? Object(context) : window
-      context.fn = this
-      let args = [...arguments][1]
-      if (!args) return context.fn()
-      let res = context.fn(...args)
-      delete context.fn
-      return res
-
-    }
-
-    let myCall = (context) => {
-
-      context = context ? Object(context) : window
-      context.fn = this
-      let args = [...arguments].slice(1)
-      let res = context.fn(...args)
-      delete context.fn
-      return res
-
-    }
-
-    let myBind = (context) => {
-
-      let me = this
-      return function () {
-        return me.call(context, arguments)
-      }
-
-    }
-
-    ```
-
-14. CommonJS 和 ES6 模块的区别
+9.  CommonJS 和 ES6 模块的区别
 
     (1). CommonJS 输出的是一个值的拷贝，ES6 模块输出的是值的引用，换句话说就是 CommonJS 在模块内部发生的后续变化影响不了外部对这个值的使用;
 
@@ -2056,7 +1945,7 @@ var person2={
 
     (3). CommonJS 顶层`this`指向当前模块, 而在 ES6 模块中`this`指向`undefined`
 
-15. `innerHtml`, `innerText`, `outerHtml`
+10. `innerHtml`, `innerText`, `outerHtml`
 
     `innerHtml`: 是指从对象的起始位置到终止位置的全部内容包括 html 标签
 
@@ -2066,17 +1955,17 @@ var person2={
 
     **火狐浏览器不支持`innerText`**
 
-16. 怎么判断是数组
+11. 怎么判断是数组
 
     (1). `instanceof`; (2). `constructor` `arr.constructor === Array`; (3). `toString` example: `Object.prototype.toString.call(arr) === '[object Array]';`; (4). `Array.isArray(arr)`
 
-17. 数组拷贝
+12. 数组拷贝
 
     浅拷贝: 直接将数组引用复制的方法是浅拷贝
 
     深拷贝: 递归复制了所有层级 `JSON.parse(JSON.stringify(arr));` `slice和concat在多维数组中无效`
 
-18. Event Loop
+13. Event Loop
 
     为了解决异步任务，js 最大的特点是单线程，非阻塞，当在执行栈中有一个异步任务的时候，js 不会一直等待其返回结果，而是将这个事件挂起，继续执行执行栈中接下来的任务，当异步任务返回结果后，js 会将结果插入到事件队列中，并不会立即回调，当执行栈中任务执行完成之后，会取出事件队列中第一位的事件，放入执行栈中继续执行，如此反复，就形成了一个循环，这个过程就是 Event Loop
 
@@ -2086,7 +1975,7 @@ var person2={
 
     而 node11 之后，node 在 setTimeOut 执行后会手动清空微任务队列，以保证结果贴近浏览器。
 
-19. 浏览器事件机制
+14. 浏览器事件机制
 
     浏览器事件机制中事件触发的三个阶段: 事件捕获 - 事件目标函数处理 - 事件冒泡
 
@@ -2102,7 +1991,7 @@ var person2={
 
     通常情况下，事件相应的函数是在冒泡阶段执行的。addEventListener 的第三个参数默认为 false，表示冒泡阶段执行（为 true 的时候，表示捕获阶段执行）。
 
-20. `onclick`和`addEventListener`的区别
+15. `onclick`和`addEventListener`的区别
 
     `on`: 不可以多次绑定同一事件
 
@@ -2116,93 +2005,11 @@ var person2={
 
     4.addEventListener 可以控制 listener 的触发阶段，（捕获/冒泡）。对于多个相同的事件处理器，不会重复触发，不需要手动使用 removeEventListener 清除
 
-21. 闭包
+16. 闭包
 
     闭包就是能够读取其他函数内部变量的函数，本质上闭包就是函数内部与函数外部的一座桥梁
 
-22. `Promise.all`和`Promise.race`
-
-    Promise 实现
-
-    ```
-    function (executor) {
-
-        // 初始属性
-        this.PromiseState = 'pending'
-        this.PromiseResult = null
-
-        // 保存回调函数
-        this.callback = []
-        // 保存实例对象的this
-        const self = this
-
-        function resolve (value) {
-
-            if (self.PromiseState !== 'Pending') return;
-            // 1. 修改对象的状态
-            self.PromiseState = 'fulfilled'
-            // 2. 设置对象结果值
-            self.PromiseResult = value
-            // 调用回调函数
-            setTimeout( () => {
-                self.callbacks.forEach(ele => element.onResolved(value))
-            })
-
-        }
-
-        function reject (reason) {
-
-
-            if (self.PromiseState !== 'Pending') return;
-            // 1. 修改对象的状态
-            self.PromiseState = 'rejected'
-            // 2. 设置对象结果值
-            self.PromiseResult = reason
-            // 调用回调函数
-            setTimeout( () => {
-                self.callbacks.forEach(ele => element.onRejected(value))
-            })
-
-
-        }
-
-        try {
-            excutor(resolve, reject)
-        } catch (error) {
-            reject(error)
-        }
-
-    }
-    ```
-
-    `Promise.all`可以将多个 Promise 实例包装成一个新的 Promise 实例。同时，成功和失败的返回值是不同的，成功的时候返回的是一个结果数组，而失败的时候则返回最先被 reject 失败状态的值。
-
-    顾名思义，`Promse.race`就是赛跑的意思，意思就是说，`Promise.race([p1, p2, p3])`里面哪个结果获得的快，就返回那个结果，不管结果本身是成功状态还是失败状态。
-
-    ```
-    Promise.prototype.all = function(promises) {
-      let results = [];
-      let promiseCount = 0;
-      let promisesLength = promises.length;
-      return new Promise(function(resolve, reject) {
-        for (let val of promises) {
-          Promise.resolve(val).then(function(res) {
-            promiseCount++;
-            // results.push(res);
-            results[i] = res;
-            // 当所有函数都正确执行了，resolve输出所有返回结果。
-            if (promiseCount === promisesLength) {
-              return resolve(results);
-            }
-          }, function(err) {
-            return reject(err);
-          });
-        }
-      });
-    };
-    ```
-
-23. `promise`与`async/await`
+17. `promise`与`async/await`
 
     Promise 对象代表一个异步操作，有三种状态：pending（进行中）、fulfilled（已成功）和 rejected（已失败）。只有异步操作的结果，可以决定当前是哪一种状态，任何其他操作都无法改变这个状态
 
@@ -2220,7 +2027,7 @@ var person2={
 
     async 相当于自执行的 generator 函数，相当于自带一个状态机，在 await 的部分等待即过，返回后自动执行下一步
 
-24. JS 为什么要区分 Microtask 和 Marcotask
+18. JS 为什么要区分 Microtask 和 Marcotask
 
     区分微任务和宏任务是为了将异步队列任务划分优先级，通俗的理解就是为了插队。
 
@@ -2228,7 +2035,7 @@ var person2={
 
     如果不区分微任务和宏任务那就无法在下一次 Event Loop 之前进行插队，其中新注册的任务得等到下一个宏任务完成之后才能进行，这中间可能你需要的状态就无法在下一个宏任务中得到同步。
 
-25. ES6 相比于 ES5 的特性
+19. ES6 相比于 ES5 的特性
 
     (1). 关键字`let` - 块级作用域 `const` - 常量;
 
@@ -2244,7 +2051,7 @@ var person2={
 
     (6). 扩展运算符(相当于`rest`的逆运算);
 
-26. 防抖和节流
+20. 防抖和节流
 
     防抖: 当你频繁触发后，n 秒内只执行一次, 如果 n 秒内有被触发，则重新计时
 
@@ -2281,13 +2088,13 @@ var person2={
 
     应用场景: (1). 滚动加载，加载更多或滚到底部监听; (2). 谷歌搜索框，搜索联想功能; (3). 高频点击提交，表单重复提交;
 
-27. js 中 0.1+0.2 为什么不等于 0.3,怎么解决
+21. js 中 0.1+0.2 为什么不等于 0.3,怎么解决
 
     计算机是用二进制储存数的，而十进制小数转二进制的方法是用 2 去乘小数部分，这会导致小数不能精确的表达所以当两个小数相加时，很有可能产生误差
 
     解决方法是可以将数组转为整数先进行加法再除以他们放大的倍数或者利用第三方库
 
-28. map, forEach
+22. map, forEach
 
     map 和 forEach 的区别:
 
@@ -2325,7 +2132,7 @@ var person2={
 
         ```
 
-29. js 获取，更新，添加，删除 dom 操作
+23. js 获取，更新，添加，删除 dom 操作
 
     ```
     // 获取
@@ -2348,7 +2155,7 @@ var person2={
     parentElement.removeChild(deleteElement)
     ```
 
-30. js 垃圾回收机制
+24. js 垃圾回收机制
 
     (1). 标记清理 在垃圾程序运行的时候，会标记内存中存储的所有变量然后，它会将所有在上下文中的变量，以及被在上下文中的变量引用的变量的标记去掉，在此之后再被加上标记的变量就是待删除的了，原因是任何在上下文中的变量都访问不到它们了。随后垃圾回收程序做一次内存清理，销毁带标记的所有值并收回它们的内存 ;
     (2). 引用计数 对每个值都记录它被引用的次数，声明变量并给它赋一个引用值时，这个值的引用数为 1。如果同一个值又被赋给另一个变量，那么引用数加 1，类似地，如果保存对该值引用的变量被其他值给覆盖了，那么引用数减 1.当一个值的引用数为 0 时，就说明没发再访问这个值了，因此可以安全地收回其内存了。垃圾回收程序下次运行的时候就会释放引用数为 0 的值的内存;
@@ -2365,7 +2172,7 @@ var person2={
         新加入的对象都被放入对象区域，等对象区域快满的时候，会执行一次垃圾清理。先给对象区域所有垃圾做标记；标记完成后，存活的对象被复制到空闲区域，并且将他们有序的排列一遍；
         这就回到我们前面留下的问题 -- 副垃圾回收器没有碎片整理。因为空闲区域里此时是有序的，没有碎片，也就不需要整理了；复制完成后，对象区域会和空闲区域进行对调。将空闲区域中存活的对象放入对象区域里。这样，就完成了垃圾回收。因为副垃圾回收器操作比较频繁，所以为了执行效率，一般新生区的空间会被设置得比较小。一旦检测到空间装满了，就执行垃圾回收。
 
-31. JS 如何解决单线程
+25. JS 如何解决单线程
 
     浏览器的主要线程包括：UI 渲染线程，JS 主线程，GUI 事件触发线程，http 请求线程
     JS 作为脚本语言，它的主要用途是与用户互动，以及操作 DOM。这决定了它只能是单线程，否则会带来很复杂的同步问题。（这里这些问题我们不做研究）
@@ -2376,7 +2183,7 @@ var person2={
 
     在新线程中使用 postMessage()方法可以向主线程中发送一些数据，主线程中使用 worker 的 onmessage 事件来接收这些数据，这样就实现了 js 的多线程执行和多线程之间数据的传递。
 
-32. 类数组与数组的转换
+26. 类数组与数组的转换
 
     类数组是一个普通对象，而真实的数组是 Array 类型。
 
@@ -2390,7 +2197,7 @@ var person2={
     (2). `[...arraylike]`;
     (3). `Array.from(arraylike)`;
 
-33. 作用域和作用域链和执行上下文
+27. 作用域和作用域链和执行上下文
 
     每个上下文都有一个关联的变量对象，而在这个上下文当中定义的所有变量和函数都存在于这个对象上，上下文在其中所有的代码都执行完毕后会被销毁，包括定义在其中的所有变量和函数，所以上下文决定了它们可以访问哪些数据，上下文可以通过作用域链访问外部上下文中的一切，但外部上下文无法访问内部上下文中的任何东西(执行上下文栈 后入先出)
 
@@ -2398,9 +2205,9 @@ var person2={
 
     变量提升，var 的变量提升和函数的变量提升
 
-34. BOM 属性和方法
+28. BOM 属性和方法
 
-35. 内存管理
+29. 内存管理
 
     优化内存的最佳手段就是保证内存在执行代码时只保存必要的数据，如果数据不再必要，那么把它设置为 null，从而释放其引用
 
@@ -2414,11 +2221,11 @@ var person2={
         (2). 不清理定时器
         (3). 闭包
 
-36. JS 为什么是单线程？
+30. JS 为什么是单线程？
 
     JavaScript 的单线程，与它的用途有关。作为浏览器脚本语言，JavaScript 的主要用途是与用户互动，以及操作 DOM。这决定了它只能是单线程，否则会带来很复杂的同步问题。比如，假定 JavaScript 同时有两个线程，一个线程在某个 DOM 节点上添加内容，另一个线程删除了这个节点，这时浏览器应该以哪个线程为准？
 
-37. 事件委托
+31. 事件委托
 
     事件委托其实就是利用 JS 事件冒泡机制把原本需要绑定在子元素的响应事件（click、keydown……）委托给父元素，让父元素担当事件监听的职务。事件代理的原理是 DOM 元素的事件冒泡。
 
@@ -2447,7 +2254,7 @@ var person2={
       </script>
     ```
 
-38. 为什么 for...of...不能遍历对象
+32. 为什么 for...of...不能遍历对象
 
     因为能够被 for...of 正常遍历的，都需要实现一个遍历器 Iterator。而数组、字符串、Set、Map 结构，早就内置好了 Iterator（迭代器），它们的原型中都有一个 Symbol.iterator 方法，而 Object 对象并没有实现这个接口，使得它无法被 for...of 遍历
 
