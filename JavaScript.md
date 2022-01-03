@@ -3,61 +3,68 @@
 Array BigInt Boolean Date Function Map Math null Number Object Promise Set
 WeakMap WeakSet
 
-全局的对象（ global objects ）或称标准内置对象，不要和 "全局对象（global object）" 混淆。这里说的全局的对象是说在
-全局作用域里的对象。全局作用域中的其他对象可以由用户的脚本创建或由宿主程序提供。
+全局的对象（ global objects ）或称标准内置对象，不要和 "全局对象（global object）" 混淆。这里说的全局的对象是在说全局作用域里的对象。全局作用域中的其他对象可以由用户的脚本创建或由宿主程序提供。
 
 标准内置对象的分类
-（1）值属性，这些全局属性返回一个简单值，这些值没有自己的属性和方法。
+
+1. 值属性，这些全局属性返回一个简单值，这些值没有自己的属性和方法。
 
 例如 Infinity、NaN、undefined、null 字面量
 
-（2）函数属性，全局函数可以直接调用，不需要在调用时指定所属对象，执行结束后会将结果直接返回给调用者。
+2. 函数属性，全局函数可以直接调用，不需要在调用时指定所属对象，执行结束后会将结果直接返回给调用者。
 
 例如 eval()、parseFloat()、parseInt() 等
 
-（3）基本对象，基本对象是定义或使用其他对象的基础。基本对象包括一般对象、函数对象和错误对象。
+3. 基本对象，基本对象是定义或使用其他对象的基础。基本对象包括一般对象、函数对象和错误对象。
 
 例如 Object、Function、Boolean、Symbol、Error 等
 
-（4）数字和日期对象，用来表示数字、日期和执行数学计算的对象。
+4. 数字和日期对象，用来表示数字、日期和执行数学计算的对象。
 
 例如 Number、Math、Date
 
-（5）字符串，用来表示和操作字符串的对象。
+5. 字符串，用来表示和操作字符串的对象。
 
 例如 String、RegExp
 
-（6）可索引的集合对象，这些对象表示按照索引值来排序的数据集合，包括数组和类型数组，以及类数组结构的对象。例如 Array
+6. 可索引的集合对象，这些对象表示按照索引值来排序的数据集合，包括数组和类型数组，以及类数组结构的对象。例如 Array
 
-（7）使用键的集合对象，这些集合对象在存储数据时会使用到键，支持按照插入顺序来迭代元素。
+7. 使用键的集合对象，这些集合对象在存储数据时会使用到键，支持按照插入顺序来迭代元素。
 
 例如 Map、Set、WeakMap、WeakSet
 
-（8）矢量集合，SIMD 矢量集合中的数据会被组织为一个数据序列。
+8. 矢量集合，SIMD 矢量集合中的数据会被组织为一个数据序列。
 
 例如 SIMD 等
 
-（9）结构化数据，这些对象用来表示和操作结构化的缓冲区数据，或使用 JSON 编码的数据。
+9. 结构化数据，这些对象用来表示和操作结构化的缓冲区数据，或使用 JSON 编码的数据。
 
 例如 JSON 等
 
-（10）控制抽象对象
+10. 控制抽象对象
 
 例如 Promise、Generator 等
 
-（11）反射
+11. 反射
 
 例如 Reflect、Proxy
 
-（12）国际化，为了支持多语言处理而加入 ECMAScript 的对象。
+12. 国际化，为了支持多语言处理而加入 ECMAScript 的对象。
 
 例如 Intl、Intl.Collator 等
 
-（13）WebAssembly
-
-（14）其他
+13. WebAssembly
+    一种可以使用非 JavaScript 编程语言编写代码并且能在浏览器上运行的技术方案
+    https://zhuanlan.zhihu.com/p/158042212
+14. 其他
 
 例如 arguments
+
+# 全局对象是什么?
+
+1. 浏览器中的 window 对象
+   任何全局变量或者全局函数都可以通过 window 的属性来访问
+2. node.js 环境下的 global 对象
 
 # Array 数组有哪些方法？
 
@@ -268,7 +275,7 @@ false 转为 false
 
 https://segmentfault.com/a/1190000022298822 冴羽
 
-1. == 是非严格意义上的相等，
+1. == 是非严格意义上的相等，会触发隐式转换
 
    两边类型相同，比较大小
    两边类型不同，根据下方表格，再进一步进行比较。
@@ -403,7 +410,8 @@ let s2 = Symbol("bar");
 
 # 判断数据类型的方法
 
-1. typeof 返回一个字符串，表示未经计算的操作数的类型
+1. typeof
+   返回一个字符串，表示未经计算的操作数的类型
    可以判断 undefined、Boolean、Number、String、function、Symbol、BigInt
 
 - 基本数据类型除 null 外都转为对应的基本数据类型
@@ -438,7 +446,8 @@ typeof num; // 返回 'object'
 typeof new Function(); // 返回 'function'
 ```
 
-2. instanceof 只能判断对象是否存在于目标对象的原型链上，不一定能获取对象的具体类型
+2. instanceof
+   只能判断对象是否存在于目标对象的原型链上，不一定能获取对象的具体类型
 
 不适用判断原始类型的值，只能用于判断对象是否从属关系
 
@@ -480,7 +489,85 @@ Object.prototype.toString.call(new Function()); // [object Function]
 Object.prototype.toString.call(new Date()); // [object Date]
 Object.prototype.toString.call(new RegExp()); // [object RegExp]
 Object.prototype.toString.call(new Error()); // [object Error]
+
+class Class1 {}
+Object.prototype.toString.call(new Class1()); // 默认情况类的[[class]]返回[object Object]
 ```
+
+## 内部属性[[class]]是什么?
+
+所有对象都包含一个内部属性[[class]]
+我们不能直接访问这个属性，但是我们可以通过一种方法访问`Object.prototype.toString.call(...)`
+例如`Object.prototype.toString.call([1,2,3])`实际上就是调用了原生函数 Array 内部的[[class]]属性
+
+1. 如果直接调用 toString()会发生什么?
+
+```js
+{'a':1}.toString() // [object Object]
+[1,2,3].toString() // 1,2,3
+function a(){}.toString() // function a(){}
+123..toString() // 123 , 只写一个小数点会被当成小数点，所以再写一个点才代表方法调用
+true.toString() // true
+```
+
+只有普通对象`{'a': 1}`返回了类型
+因为普通对象直接调用了顶级原型 Object 上的 toString 方法
+而数组、函数以及这些基本包装对象继承 Object 的同时，重写了 toString()方法，在查找 toString 方法的时候，优先找自己原型链上的方法
+所以必须使用`Object.prototype.toString.call()`进行类型检测
+
+# `null`和`undefined`，怎么判断是`null`
+
+    `null`: 表示一个值被定义了，定义为"空值";
+
+    `undefined`: 表示根本不存在定义;
+
+    ```js
+    let exp = undefined
+    if (typeof (exp) === 'undefined') console.log('undefined');
+
+    exp = null
+    if (!exp) console.log('null');
+    ```
+
+1. null 表示"没有对象"，即该处不应该有值。
+   典型用法是：
+   （1） 作为函数的参数，表示该函数的参数不是对象。
+
+   （2） 作为对象原型链的终点。
+
+   ```js
+   Object.getPrototypeOf(Object.prototype);
+   // null
+   ```
+
+2. undefined 表示"缺少值"，就是此处应该有一个值，但是还没有定义。
+   典型用法是：
+   （1）变量被声明了，但没有赋值时，就等于 undefined。
+
+   （2) 调用函数时，应该提供的参数没有提供，该参数等于 undefined。
+
+   （3）对象没有赋值的属性，该属性的值为 undefined。
+
+   （4）函数没有返回值时，默认返回 undefined。
+
+   ```js
+   var i;
+   i; // undefined
+
+   function f(x) {
+     console.log(x);
+   }
+   f(); // undefined
+
+   var o = new Object();
+   o.p; // undefined
+
+   var x = f();
+   x; // undefined
+   ```
+
+3. 如何判断 undefined
+   https://juejin.cn/post/6844903792270393358
 
 # js 获取原型的方法
 
@@ -500,6 +587,62 @@ Array.from(arrayLike)
 Array.apply(null, arrayLike)
 Array.prototype.concat.apply([], arrayLike)
 ```
+
+# toString 和 valueOf 的使用
+
+```js
+{}.valueOf() // {}
+[].valueOf() // []
+{}.toString() // 报错, {}被解析成一个空的block，没有被解析成一个对象
+[].toString() // ""
+({}).toString() // [object Object] , 加(), js引擎就知道里面是js表达式
+[] + {} // [object Object], []转字符串为空, {}转字符串为[object Object]
+{} + [] // 0  {}会被识别为代码块，被忽略, [].toString()返回'', +''结果为0
+```
+
+1.  toString
+    https://juejin.cn/post/6873215243804213262
+    返回一个表示该对象的字符串
+
+    1. 什么时候会自动调用?
+       使用操作符的时候，如果其中一边为对象，则会先调用 toString 方法，也就是隐式转换，然后再进行操作
+
+       ```js
+       let c = [1, 2, 3];
+
+       let d = { a: 2 };
+       Object.prototype.toString = function () {
+         console.log("Object");
+       };
+       Array.prototype.toString = function () {
+         console.log("Array");
+         return this.join(","); // 返回 toString 的默认值（下面测试）
+       };
+       console.log(2 + 1); // 3
+       console.log("s"); // 's'
+       console.log("s" + 2); // 's2'
+       console.log(c < 2); // false (一次 => 'Array')
+       console.log(c + c); // "1,2,31,2,3" (两次 => 'Array')
+       console.log(d > d); // false (两次 => 'Object')
+       ```
+
+2.  valueOf
+    返回当前对象的原始值
+
+    ```js
+    let c = [1, 2, 3];
+    let d = { a: 2 };
+
+    console.log(c.valueOf()); // [1, 2, 3]
+    console.log(d.valueOf()); // {a:2}
+    ```
+
+# || 和 && 操作符
+
+1. ||
+   左边的值为 null 或者 undefined，返回右边的值， 否则返回左边
+2. &&
+   左边的值为转化后为 false 时，返回左边的值， 否则返回右边
 
 # new 原理
 
@@ -1194,57 +1337,6 @@ input.addEventListener("keyup", function (e) {
 });
 ```
 
-# `null`和`undefined`，怎么判断是`null`
-
-    `null`: 表示一个值被定义了，定义为"空值";
-
-    `undefined`: 表示根本不存在定义;
-
-    ```js
-    let exp = undefined
-    if (typeof (exp) === 'undefined') console.log('undefined');
-
-    exp = null
-    if (!exp) console.log('null');
-    ```
-
-1. null 表示"没有对象"，即该处不应该有值。
-   典型用法是：
-   （1） 作为函数的参数，表示该函数的参数不是对象。
-
-   （2） 作为对象原型链的终点。
-
-   ```js
-   Object.getPrototypeOf(Object.prototype);
-   // null
-   ```
-
-2. undefined 表示"缺少值"，就是此处应该有一个值，但是还没有定义。
-   典型用法是：
-   （1）变量被声明了，但没有赋值时，就等于 undefined。
-
-   （2) 调用函数时，应该提供的参数没有提供，该参数等于 undefined。
-
-   （3）对象没有赋值的属性，该属性的值为 undefined。
-
-   （4）函数没有返回值时，默认返回 undefined。
-
-   ```js
-   var i;
-   i; // undefined
-
-   function f(x) {
-     console.log(x);
-   }
-   f(); // undefined
-
-   var o = new Object();
-   o.p; // undefined
-
-   var x = f();
-   x; // undefined
-   ```
-
 # 正则表达式
 
 https://marketplace.visualstudio.com/items?itemName=russell.any-rule
@@ -1587,6 +1679,10 @@ element.parentNode //返回最近一级的父亲
    style.width 获得不包含 padding 和 border 的值
    style.width 是可读属性，可以获取也可以赋值
 
+# 三种事件模型
+
+# js 的几种模块规范
+
 # axios
 
 ## 特点
@@ -1758,6 +1854,11 @@ https://github.com/LiangJunrong/document-library/tree/master/%E7%B3%BB%E5%88%97-
 
 2. 文件上传
    https://juejin.cn/post/6844904046436843527
+
+3. toString 和 valueOf
+   https://juejin.cn/post/6873215243804213262
+
+4. toString 返回一个表示该对象的字符串
 
 # 原内容
 

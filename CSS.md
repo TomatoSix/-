@@ -394,6 +394,109 @@ p {
 - 列表: list-style-image, list-style-position, list-style-type, list-style
 - 颜色: color
 
+# 包含块
+
+# a 标签的作用
+
+1. 跳转到外部网址
+
+```css
+<a href="http://www.baidu.com" target="_blank">百度</a>
+```
+
+2. 实现本地页面文件跳转
+3. 设置锚点。在网页任意位置添加一个标记，可以由任何地方跳转到这个标记处
+   定义锚点时，如果用 a 标签当做锚点，给 a 标签设置 name 属性，如果用其它标签当做锚点，给该标签设置 id 属性
+
+```css
+/* 在HTML文档中插入 id */
+<h3 id="tips">详细说明</h3>
+<p>内容</p>
+/* 在HTML文档中创建一个链接到“详细说明” */
+<a href="#tips">详细说明</a>
+```
+
+# BFC 是什么？
+
+https://github.com/zuopf769/notebook/blob/master/fe/BFC%E5%8E%9F%E7%90%86%E5%89%96%E6%9E%90/README.md
+BFC 全称： Block Formatting Context 块级格式化上下文
+简单来说，BFC 就是一个完全独立的空间(布局环境)，让空间里的子元素不会影响到外面的布局
+
+## 如何生成 BFC？
+
+1. 根元素
+2. float 的值不为 none
+3. overflow 的值不为 visible hidden|auto|scroll
+4. display 的值为 inline-block、table-cell、table-caption、flex
+5. position 的值为 absolute 或者 fixed
+
+## BFC 的约束规则
+
+- 内部的 Box 会在垂直方向上一个接一个的放置
+- 垂直方向上的距离由 margin 决定。（完整的说法是：属于同一个 BFC 的两个相邻 Box 的 margin 会发生重叠（塌陷），与方向无关。）
+- 每个元素的左外边距与包含块的左边界相接触（从左向右），即使浮动元素也是如此。（这说明 BFC 中子元素不会超出他的包含块，而 position 为 absolute 的元素可以超出他的包含块边界）
+- BFC 的区域不会与 float 的元素区域重叠
+- 计算 BFC 的高度时，浮动子元素也参与计算
+- BFC 就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面元素，反之亦然
+
+## BFC 的作用
+
+1. 当两个相邻块级子元素分属于不同的 BFC 时可以阻止 margin 重叠(塌陷)
+
+2. 使用 float 脱离文档流，高度塌陷，即父元素高度不会被撑开。可以给父元素触发 BFC
+
+3. 两栏布局
+
+4. 清除内部浮动(应该就是解决高度塌陷)
+
+```
+<style>
+    .par {
+        border: 5px solid #fcc;
+        width: 300px;
+    }
+
+    .child {
+        border: 5px solid #f66;
+        width:100px;
+        height: 100px;
+        float: left;
+    }
+</style>
+<body>
+    <div class="par">
+        <div class="child"></div>
+        <div class="child"></div>
+    </div>
+</body>
+```
+
+为达到清除内部浮动，我们可以触发 par 生成 BFC，那么 par 在计算高度时，par 内部的浮动元素 child 也会参与计算。
+
+```
+.par {
+    overflow: hidden;
+}
+```
+
+# 层叠上下文 层叠等级 层叠顺序 z-index
+
+https://juejin.cn/post/6844903667175260174
+
+1. 层叠上下文
+   元素在页面 z 轴上的层叠关系
+
+2. 层叠等级
+   指层叠上下文中的层叠上下文元素在 z 轴上的上下顺序
+
+3. 层叠准则
+   1. 谁大谁上
+   2. 后来居上
+
+# style 写在 body 前后的区别
+
+写在 body 标签后由于浏览器以逐行方式对 html 文档进行解析，当解析到写在尾部的样式表（外联或写在 style 标签）会导致浏览器停止之前的渲染，等待加载且解析样式表完成之后重新渲染，在 windows 的 IE 下可能会出现 FOUC 现象（即样式失效导致的页面闪烁问题）
+
 # 实现对齐
 
 ## 水平居中
@@ -733,109 +836,6 @@ p {
       }
       ```
 
-# 包含块
-
-# a 标签的作用
-
-1. 跳转到外部网址
-
-```css
-<a href="http://www.baidu.com" target="_blank">百度</a>
-```
-
-2. 实现本地页面文件跳转
-3. 设置锚点。在网页任意位置添加一个标记，可以由任何地方跳转到这个标记处
-   定义锚点时，如果用 a 标签当做锚点，给 a 标签设置 name 属性，如果用其它标签当做锚点，给该标签设置 id 属性
-
-```css
-/* 在HTML文档中插入 id */
-<h3 id="tips">详细说明</h3>
-<p>内容</p>
-/* 在HTML文档中创建一个链接到“详细说明” */
-<a href="#tips">详细说明</a>
-```
-
-# BFC 是什么？
-
-https://github.com/zuopf769/notebook/blob/master/fe/BFC%E5%8E%9F%E7%90%86%E5%89%96%E6%9E%90/README.md
-BFC 全称： Block Formatting Context 块级格式化上下文
-简单来说，BFC 就是一个完全独立的空间(布局环境)，让空间里的子元素不会影响到外面的布局
-
-## 如何生成 BFC？
-
-1. 根元素
-2. float 的值不为 none
-3. overflow 的值不为 visible hidden|auto|scroll
-4. display 的值为 inline-block、table-cell、table-caption、flex
-5. position 的值为 absolute 或者 fixed
-
-## BFC 的约束规则
-
-- 内部的 Box 会在垂直方向上一个接一个的放置
-- 垂直方向上的距离由 margin 决定。（完整的说法是：属于同一个 BFC 的两个相邻 Box 的 margin 会发生重叠（塌陷），与方向无关。）
-- 每个元素的左外边距与包含块的左边界相接触（从左向右），即使浮动元素也是如此。（这说明 BFC 中子元素不会超出他的包含块，而 position 为 absolute 的元素可以超出他的包含块边界）
-- BFC 的区域不会与 float 的元素区域重叠
-- 计算 BFC 的高度时，浮动子元素也参与计算
-- BFC 就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面元素，反之亦然
-
-## BFC 的作用
-
-1. 当两个相邻块级子元素分属于不同的 BFC 时可以阻止 margin 重叠(塌陷)
-
-2. 使用 float 脱离文档流，高度塌陷，即父元素高度不会被撑开。可以给父元素触发 BFC
-
-3. 两栏布局
-
-4. 清除内部浮动(应该就是解决高度塌陷)
-
-```
-<style>
-    .par {
-        border: 5px solid #fcc;
-        width: 300px;
-    }
-
-    .child {
-        border: 5px solid #f66;
-        width:100px;
-        height: 100px;
-        float: left;
-    }
-</style>
-<body>
-    <div class="par">
-        <div class="child"></div>
-        <div class="child"></div>
-    </div>
-</body>
-```
-
-为达到清除内部浮动，我们可以触发 par 生成 BFC，那么 par 在计算高度时，par 内部的浮动元素 child 也会参与计算。
-
-```
-.par {
-    overflow: hidden;
-}
-```
-
-# 层叠上下文 层叠等级 层叠顺序 z-index
-
-https://juejin.cn/post/6844903667175260174
-
-1. 层叠上下文
-   元素在页面 z 轴上的层叠关系
-
-2. 层叠等级
-   指层叠上下文中的层叠上下文元素在 z 轴上的上下顺序
-
-3. 层叠准则
-   1. 谁大谁上
-   2. 后来居上
-
-# style 写在 body 前后的区别
-
-写在 body 标签后由于浏览器以逐行方式对 html 文档进行解析，当解析到写在尾部的样式表（外联或写在 style 标签）会导致浏览器停止之前的渲染，等待加载且解析样式表完成之后重新渲染，在 windows 的 IE 下可能会出现 FOUC 现象（即样式失效导致的页面闪烁问题）
-
 # 实现类
 
 1.  实现一个宽高自适应的正方形
@@ -907,7 +907,7 @@ https://juejin.cn/post/6844903667175260174
          margin: 0;
        }
        .scale {
-         height: 100%;
+         width: 100%;
          padding-bottom: 56.25%;
          background-color: tomato;
        }
@@ -942,33 +942,33 @@ https://juejin.cn/post/6844903667175260174
     概念: 页面中有三栏， 左右两栏宽度固定， 中间自适应的布局
 
     ```css
-    * {
-      margin: 0;
+    html,
+    body {
+      /* 高度一定要加， 否则子元素不会生效 */
+      height: 100%;
       padding: 0;
+      margin: 0;
     }
-    .container {
+    .box {
       display: flex;
-      height: 600px;
+      height: 100%;
     }
     .left {
+      background-color: rgb(224, 207, 210);
       width: 200px;
-      height: 100%;
-      background: blue;
     }
     .center {
+      background-color: rgb(245, 183, 173);
       flex: 1;
-      height: 100%;
-      background: gray;
     }
     .right {
-      width: 150px;
-      height: 100%;
-      background: orange;
+      background-color: rgb(182, 182, 240);
+      width: 220px;
     }
     ```
 
     ```html
-    <div class="container">
+    <div class="box">
       <div class="left"></div>
       <div class="center"></div>
       <div class="right"></div>
@@ -1083,7 +1083,7 @@ https://juejin.cn/post/6844903667175260174
 
     左列定宽，右列自适应
 
-    1. float + margin
+    1. 左 float, 右 margin-left
 
        ```html
        <body>
@@ -1111,7 +1111,7 @@ https://juejin.cn/post/6844903667175260174
        }
        ```
 
-    2. float + overflow
+    2. 左 float, 右 overflow
 
        ```html
        <body>
@@ -1121,16 +1121,22 @@ https://juejin.cn/post/6844903667175260174
        ```
 
        ```css
+       body,
+       html {
+         padding: 0;
+         margin: 0;
+         height: 100%;
+       }
        .left {
-         background-color: #f00;
+         background-color: rgb(240, 188, 188);
          float: left;
          width: 100px;
-         height: 500px;
+         height: 100%;
        }
        .right {
-         background-color: #0f0;
-         height: 500px;
-         overflow: hidden; /*触发bfc达到自适应*/
+         background-color: rgb(125, 185, 125);
+         overflow: hidden; /*触发bfc达到自适应, 不需要添加width*/
+         height: 100%;
        }
        ```
 
@@ -1144,21 +1150,28 @@ https://juejin.cn/post/6844903667175260174
        ```
 
        ```css
+       body,
+       html {
+         padding: 0;
+         margin: 0;
+         height: 100%;
+       }
        .box {
-         height: 500px;
          display: flex;
+         height: 100%;
        }
        .left {
-         width: 100px;
-         background-color: #f00;
+         width: 200px;
+         background-color: pink;
        }
        .right {
-         flex: 1; /*均分了父元素剩余空间*/
-         background-color: #0f0;
+         /* width: 100%; */
+         background-color: tomato;
+         flex: 1;
        }
        ```
 
-    4. 绝对定位 实现
+    4. 左 绝对定位, 右 margin-left
        父级设置为相对定位，left 设置绝对定位，宽 200px, right 设置 margin-left 为 200px
 
        ```html
@@ -1169,24 +1182,27 @@ https://juejin.cn/post/6844903667175260174
        ```
 
        ```css
-       * {
+       body,
+       html {
          padding: 0;
          margin: 0;
+         height: 100%;
        }
        .box {
-         width: 100%;
+         height: 100%;
          position: relative;
        }
        .left {
-         width: 200px;
-         height: 500px;
+         background-color: rgb(240, 188, 188);
          position: absolute;
-         background-color: pink;
+         left: 0;
+         width: 100px;
+         height: 100%;
        }
        .right {
-         height: 500px;
-         margin-left: 200px;
-         background-color: tomato;
+         background-color: rgb(125, 185, 125);
+         height: 100%;
+         margin-left: 100px;
        }
        ```
 
@@ -1214,7 +1230,7 @@ https://juejin.cn/post/6844903667175260174
         .center {
           background-color: pink;
           flex: 1;
-          overflow: auto;
+          overflow: auto; /* 实现中间高度超过页面出现滚动条 */
         }
         .footer {
           background-color: tomato;
@@ -1232,7 +1248,7 @@ https://juejin.cn/post/6844903667175260174
 
     2.  定位实现
         ```css
-        /* 所有的width一定要加, html同上 */
+        /* 所有的width和height一定要加, html同上 */
         html,
         body {
           padding: 0;
@@ -1279,7 +1295,7 @@ https://juejin.cn/post/6844903667175260174
          /*文本不会换行*/
          white-space: nowrap;
          /*当文本溢出包含元素时，以省略号表示超出的文本，该属性依赖于overflow: hidden*/
-         text-overflow: ellipsis;
+         text-overflow: ellipsis; /* ellipsis表示省略号 */
        }
        ```
 

@@ -8,20 +8,30 @@
 <title>Document</title>
 </head>
 <body>
+    <style>
+        
+
+    </style>
+    
     <script>
-        var numTrees = function(n) {
-            let dp = new Array(n+1).fill(0)
-            dp[1] = 1, dp[0] = 1
-            for (let i=1; i<=n; i++) {
-                for (let j=0; j<i; j++) {
-                    console.log(dp[i],i, '1');
-                    dp[i] += dp[j] * dp[i-j-1]
-                    console.log(dp[i], dp[j], dp[i-j-1], i, j, i-j-1);
+        var countBits = function(n) {
+            let res = []
+
+            for (let i=0; i<=n; i++) {
+                let sum = 0
+                for (let j=0; j<32; i++) {
+                    if ((j >> i) & 1 === 1) {
+                        sum++
+                    }
                 }
+                res[i] = sum
             }
-            return dp[n]
+            return res
         };
-        numTrees(3)
+        let res = countBits(2)
+        console.log(res, '0000');
+        
     </script>
+    
 </body>
 </html>
