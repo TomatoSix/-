@@ -2,6 +2,7 @@
   "cSpell.ignoreWords": [
     "MVVM",
     "Referer",
+    "bytecode",
     "csrf",
     "eval",
     "funfilled",
@@ -17,7 +18,5 @@
     "undefiend",
     "vuex"
   ],
-  "cSpell.words": [
-    "unshift"
-  ]
+  "cSpell.words": ["unshift"]
 }

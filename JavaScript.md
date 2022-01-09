@@ -732,6 +732,8 @@ https://juejin.cn/post/6844904083707396109
 
 # 闭包及其作用？
 
+## 解释一
+
 闭包： 能够访问自由变量的函数 (本质： 当前环境中存在指向父级作用域的引用)
 自由变量： 指在函数中使用的，既不是函数参数也不是函数的局部变量的变量
 
@@ -744,22 +746,24 @@ https://juejin.cn/post/6844904083707396109
 
 作用：
 
-1. 可以读取函数内部的变量
-2. 让这些变量始终保持在内存中
+1.  可以读取函数内部的变量
+2.  让这些变量始终保持在内存中
 
 ```js
-　　function f1() {
-　　　　var n = 999;
-　　　　nAdd = function() { n + =1 }
-　　　　function f2() {
-　　　　　　alert(n);
-　　　　}
-　　　　return f2;
-　　}
-　　var result = f1();
-　　result(); // 999
-　　nAdd();
-　　result(); // 1000
+function f1() {
+  var n = 999
+  nAdd = function() {
+    n + =1 // n就是自由变量
+  }
+  function f2() {
+    alert(n);
+  }
+  return f2;
+}
+var result = f1();
+result(); // 999
+nAdd();
+result(); // 1000
 ```
 
 缺点：
@@ -768,6 +772,78 @@ https://juejin.cn/post/6844904083707396109
 2. 闭包会在父函数外部，改变父函数内部变量的值
 
 应用场景：模块化与柯理化
+
+1. 模块封装
+在各模块规范出现之前，都是用这样的方式防止变量污染全局。
+```js
+var Yideng = (function () {
+  // 这样声明为模块私有变量，外界无法直接访问
+  var foo = 0;
+
+  function Yideng() {}
+  Yideng.prototype.bar = function bar() {
+    return foo;
+  };
+  return Yideng;
+})();
+```
+2. 在循环中创建闭包
+## 解释二
+
+1. MDN 概念
+
+   1. 一个函数和对其周围状态(词法环境)的引用捆绑在一起，这样的组合就是闭包
+   2. 也就是说，闭包让你可以在一个内层函数中访问到其外层函数的作用域
+      在 JS 中，每当创建一个函数，闭包就会在函数创建的同时被创建出来
+
+2. 示例
+
+```js
+function foo() {
+  var name = "foo";
+  function bar() {
+    console.log("bar", name);
+  }
+  return bar;
+}
+var fn = foo();
+fn();
+```
+
+## 解释三
+
+1. 维基百科概念
+   1. 闭包在实现上是一个结构体，它存储了一个函数和一个关联的环境(相当于一个符号查找表)
+   2. 闭包和函数最大的区别就是，当捕捉闭包的时候，它的自由变量会在捕捉时被确定，这样即使脱离了捕捉时的上下文，它也能照常运行
+
+# 内存泄漏
+
+- 概念： 指由于疏忽或错误造成程序未能释放已经不再使用的内存
+- 哪些情况会引起内存泄露？
+
+  1. 意外的全局变量
+  2. 被遗忘的计时器或回调函数
+  3. 闭包
+
+     ```js
+     function foo() {
+       var name = "foo";
+       var age = 18;
+
+       function bar() {
+         console.log(name);
+         console.log(age);
+       }
+       return bar;
+     }
+     var fn = foo(); // bar函数不会被销毁
+     fn();
+
+     fn = null; // 解决内存泄漏
+     ```
+
+  4. 没有清理的 DOM 元素引用
+  5. 循环引用
 
 # prototype 和**proto**的关系与区别
 
@@ -1131,16 +1207,6 @@ ajax.onreadystatechange = function () {
 ```
 
 # fetch
-
-# 内存泄漏
-
-- 概念： 指由于疏忽或错误造成程序未能释放已经不再使用的内存
-- 哪些情况会引起内存泄露？
-  1. 意外的全局变量
-  2. 被遗忘的计时器或回调函数
-  3. 闭包
-  4. 没有清理的 DOM 元素引用
-  5. 循环引用
 
 # JS 的垃圾回收机制 GC(Garbage Collection)
 
@@ -1683,6 +1749,11 @@ element.parentNode //返回最近一级的父亲
 
 # js 的几种模块规范
 
+1. CommonJs
+2. AMD
+3. CMD
+4. ES6
+
 # axios
 
 ## 特点
@@ -1791,6 +1862,7 @@ https://github.com/LiangJunrong/document-library/tree/master/%E7%B3%BB%E5%88%97-
 # 设计模式手写
 
 1. 发布订阅/观察者模式
+   https://juejin.cn/post/6968713283884974088#heading-3
 
    ```js
    // 手写发布订阅模式

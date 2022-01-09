@@ -46,10 +46,10 @@ https://juejin.cn/post/6844903959283367950
     - Object.getOwnPropertyDescriptors
     - Object.values() Object.entries()
 
-4.  ES9
+4.  ES9(ES2018)
 
     - Async iterators 迭代器
-    - Object spread operators 展开运算符
+    - Object spread operators 对象展开运算符
     - Promise finally
     - replaceAll
 
@@ -626,58 +626,207 @@ Promise 的状态一经改变就不能再改变
 # Iterator 迭代器
 
 - 确使用户在容器对象上遍访的对象，使用该接口无需关心对象的内部实现细节
-- 帮助我们对某个数据进行遍历的对象
+- 迭代器是一个帮助我们对某个数据进行遍历的对象
 
 1. 迭代器概念
 
    迭代器是一个对象，符合迭代器协议
-   `const iterator = { next: function() { return {} }}`
+   迭代器对象有一个 next 函数，返回一个对象，该对象有 done 和 value 属性
+   `const iterator = { next: function() { return { done: , value: } }}`
 
    1. next 函数
       一个无参函数，返回一个拥有 done 和 value 两个属性的对象
 
    2. 创建一个数组迭代器
 
-   ```js
-   const name = ["abc", "def", "ghi"];
-   const nums = [1, 2, 3, 4, 5];
+      ```js
+      const name = ["abc", "def", "ghi"];
+      const nums = [1, 2, 3, 4, 5];
 
-   function createArrayIterator(arr) {
-     let index = 0;
-     return {
-       next: function () {
-         if (index < arr.length) {
-           return { done: false, value: arr[index++] };
-         } else {
-           return { done: true, value: undefined };
-         }
-       },
-     };
-   }
+      function createArrayIterator(arr) {
+        let index = 0;
+        return {
+          next: function () {
+            if (index < arr.length) {
+              return { done: false, value: arr[index++] };
+            } else {
+              return { done: true, value: undefined };
+            }
+          },
+        };
+      }
 
-   let namesIterator = createArrayIterator(name);
-   console.log(namesIterator.next());
-   console.log(namesIterator.next());
-   console.log(namesIterator.next());
-   console.log(namesIterator.next());
-   ```
+      let namesIterator = createArrayIterator(name);
+      console.log(namesIterator.next());
+      console.log(namesIterator.next());
+      console.log(namesIterator.next());
+      console.log(namesIterator.next());
+      ```
 
 2. 可迭代对象概念
 
-   当一个对象实现了可迭代协议(iterable protocol)时，它就是一个可迭代对象。要求必须实现@@iterator 方法，在代码中使用 Symbol.iterator 访问该属性
+   当一个对象实现了可迭代协议(iterable protocol)时，它就是一个可迭代对象。要求必须实现@@iterator 方法，在代码中使用 [Symbol.iterator] 访问该属性，[Symbol.iterator]会返回一个迭代器
    `const iterableObj = { [Symbol.iterator]: function() { return 迭代器}}`
 
-3. 原生迭代器对象
+   ```js
+   // 可迭代对象
+   const iterableObj = {
+     favName: ["英路", "守护", "jisoo"],
+     [Symbol.iterator]: function () {
+       let index = 0;
+       return {
+         next: () => {
+           if (index < this.favName.length) {
+             return { done: false, value: this.favName[index++] };
+           } else {
+             return { done: true, value: undefined };
+           }
+         },
+       };
+     },
+   };
+   console.log(iterableObj[Symbol.iterator]); // function
+   // 如何使用
+   // 生成一个迭代器
+   const iterator2 = iterableObj[Symbol.iterator]();
+   console.log(iterator2.next()); // { done: false, value: '英路' }
+   console.log(iterator2.next()); // { done: false, value: '守护' }
+   console.log(iterator2.next()); // { done: false, value: 'jisoo' }
+   console.log(iterator2.next()); // { done: true, value: undefined }
+
+   // 可迭代对象应用
+   // for...of 可以遍历的东西必须是可迭代对象, 将next中的value赋值到item中
+   for (let item of iterableObj) {
+     console.log(item); //英路 守护 jisoo
+   }
+   ```
+
+3. 原生可迭代对象
 
    事实上我们平时创建的很多原生对象已经实现了可迭代协议，会生成一个迭代器对象
    String, Array, Map, Set, arguments 对象, NodeList 对象
 
-   1. 应用场景
-      展开运算符、 解构赋值、for of
+   1. 可迭代对象的应用场景
+      展开运算符、 解构赋值、for of、 yield
+      Array.from() 中传入可迭代对象
+      new Set() 中传入可迭代对象
+      Promise.all 中传入可迭代对象
 
-4. 自定义类的迭代
+4. 自定义类的可迭代性
+   该类创建出来的对象默认是可迭代的，在设计类的时候添加上@@iterator 方法
 
-# Generator 生成器(特殊的迭代器)
+   ```js
+   // 创建一个classroom类，创建出来的对象都是可迭代对象
+   // 教室中有自己的位置、名称、当前教室的学生
+   // 这个教室可以进来新学生
+   // 创建的教室对象是可迭代对象
+
+   class Classroom {
+     constructor(address, name, students) {
+       this.address = address;
+       this.name = name;
+       this.students = students;
+     }
+     entry(newStudents) {
+       this.students.push(newStudents);
+     }
+
+     // 封装可迭代方法
+     [Symbol.iterator]() {
+       let index = 0;
+       return {
+         next: () => {
+           if (index < this.students.length) {
+             return { done: false, value: this.students[index++] };
+           } else {
+             return { done: true, value: undefined };
+           }
+         },
+         // 想要监听中断的话， 可以添加return方法
+         return: () => {
+           console.log("迭代器提前终止了");
+           return { done: true, value: undefined };
+         },
+       };
+     }
+   }
+   const c1 = new Classroom("207", "计算机教室", ["英路", "守护"]);
+   // const c2 = new Classroom('231', '酷儿教室', ['英路', '守护'])
+   // const c3 = new Classroom('207', '计算机教室', ['英路', '守护'])
+
+   c1.entry("jisoo");
+   for (const item of c1) {
+     console.log(item); // 英路 守护 jisoo
+     // break 会去调用return
+     if (item === "守护") break;
+   }
+   ```
+
+# Generator 生成器
+
+生成器是 ES6 中新增的一种函数控制、使用的方案，它可以让我们更加灵活的控制函数什么时候暂停执行、继续执行等
+
+1. 生成器函数与普通函数的区别
+
+   1. 生成器函数需要在 function 的后面加一个符号\*
+   2. 生成器函数可以通过 yield 关键字来控制函数的执行流程
+   3. 生成器函数的返回值是一个 Generator(生成器)
+
+2. 如何使用
+   以及 next()、 throw()、 return()的使用
+
+   ```js
+   // 当遇到yield时暂停函数的执行, yield后面的值会放到next()返回对象的value中
+   // 当遇到return时生成器就停止执行, return后面的值会放到next()返回对象的value中
+   // next(x) 会把x作为上一个yield的返回值
+   function* foo() {
+     console.log("函数开始执行");
+
+     const value1 = 1;
+     console.log("第一段代码", value1);
+
+     // yield 会把后面的值value1放到next()返回对象的value中
+     // next(10) 会作为上一个yield的返回值
+     const n = yield value1;
+
+     const value2 = 200 * n;
+     console.log(n, "n"); // 10 n
+     console.log("第二段代码", value2); //第二段代码 2000
+     yield value2;
+
+     const value3 = 300;
+     console.log("第三段代码", value3);
+     yield;
+
+     console.log("函数执行结束");
+     // 会把return的值赋值到next()返回对象的value中
+     return "结束";
+   }
+
+   // 调用生成器函数时，会给我们返回一个生成器对象
+   const generator = foo();
+
+   console.log(generator.next());
+   // 函数开始执行 1 { value: 1, done: false }
+   console.log(generator.next(10));
+   // 10 n
+   // 第二段代码 2000
+   // { value: 2000, done: false }
+   generator.next();
+   // 第二段代码 300
+   console.log(generator.next());
+   // 第三段代码 300
+   // 函数执行结束
+   // { value: '结束', done: true }
+   ```
+
+3. 生成器替代迭代器使用
+
+4. yield x == return {done: false, value: x}
+
+# 异步代码处理方案
+
+# Generator 生成器(特殊的迭代器)(six)
 
 1. ES6 知识点
    异步编程解决方案
