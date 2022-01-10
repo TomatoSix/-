@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function add() {
+      let args =  [...arguments]
+      let fn = function() {
+        return add.apply(null, args.concat([...arguments]))
+      }
+      fn.toString = () => {
+        return args.reduce((a,b) => a+b)
+      }
+      return fn
+    }
+    console.log(+add(1,1,2)(3)(4));
+  </script>
+</body>
+</html>
