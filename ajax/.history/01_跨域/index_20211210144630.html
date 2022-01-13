@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    跨域
+  </title>
+</head>
+<body>
+  <h2>番茄炒小六</h2>
+  <h1></h1>
+  <script>
+
+    var hNode = document.getElementsByTagName('h2')
+    const x = new XMLHttpRequest
+    x.open("GET",'127.0.0.1:9000/data')
+    x.send()
+
+    x. onreadystatechange = function() {
+      if (x.readyState=== 4) {
+        if (x.status >= 200 &&  x.status < 300) {
+          hNode.innerText = x.response
+          console.log('111');
+          console.log(x.response, '111');
+          console.log(x.responseText, '2222');
+        }
+      }
+    }
+  </script>
+</body>
+</html>

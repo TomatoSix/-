@@ -992,6 +992,31 @@ Proxy 就像在目标对象之间的一个代理，任何对目标的操作都�
 可以拦截某些操作并实现自定义行为
 元编程
 
+1. 有哪些捕获器(13 个)
+
+   1. get() 属性读取操作的捕获器
+   2. set() 属性设置操作的捕获器
+   3. has() in 操作符的捕获器
+   4. deleteProperty() delete 操作符的捕获器
+   5. handler.getPrototypeOf()
+      Object.getPrototypeOf 方法的捕获器
+
+   6. handler.setPrototypeOf()
+      Object.setPrototypeOf 方法的捕获器
+   7. handler.isExtensible() 监听是否可以扩展
+
+   8. handler.preventExtensions()
+
+   9. handler.getOwnPropertyDescriptor()
+
+   10. handler.defineProperty()
+
+   11. handler.ownKeys()
+
+   12. handler.apply() 函数调用操作符的捕获器
+
+   13. handler.construct() new 操作符的捕获器
+
 # Reflect
 
 内置对象，它提供了可拦截 Javascript 操作的方法
@@ -1000,6 +1025,29 @@ Proxy 就像在目标对象之间的一个代理，任何对目标的操作都�
 2. 修改某些 Object 方法的返回结果，让其变得更合理。
    比如，Object.defineProperty(obj,name,desc)在无法定义属性时，会抛出一个错误，而
    Reflect.defineProperty(obj, name, desc)则会返回 false
+
+```js
+const obj = {
+  id: 'six',
+  age: 18
+}
+const objProxy = new Proxy(obj, {
+  get: function(target, key, receiver) {
+    // return target[key]
+    // 通过语言内部target[key]获取
+    return Reflect.get(target, key)
+  },
+   set: function(target, key, newValue, receiver) {
+     // target[key] = new Value 和下面代码效果相同
+     Reflect.set(target, key, newValue)
+   }
+})
+
+objProxy.id = '66'
+console.log(objProxy.name)
+
+通过语言内部target[key]获取
+```
 
 ## 13 个内置属性
 
@@ -1018,11 +1066,13 @@ Reflect.getOwnPropertyDescriptor(target, name)
 Reflect.getPrototypeOf(target)
 Reflect.setPrototypeOf(target, prototype)
 
-## 观察者模式
+## Receiver 参数的作用
+
+# 观察者模式
 
 指函数自动观察数据对象，一旦对象有变化，函数就会自动执行
 
-# ES6 模块加载与 CommonJS 加载的原理
+# 模块化加载
 
 https://juejin.cn/post/6994224541312483336
 
@@ -1204,6 +1254,10 @@ node 中对 CommonJS 进行了支持和实现
       对模块记录进行实例化，并且分配内存空间，解析模块的导入和导出语句，把模块指向对应的内存地址
    3. 运行
       运行代码，计算值，并且将值填充到内存地址中
+
+## AMD 使用
+
+## CMD 使用
 
 ## 其它
 

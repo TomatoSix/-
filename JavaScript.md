@@ -1,3 +1,12 @@
+(建议收藏)原生 JS 灵魂之问, 请问你能接得住几个？(上)
+https://juejin.cn/post/6844903974378668039
+
+(建议精读)原生 JS 灵魂之问(中)，检验自己是否真的熟悉 JavaScript？
+https://juejin.cn/post/6844903986479251464
+
+(2.4w 字,建议收藏)😇 原生 JS 灵魂之问(下), 冲刺 🚀 进阶最后一公里(附个人成长经验分享)
+https://juejin.cn/post/6844904004007247880
+
 # 有哪些内置对象？
 
 Array BigInt Boolean Date Function Map Math null Number Object Promise Set
@@ -359,6 +368,13 @@ https://segmentfault.com/a/1190000022298822 冴羽
      Object.is(+0, -0); // false
      Object.is(NaN, NaN); // true
      ```
+
+# 对象转原始类型
+
+1. 调用内置的 Symbol.toPrimitive()方法
+2. 调用 valueOf()
+3. 调用 toString()
+4. 如果都没有返回原始类型，则报错
 
 # 基本数据类型(原始数据类型)和引用数据类型
 
@@ -1921,6 +1937,12 @@ https://github.com/LiangJunrong/document-library/tree/master/%E7%B3%BB%E5%88%97-
    ```
 
 # 位运算符
+
+# 描述 V8 执行一段 JS 代码的过程
+
+1. 首先通过词法分析和语法分析生成 AST
+2. 将 AST 转换成字节码
+3. 由解释器逐行执行字节码，遇到热点代码地洞编译器进行编译， 生成对应的机器码，以优化执行效率
 
 # 问题类
 
