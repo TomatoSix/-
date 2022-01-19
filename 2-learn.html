@@ -8,47 +8,35 @@
 </head>
 <body>
   <script>
-    var tree = [
-      {
-        id: 1,
-        text: "节点1",
-        parentId: 0,
-        children: [
-          {
-            id: 2,
-            text: "节点1_1",
-            parentId: 1,
-          },
-        ],
-      },
-    ];
-    var arr = [
-      {
-        id: 1,
-        text: "节点1",
-        parentId: 0, //这里用0表示为顶级节点
-      },
-      {
-        id: 2,
-        text: "节点1_1",
-        parentId: 1, //通过这个字段来确定子父级
-      },
-    ];
-    function treeToArr(data) {
+    // 归并排序
+    function mergeArr(arr) {
+      if (arr.length < 2) return arr
+      let m = Math.floor(arr.length / 2)
+      let left = mergeArr(arr.slice(0, m))
+      let right = mergeArr(arr.slice(m))
+      return merge(left, right)
+    }
+    function merge(left, right) {
+      let i = 0, j=0
       let res = []
-      var dfs = function(tree) {
-        tree.forEach(item => {
-          if (item.children) {
-            dfs(item.children)
-            delete item.children
-          }
-          res.push(item)
-        })
+      while (i < left.length && j < right.length) {
+        if (left[i] <= right[j]) {
+          res.push(left[i])
+          i++
+        } else {
+          res.push(right[j]) 
+          j++
+        }
       }
-      dfs(data)
+      if (i < left.length) {
+        res.push(...left.slice(i))
+      }else {
+        res.push(...right.slice(j))
+      }
       return res
     }
-    let res = treeToArr(tree)
+    let arr = [1,3,2,6,4,5,9,7,8]
+    let res = mergeArr(arr)
     console.log(res, 'res');
   </script>
 </body>
