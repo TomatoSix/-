@@ -8,31 +8,21 @@
 </head>
 <body>
   <script>
-    /**
-    * @param {number} n
-    * @return {number[]}
-    */
-    var printNumbers = function(n) {
-        let res = []
-        var dfs = function(index, str) {
-            if (index === n) {
-              console.log(index, 'index', str, 'str', n , 'n');
-                res.push(+str)
-                return
-            }
-            for (let i=0; i<=9; i++) {
-                str += i.toString()
-                dfs(index+1, str)
-                str = str.slice(0, str.length-1)
-            }
+    function quikSort(arr, left, right) {
+        let pivot = arr[left]
+        while(left < right) {
+            while(left < right && arr[right] >= pivot) right--
+            arr[left] = arr[right]
+            while(left < right && arr[left] < pivot) left++
+            arr[right] = arr[left]
         }
-        dfs(0, '')
-        // res.shift()
-        return res
-        
-    };
-    let res = printNumbers(2)
-    console.log(res, 'res');
+        arr[left] = pivot
+        return arr
+    }
+    let arr = [1,10,2,34,6,85,45]
+    console.log(quikSort(arr, 0, arr.length-1));
+
+
   </script>
 </body>
 </html>
