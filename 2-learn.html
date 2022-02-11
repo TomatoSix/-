@@ -7,21 +7,29 @@
   <title>Document</title>
 </head>
 <body>
-  <script>
-    function quikSort(arr, left, right) {
-        let pivot = arr[left]
-        while(left < right) {
-            while(left < right && arr[right] >= pivot) right--
-            arr[left] = arr[right]
-            while(left < right && arr[left] < pivot) left++
-            arr[right] = arr[left]
-        }
-        arr[left] = pivot
-        return arr
-    }
-    let arr = [1,10,2,34,6,85,45]
-    console.log(quikSort(arr, 0, arr.length-1));
 
+  <script>
+    let arr = ["0.1.1", "2.3.3", "0.302.1", "4.2", "4.3.5", "4.3.4.5"];
+    arr.sort((a,b) => {
+      let i=0
+      let arr1 = a.split('.')
+      let arr2 = b.split('.')
+
+      while (true) {
+        let x = arr1[i]
+        let y = arr2[i]
+        i++
+        if (!x || !y) {
+          return arr1.length - arr2.length
+        }
+        if (x === y) {
+          continue
+        }
+        return x-y
+
+      }
+    })
+    console.log(arr, 'arr');
 
   </script>
 </body>

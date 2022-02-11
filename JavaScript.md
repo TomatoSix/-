@@ -1768,6 +1768,8 @@ element.parentNode //返回最近一级的父亲
 
 # js 的几种模块规范
 
+https://juejin.cn/post/6844903576309858318
+
 1. CommonJs
 2. AMD
 3. CMD
