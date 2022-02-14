@@ -1454,64 +1454,64 @@ https://juejin.cn/post/6844903667175260174
 
 13. 实现下拉菜单
 
-```css
-.box {
-  position: relative;
-  display: inline-block;
-}
-/* 下拉财当按钮样式 */
-.dropBtn {
-  background-color: #2f8532;
-  color: white;
-  width: 100px;
-  padding: 10px 20px;
-  cursor: pointer;
-  border: none;
-}
-/* 下拉内容，默认隐藏 */
-.content {
-  display: none;
-  position: absolute;
-}
-/* 下拉菜单的链接样式 */
-.content a {
-  display: block;
+    ```css
+    .box {
+      position: relative;
+      display: inline-block;
+    }
+    /* 下拉财当按钮样式 */
+    .dropBtn {
+      background-color: #2f8532;
+      color: white;
+      width: 100px;
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+    }
+    /* 下拉内容，默认隐藏 */
+    .content {
+      display: none;
+      position: absolute;
+    }
+    /* 下拉菜单的链接样式 */
+    .content a {
+      display: block;
 
-  width: 100px;
-  box-sizing: border-box;
-  color: white;
-  text-decoration: none;
-  background-color: #5da35f;
-  padding: 10px 20px;
-}
-/* 鼠标移动上去后显示下拉菜单 */
-.box:hover .content {
-  display: block;
-}
-/* 选中下拉菜单样式修改 */
-.content a:hover {
-  background-color: #a9daab;
-}
-```
+      width: 100px;
+      box-sizing: border-box;
+      color: white;
+      text-decoration: none;
+      background-color: #5da35f;
+      padding: 10px 20px;
+    }
+    /* 鼠标移动上去后显示下拉菜单 */
+    .box:hover .content {
+      display: block;
+    }
+    /* 选中下拉菜单样式修改 */
+    .content a:hover {
+      background-color: #a9daab;
+    }
+    ```
 
-```html
-<div class="box">
-  <button class="dropBtn">下拉菜单</button>
-  <div class="content">
-    <a href="">菜单1</a>
-    <a href="">菜单2</a>
-    <a href="">菜单3</a>
-  </div>
-</div>
-<div class="box">
-  <button class="dropBtn">下拉菜单</button>
-  <div class="content">
-    <a href="">菜单1</a>
-    <a href="">菜单2</a>
-    <a href="">菜单3</a>
-  </div>
-</div>
-```
+    ```html
+    <div class="box">
+      <button class="dropBtn">下拉菜单</button>
+      <div class="content">
+        <a href="">菜单1</a>
+        <a href="">菜单2</a>
+        <a href="">菜单3</a>
+      </div>
+    </div>
+    <div class="box">
+      <button class="dropBtn">下拉菜单</button>
+      <div class="content">
+        <a href="">菜单1</a>
+        <a href="">菜单2</a>
+        <a href="">菜单3</a>
+      </div>
+    </div>
+    ```
 
 # 原知识点
 

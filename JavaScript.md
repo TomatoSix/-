@@ -864,7 +864,7 @@ fn();
   4. 没有清理的 DOM 元素引用
   5. 循环引用
 
-# prototype 和**proto**的关系与区别
+# `prototype` 和`__proto__`的关系与区别
 
 https://mp.weixin.qq.com/s/1UDILezroK5wrcK-Z5bHOg
 

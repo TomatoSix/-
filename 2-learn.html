@@ -7,30 +7,58 @@
   <title>Document</title>
 </head>
 <body>
-
+  <style>
+    /* 实现圣杯布局 */
+    .box {
+      
+    }
+    .center {
+      width: 100%;
+      background-color: pink;
+      float: left;
+      height: 500px;
+    }
+    .inner {
+      margin-left: 200px;
+      margin-right: 220px;
+      height: 100%;
+    }
+    .left {
+      float: left;
+      background-color: tomato;
+      margin-left: -100%;
+      width: 200px;
+      height: 500px;
+    }
+    .right {
+      float: left;
+      background-color: antiquewhite;
+      margin-left: -220px;
+      height: 500px;
+      width: 220px;
+    }
+  </style>
+  
   <script>
-    let arr = ["0.1.1", "2.3.3", "0.302.1", "4.2", "4.3.5", "4.3.4.5"];
-    arr.sort((a,b) => {
-      let i=0
-      let arr1 = a.split('.')
-      let arr2 = b.split('.')
-
-      while (true) {
-        let x = arr1[i]
-        let y = arr2[i]
-        i++
-        if (!x || !y) {
-          return arr1.length - arr2.length
-        }
-        if (x === y) {
-          continue
-        }
-        return x-y
-
+    // TypeScript基本类型
+    /* 
+      元组 var arr: [string, number, number] = ['1', 2,3]
+      never
+      unknown 该类型不能赋值给其它类型
+      any
+      let num: number = 8
+      function add(a: number, b: number) {
+        return a+b
       }
-    })
-    console.log(arr, 'arr');
-
+      类型别名 type
+      联合类型 var cur: number | string
+      可选类型 var fn(a: number, b?: number)
+      !! Boolean()
+      ?? 类型三元运算符
+      可选链 ?.
+      断言 把某个类型变为更具体或更不具体(unknown, any)
+    */
+    
   </script>
 </body>
 </html>
