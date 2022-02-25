@@ -79,8 +79,41 @@ Model-View-ViewModel(MVVM)是一种软件架构设计模式
 
 # 什么是虚拟 DOM
 
-虚拟 DOM 是对 DOM 的抽象，本质上是 Javascript 对象
+虚拟 DOM 指的是用 JS 模拟的 DOM 结构，
+本质上是 Javascript 对象
 虚拟 DOM 提升性能的点在于 DOM 发生变化的时候，通过 diff 算法比对 JavaScript 原生对象，计算出需要变更的 DOM，然后只对变化的 DOM 进行操作，而不是更新整个视图。
+
+1. DOM 结构
+
+```html
+<ul id="list">
+  <li class="item">Item1</li>
+  <li class="item">Item2</li>
+</ul>
+```
+
+2. 映射成的虚拟 DOM 如下
+
+```js
+var vDOM = {
+  tag: "ul",
+  attrs: {
+    id: "list",
+  },
+  children: [
+    {
+      tag: "li",
+      attrs: { className: "item" },
+      children: ["Item1"],
+    },
+    {
+      tag: "li",
+      attrs: { className: "item" },
+      children: ["Item2"],
+    },
+  ],
+};
+```
 
 # Vue2 的响应式数据原理
 

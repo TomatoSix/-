@@ -242,8 +242,14 @@ initialValue);
 # String 有哪些方法
 
 - charAt() 从一个字符串中返回指定的字符
+- charCodeAt() 获取 Unicode 编码
 - concat() 将一个或多个字符串与原字符串连接合并，形成一个新的字符串并返回
 - endsWith()方法用来判断当前字符串是否是以另外一个给定的子字符串“结尾”的，根据判断结果返回 true 或 false。
+
+```js
+"numbers".endsWith("s"); // true
+```
+
 - includes() 方法用于判断一个字符串是否包含在另一个字符串中，根据情况返回 true 或 false。
 - indexOf() 方法返回调用它的 String 对象中第一次出现的指定值的索引，从 fromIndex 处进行搜索。如果未找到该值，则返回 -1。
 
@@ -267,10 +273,18 @@ Undefiend 转为 NaN
 null 转为 0
 boolean true 转为 1 ， false 转为 0
 String 数字值直接转为数字 包含非数字值转换为 NaN  
-[] -> 0
+[] -> 0, '' -> 0
 除了数组的引用类型 -> NaN
 
 可以用 parseInt() Number()
+
+```js
+Number(""); // 0
+Number([]); // 0
+Number([1]); // 1
+Number([1, 2, 3]); // NaN
+parseInt([1, 2, 3]); // 1
+```
 
 ## 其他值转为布尔值
 
@@ -332,6 +346,7 @@ https://segmentfault.com/a/1190000022298822 冴羽
    // 空数组转为数字为 0 ， 除了数组外的引用类型全部为 NaN
    // [] == ![] -> [] == false -> [] == 0 -> 0 == 0 -> true
    {} == !{}  //false
+   // {} 转数字是NaN
    // {} == !{} -> {} == false -> {} == 0 -> NaN == 0 -> false
    [] == []  //false
    {} == {}  //false
@@ -369,7 +384,7 @@ https://segmentfault.com/a/1190000022298822 冴羽
      Object.is(NaN, NaN); // true
      ```
 
-# 对象转原始类型
+# 对象转基本数据类型
 
 1. 调用内置的 Symbol.toPrimitive()方法
 2. 调用 valueOf()
@@ -587,9 +602,9 @@ true.toString() // true
 
 # js 获取原型的方法
 
-p.**proto**
-p.constructor
-Object.getPrototypeOf(p)
+`p.__proto__`
+`p.constructor`
+`Object.getPrototypeOf(p)`
 
 # 类数组与数组的区别和转换
 
@@ -606,41 +621,54 @@ Array.prototype.concat.apply([], arrayLike)
 
 # toString 和 valueOf 的使用
 
-```js
-{}.valueOf() // {}
-[].valueOf() // []
-{}.toString() // 报错, {}被解析成一个空的block，没有被解析成一个对象
-[].toString() // ""
-({}).toString() // [object Object] , 加(), js引擎就知道里面是js表达式
-[] + {} // [object Object], []转字符串为空, {}转字符串为[object Object]
-{} + [] // 0  {}会被识别为代码块，被忽略, [].toString()返回'', +''结果为0
-```
+`toString` 和 `valueOf` 几乎都是在出现操作符(+-\*/==><)时被调用(隐式转换)
+
+https://juejin.cn/post/6873215243804213262
 
 1.  toString
-    https://juejin.cn/post/6873215243804213262
+
     返回一个表示该对象的字符串
 
-    1. 什么时候会自动调用?
-       使用操作符的时候，如果其中一边为对象，则会先调用 toString 方法，也就是隐式转换，然后再进行操作
+    1.  总结
+        `对象.toString()`就是类型检测， `数组/函数/字符串.toString()`就是转为字符串；
+        在使用操作符的时候，如果其中一边为对象，则会先调用 toString 方法，也就是隐式转换;
 
-       ```js
-       let c = [1, 2, 3];
+        ```js
+        //
+        {}.valueOf() // {}
+        [].valueOf() // []
+        {}.toString() // 报错, {}被解析成一个空的block，没有被解析成一个对象
+        [].toString() // ""
+        [1, 2, 3].toString() // '1, 2, 3'
 
-       let d = { a: 2 };
-       Object.prototype.toString = function () {
-         console.log("Object");
-       };
-       Array.prototype.toString = function () {
-         console.log("Array");
-         return this.join(","); // 返回 toString 的默认值（下面测试）
-       };
-       console.log(2 + 1); // 3
-       console.log("s"); // 's'
-       console.log("s" + 2); // 's2'
-       console.log(c < 2); // false (一次 => 'Array')
-       console.log(c + c); // "1,2,31,2,3" (两次 => 'Array')
-       console.log(d > d); // false (两次 => 'Object')
-       ```
+        ({}).toString() // [object Object] , 加(), js引擎就知道里面是js表达式
+        ({name: 'six', age: 18}).toString() // [object Object]
+        (function() {}).toString() // 'function() {}'
+        [] + {} // [object Object], []转字符串为空, {}转字符串为[object Object]
+        {} + [] // 0  {}会被识别为代码块，被忽略, [].toString()返回'', +''结果为0
+        ```
+
+    2.  什么时候会自动调用?
+        使用操作符的时候，如果其中一边为对象，则会先调用 toString 方法，也就是隐式转换，然后再进行操作
+
+        ```js
+        let c = [1, 2, 3];
+
+        let d = { a: 2 };
+        Object.prototype.toString = function () {
+          console.log("Object");
+        };
+        Array.prototype.toString = function () {
+          console.log("Array");
+          return this.join(","); // 返回 toString 的默认值（下面测试）
+        };
+        console.log(2 + 1); // 3
+        console.log("s"); // 's'
+        console.log("s" + 2); // 's2'
+        console.log(c < 2); // false (一次 => 'Array')
+        console.log(c + c); // "1,2,31,2,3" (两次 => 'Array')
+        console.log(d > d); // false (两次 => 'Object')
+        ```
 
 2.  valueOf
     返回当前对象的原始值
@@ -652,6 +680,12 @@ Array.prototype.concat.apply([], arrayLike)
     console.log(c.valueOf()); // [1, 2, 3]
     console.log(d.valueOf()); // {a:2}
     ```
+
+总结:
+
+1. 在进行对象转换时，将优先调用 toString 方法，如若没有重写 toString，将调用 valueOf 方法；如果两个方法都没有重写，则按 Object 的 toString 输出。
+2. 在进行强转字符串类型时，将优先调用 toString 方法，强转为数字时优先调用 valueOf。
+3. 使用运算操作符，valueOf 的优先级高于 toString。
 
 # || 和 && 操作符
 
@@ -1766,14 +1800,144 @@ element.parentNode //返回最近一级的父亲
 
 # 三种事件模型
 
+1. DOM 0 级
+2. DOM 2 级
+3. DOM 3 级
+
+# 错误处理方案
+
+1. 为什么需要有错误处理方案
+   如果我们有一个函数，再调用这个函数时，如果出现了错误，那么我们应该修复这个错误，例如当函数传入参数的类型不正确时，应该告知调用者一个错误。
+   需要强制告诉外界错误，用 throw 来抛出
+   `throw "not a function"`
+2. 抛出异常的类型
+
+   1. 抛出一个字符串类型(基本的数据类型)
+
+      ```js
+      function foo(type) {
+        console.log("foo函数开始执行");
+
+        if (type === 0) {
+          throw "type不能为0";
+        }
+
+        console.log("foo函数结束执行");
+      }
+
+      foo(0);
+      ```
+
+   2. 抛出一个对象类型
+
+      ```js
+      // 别人可以根据错误码查找错误信息
+      throw { errorCode: -1001, errorMessage: "type不能为0." };
+      ```
+
+   3. 创建类， 并且创建这个类对应的对象
+
+      ```js
+      class HYError {
+        constructor(errorCode, errorMessage) {
+          this.errorCode = errorCode;
+          this.errorMessage = errorMessage;
+        }
+      }
+
+      function foo(type) {
+        console.log("foo函数开始执行");
+
+        if (type === 0) {
+          throw new HYError(-1001, "type不能为0");
+        }
+
+        console.log("foo函数结束执行");
+      }
+      ```
+
+   4. 真实开发中，js 已经提供了类 Error, 可以打印出函数的调用栈
+
+      Error 包含三个属性: message, name, stack
+      Error 有一些自己的子类: RangeError(下标越界时使用)、SyntaxError(解析语法错误时使用)、TypeError(出现类型错误时使用)
+
+      ```js
+      function foo(code) {
+        if (!code) {
+          throw new Error("错误代码");
+        }
+        console.log(code);
+      }
+      ```
+
+      ```js
+      const err = new Error("type不能为0");
+
+      console.log(err.message);
+      console.log(err.name);
+      console.log(err.stack);
+      ```
+
+3. 对抛出的异常进行处理
+
+   1. 不处理, 那么异常会继续抛出，指导最顶层的调用
+      如果在最顶层也没有对这个异常进行处理，那么我们的程序就会终止执行，并且报错
+
+   2. 利用 try {} catch() {}
+      会正确处理异常， 程序不会终止执行
+
+      ```js
+      try {
+        // 代码块
+        // 异常信息, 一般用e来表示
+      } catch (e) {
+        // 需要处理的内容
+        console.log(e);
+      } finally {
+        // 不管有没有发生异常, finally中的代码一定会执行
+      }
+      ```
+
 # js 的几种模块规范
 
 https://juejin.cn/post/6844903576309858318
 
-1. CommonJs
-2. AMD
-3. CMD
-4. ES6
+1. 为什么要模块化开发
+
+   1. 模块中可以编写属于自己的逻辑代码，有自己的作用域， 不会影响到其他的结构，产生命名冲突
+   2. 模块可以将自己希望暴露的变量、函数、对象等导出给其他模块使用
+   3. 也可以导入其他模块中的变量、函数、对象等
+
+2. 没有模块化之前,利用立即执行函数
+
+   ```js
+   // 文件1
+   const moduleA = (function () {
+     var name = "six";
+     var age = 18;
+     var isFlag = true;
+     return {
+       name,
+       age,
+     };
+   })();
+   ```
+
+   ```js
+   // 文件2
+   (function () {
+     if (moduleA.isFlag) {
+       console.log("我的名字是" + moduleA.name);
+     }
+   })();
+   ```
+
+3. 几种规范介绍(详见 ES6.md)
+
+   1. CommonJs
+   2. AMD
+   3. CMD
+   4. ES6
 
 # axios
 

@@ -824,8 +824,6 @@ Promise 的状态一经改变就不能再改变
 
 4. yield x == return {done: false, value: x}
 
-# 异步代码处理方案
-
 # Generator 生成器(特殊的迭代器)(six)
 
 1. ES6 知识点
@@ -1074,15 +1072,20 @@ Reflect.setPrototypeOf(target, prototype)
 
 # 模块化加载
 
+前端模块化：CommonJS,AMD,CMD,ES6
+https://juejin.cn/post/6844903576309858318#heading-3
+「万字进阶」深入浅出 Commonjs 和 Es Module
 https://juejin.cn/post/6994224541312483336
 
 ## CommonJS 使用
 
 node 中对 CommonJS 进行了支持和实现
+CommonJS 规范的核心变量: exports 、module.exports 、require
 
 1. 使用
 
    ```js
+   // 导出方法一
    let name = "六";
    let age = 18;
    exports.name = name;
@@ -1090,26 +1093,33 @@ node 中对 CommonJS 进行了支持和实现
    ```
 
    ```js
+   // 导出方法二
    const info = {
      name: "六",
      age: 18,
    };
 
    // 将对象暴露出去
+   // 把info对象赋值给module.exports
    module.exports = info;
    ```
 
    ```js
+   // 导入方法 require
    const bar = require("./bar.js");
+   // 或者
+   const { name, age } = require("./bar.js");
    ```
 
 2. 原理 | module.export 和 exports 区别
    对象赋值，通过 require 函数把导出的对象赋值到另一个模块的标识符上， 通过标识符拿到同一个对象
 
    ```js
-   module.exports = {}
-   exports = module.exports
-   真正导出的是 module.exports
+   // 源码
+   module.exports = {};
+   exports = module.exports;
+   // 最终导出的是 module.exports
+   // exports.name = 'six'相当于在module.exports中添加name属性
    ```
 
 3. require 查找规则
@@ -1137,11 +1147,12 @@ node 中对 CommonJS 进行了支持和实现
 
    1. 模块在被第一次引入时，模块中的 js 代码会被运行一次
    2. 模块被多次引入时，会缓存(每个模块对象 module 都一个 loaded 属性)，最终只加载(运行)一次
-   3. 有循环引入， 加载顺序为深度优先算法
+   3. 有循环引入，加载顺序为深度优先算法
 
 5. 缺点
-   Commonjs 加载模块是同步的，只有等到对应的模块加载完毕，当前模块中的内容才能被运行。
-   如果将它应用到浏览器， 浏览器加载 js 文件需要从服务器将文件下载下来再运行
+   Commonjs 加载模块是同步的，只有等到对应的模块加载完毕，当前模块中的后续内容才能被运行。
+   如果将它应用到浏览器， 浏览器加载 js 文件需要从服务器将文件下载下来再运行，
+   同步就意味着后续的 js 代码都无法正常运行，即使是一些简单的 DOM 操作
 
 ## ES Module 使用
 
@@ -1255,9 +1266,88 @@ node 中对 CommonJS 进行了支持和实现
    3. 运行
       运行代码，计算值，并且将值填充到内存地址中
 
-## AMD 使用
+## AMD 规范
+
+AMD - Asynchronous Module Definition(异步模块定义)
+采用的是异步加载模块
+需要借助 require.js 库
+
+1. require.js 的使用
+
+   1. 下载 require.js
+
+   2. 定义 HTML 的 script 标签引入 require.js 和定义入口文件 main.js
+      `<script src="./lib/require.js" data-main="./main.js"></script>`
+      data-main 属性的作用是在加载完 src 的文件后会加载执行该文件
+   3. main.js 文件中
+
+      ```js
+      // 指定模块路径
+      require.config({
+        baseUrl: './src'
+        // 注册foo.js和bar.js文件
+        paths: {
+          foo: "foo",
+          bar: "bar",
+        },
+      });
+      // 执行基本操作
+      require(["foo"], function (foo) {
+        console.log(foo);
+      });
+      ```
+
+   4. bar.js 文件中
+
+      ```js
+      define(["foo"], function (foo) {
+        console.log("--------");
+
+        console.log("bar:", foo);
+      });
+      ```
 
 ## CMD 使用
+
+CMD - Common Module Definition(通用模块定义)
+采用的是异步加载模块
+实现方案有 sea.js 库
+
+1. sea.js 的使用
+
+   1. html 中引入 sea.js 和 定义入口文件 main.js
+      `<script src="./lib/sea.js" data-main="./main.js"></script>`
+
+   2. main.js 文件中
+
+      ```js
+      // 会传递三个参数
+      define(function (require, exports, module) {
+        // 导入
+        const foo = require("./foo");
+        // 使用
+        console.log(foo);
+      });
+      ```
+
+   3. foo.js 中
+
+      ```js
+      define(function (require, exports, module) {
+        const name = "six";
+        const age = 18;
+        function sum(a, b) {
+          return a + b;
+        }
+
+        //导出
+        module.exports = {
+          name,
+          age,
+          sum,
+        };
+      });
+      ```
 
 ## 其它
 
@@ -1296,7 +1386,9 @@ node 中对 CommonJS 进行了支持和实现
    (2)CommonJS 模块是运行时加载，ES6 模块是编译时输出接口
    (3)CommonJS 模块的 require()是同步加载模块，ES6 模块的 import 命令是异步加载，有一个独立的模块依赖的解析阶段
 
-# ES7
+# ES7-ES12
+
+## ES7
 
 1. array.includes
 
@@ -1312,7 +1404,7 @@ node 中对 CommonJS 进行了支持和实现
    let res = 3 ** 3; //27
    ```
 
-# ES8
+## ES8
 
 1. async/await
 
@@ -1335,13 +1427,13 @@ for (let value of Object.values(map)) {
 
    获取属性描述符
 
-# ES9
+## ES9
 
 1. Async iterators 迭代器
 2. Object spread operators 展开运算符
 3. Promise finally
 
-# ES10
+## ES10
 
 1. flat
 
@@ -1374,7 +1466,7 @@ for (let value of Object.values(map)) {
 
 4. trimStart trimEnd
 
-# ES11
+## ES11
 
 1. BigInt
 
@@ -1440,7 +1532,7 @@ for (let value of Object.values(map)) {
    console.log(globalThis);
    ```
 
-# ES12
+## ES12
 
 1. finalizationRegistry
 2. WeakRef
