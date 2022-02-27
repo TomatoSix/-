@@ -775,10 +775,26 @@ call
 apply
 手写详见手撕代码
 
-# 如何正确判断 this?
+# 如何正确判断 this? (5 中情况)
 
 详见霖呆呆
 https://juejin.cn/post/6844904083707396109
+
+1. 默认绑定
+   非严格模式下 this 指向全局对象， 严格模式下 this 会绑定到 undefined
+2. 隐式绑定
+   this 永远指向最后调用它的那个对象
+
+   隐式丢失问题
+
+   1. 使用另一个变量给函数取别名 - 会指向调用者
+   2. 将函数作为参数传递时会被隐式赋值，回调函数丢失 this 绑定 - 会指向 window
+
+3. 显式绑定
+4. new 绑定
+   使用 new 函数创建的对象和字面量形式创建出来的对象没有太大区别，不涉及箭头函数
+5. 箭头函数
+   this 的指向由外层作用域决定
 
 # 闭包及其作用？
 
@@ -898,7 +914,7 @@ fn();
   4. 没有清理的 DOM 元素引用
   5. 循环引用
 
-# `prototype` 和`__proto__`的关系与区别
+# `prototype` 和`__proto__`的关系与区别(记住图就可以)
 
 https://mp.weixin.qq.com/s/1UDILezroK5wrcK-Z5bHOg
 
@@ -906,6 +922,42 @@ https://github.com/LiangJunrong/document-library/blob/master/%E7%B3%BB%E5%88%97-
 
 等式 1：person.constructor === Person 实例的 constructor 指向构造函数
 等式 2：Person.prototype.constructor === Person 构造函数原型的 constructor 指向构造函数
+
+1. Object 和 Function 都是 Js 自带的函数对象
+
+   ```js
+   typeof Object; // function
+   typeof Function; // function
+   ```
+
+2. 题目
+
+   ```js
+   var F = function () {};
+
+   Object.prototype.a = function () {
+     console.log("a");
+   };
+
+   Function.prototype.b = function () {
+     console.log("b");
+   };
+
+   var f = new F();
+
+   f.a(); // 输出啥？
+   f.b(); // 输出啥？
+
+   F.a(); // 输出啥？
+   F.b(); // 输出啥？
+
+
+   f.a() -> a
+   f.b() -> f.b is not a function
+
+   F.a() -> a
+   F.b() -> b
+   ```
 
 # 封装
 
@@ -1142,8 +1194,6 @@ module.exports = {
 };
 ```
 
-# 防抖与节流
-
 # 作用域和作用域链、执行上下文 详见：冴羽
 
 ## 作用域
@@ -1258,6 +1308,8 @@ ajax.onreadystatechange = function () {
   }
 };
 ```
+
+# 跨域方案
 
 # fetch
 
@@ -1470,61 +1522,73 @@ window > document > html > body
 
 ## 获取元素（增）
 
-- 利用 DOM 提供的方法获取元素
-  1. document.getElementById('id 名') 返回对象
-  2. document.getElementsByTagName('标签名') 返回类数组，即元素对象的集合
-  3. 父元素.getElementsByTagName('子元素标签名') 获取父元素内部所有指定标签名的子元素
-  ```javascript
-  var ol = document.getElementsByTagName("ol");
-  ol[0].getElementsByTagName("li");
-  ```
-  4. document.getElementsByClassName('类名') 根据类名获得元素对象的集合
-  5. document.querySelector('.box') 返回指定选择的第一个元素对象
-  ```javascript
-  var nav = document.querySelector("#nav"); //根据id选择器获取
-  var li = document.querySelector("li"); //根据li标签获取
-  ```
-  6. document.querySelectorAll() 返回指定选择器的所有元素对象集合
-- 利用节点层级关系获取元素
-  - 父子节点
-    1. node.parentNode 获取节点的父节点
-    2. node.childNodes 获取节点的孩子节点集合，包含所有的元素节点、文本节点等，不提倡使用
-    3. node.children 获取所有的子元素节点集合
-    4. node.firstChild 获取第一个子节点，包括元素节点、文本节点等，不提倡使用
-    5. node.lastChild 获取最后一个子节点，不提倡使用
-    6. node.firstElementChild 返回第一个子元素节点, 有兼容问题
-    7. node.lastElementChild 返回最后一个元素节点，有兼容问题
-  - 兄弟节点
-    1. node.nextSibling 下一个兄弟节点，包含元素节点或文本节点
-    2. node.previousSibling 上一个兄弟节点，包含元素节点或文本节点
-    3. node.nextElementSibling 下一个兄弟元素节点, 有兼容问题
-    4. node.previousElementSibling 上一个兄弟元素节点, 有兼容问题
+1. 利用 DOM 提供的方法获取元素
+
+   1. document.getElementById('id 名') 返回对象
+   2. document.getElementsByTagName('标签名') 返回类数组，即元素对象的集合
+   3. 父元素.getElementsByTagName('子元素标签名') 获取父元素内部所有指定标签名的子元素
+
+   ```javascript
+   var ol = document.getElementsByTagName("ol");
+   ol[0].getElementsByTagName("li");
+   ```
+
+   4. document.getElementsByClassName('类名') 根据类名获得元素对象的集合
+   5. document.querySelector('.box') 返回指定选择的第一个元素对象
+
+   ```javascript
+   var nav = document.querySelector("#nav"); //根据id选择器获取
+   var li = document.querySelector("li"); //根据li标签获取
+   ```
+
+   6. document.querySelectorAll() 返回指定选择器的所有元素对象集合
+
+2. 利用节点层级关系获取元素
+   1. 父子节点
+      1. node.parentNode 获取节点的父节点
+      2. node.childNodes 获取节点的孩子节点集合，包含所有的元素节点、文本节点等，不提倡使用
+      3. node.children 获取所有的子元素节点集合
+      4. node.firstChild 获取第一个子节点，包括元素节点、文本节点等，不提倡使用
+      5. node.lastChild 获取最后一个子节点，不提倡使用
+      6. node.firstElementChild 返回第一个子元素节点, 有兼容问题
+      7. node.lastElementChild 返回最后一个元素节点，有兼容问题
+   2. 兄弟节点
+      1. node.nextSibling 下一个兄弟节点，包含元素节点或文本节点
+      2. node.previousSibling 上一个兄弟节点，包含元素节点或文本节点
+      3. node.nextElementSibling 下一个兄弟元素节点, 有兼容问题
+      4. node.previousElementSibling 上一个兄弟元素节点, 有兼容问题
 
 ## 元素修改（改）
 
 1. 操作元素内容
 
-- div.innerText  
-  不识别 html 标签 起始位置到终止位置的全部内容，去除 html 标签，空格和换行
-- div.innerHTML  
-  识别 html 标签 起始位置到终止位置的全部内容，包括 html 标签，保留空格和换行
+   1. div.innerText  
+      不识别 html 标签 起始位置到终止位置的全部内容，去除 html 标签，空格和换行
+   2. div.innerHTML  
+      识别 html 标签 起始位置到终止位置的全部内容，包括 html 标签，保留空格和换行
 
 2. 操作常见元素属性
+   注意: setAttribute 用于直接在 DOM 元素上添加/修改属性
 
-```js
-img.src;
-div1.setAttribute("align", "center"); //设置属性值
-div1.getAttribute("align"); //获取属性值
-div.removeAttribute("style");
-```
+   1. 如果设置 `div.setAttribute('color', 'red')`
+      产生的效果是 `<div color="red"> </div>`
+   2. 实际上应该设置`div.setAttribute("style", "color:red");`
+      产生的效果是 `<div style="color: red"></div>`
+
+   ```js
+   img.src;
+   div.setAttribute("style", "color:red");
+   input.setAttribute("type", "button");
+   div.removeAttribute("style");
+   ```
 
 3. 修改表单属性
    input.value 用于操作表单里面的值
 4. 修改样式属性
 
-- element.style 例如 div.style.backgroundColor = 'purple'  
-  该操作产生的是行内样式
-- element.className 例如 div.className = '类名' 会覆盖原先的类名
+   1. element.style 例如 div.style.backgroundColor = 'purple'  
+      该操作产生的是行内样式
+   2. element.className 例如 div.className = '类名' 会覆盖原先的类名
 
 ## 节点操作
 
@@ -1562,9 +1626,9 @@ nodeValue 节点值
    会覆盖原本的页面内容
    是直接将内容写入页面的内容流，但是文档流执行完毕，会导致页面全部重绘
 
-```js
-document.write("<div>这里是文本内容</div>");
-```
+   ```js
+   document.write("<div>这里是文本内容</div>");
+   ```
 
 2. innerHTML 创建元素
    是将内容写入某个 DOM 节点，不会导致页面全部重绘
@@ -1584,18 +1648,26 @@ document.write("<div>这里是文本内容</div>");
 - 注册事件的两种方式
 
   1. DOM0 onclick 同一个元素同一个事件只能设置一个注册函数，会被覆盖  
-     添加事件处理程序： 1. btn.onclick = function(){} 事件处理程序会在 btn 元素的作用域中运行 2. <button onclick=""></button>
-     移除事件处理程序： btn.onclick = null
+     添加事件处理程序：
+
+     1. btn.onclick = function(){} 事件处理程序会在 btn 元素的作用域中运行
+     2. <button onclick=""></button>
+        移除事件处理程序： btn.onclick = null
 
   2. DOM2 addEventListener 同一个元素同一个事件可以注册多个监听器
      添加事件处理程序： btn.addEventListener(event, function, useCapture)
      移除事件处理程序: btn.removeEventListener(event, function, useCapture)
 
-  三个参数：
-  event - 指定事件名，比如 click、mouseover
-  function - 指定要事件触发时执行的函数
-  useCapture - true(表示在捕获阶段调用事件处理程序)
-  false(默认，表示在冒泡阶段调用事件处理程序)
+     三个参数：
+     event - 指定事件名，比如 click、mouseover
+     function - 指定要事件触发时执行的函数
+     useCapture - true(表示在捕获阶段调用事件处理程序)
+     false(默认，表示在冒泡阶段调用事件处理程序)
+
+  3. 区别
+     1. onclick 只能注册一次, addEventListener 可以注册多次
+     2. 解绑方式不同
+     3. onclick 只能冒泡阶段
 
 ## 事件流
 
@@ -1604,7 +1676,7 @@ document.write("<div>这里是文本内容</div>");
 
 事件捕获：事件从最外层开始发生，直到最具体的元素
 document -> html -> body -> father -> son
-事件冒泡：事件会从最内层的元素开始发生，一直向上传播，知道 document 对象
+事件冒泡：事件会从最内层的元素开始发生，一直向上传播， document 对象
 son -> father -> body -> html -> document
 
 特点：
@@ -1637,16 +1709,17 @@ son -> father -> body -> html -> document
    e.pageY
 
 7. 键盘事件
-8. document.addEventListener('keyup', function(e){})  
-   某个键盘按键被松开时触发
-9. document.addEventListener('keydown', function(e){})  
-   某个键盘按键被按下时触发
-10. document.addEventListener('keypress', function(e){})  
-    某个键盘按键被按下时触发,但是它不识别功能键，例如 ctrl、shift、左右箭头等
 
-e.keyCode 返回对应键盘的 ASC 值
-keyup 和 keydown 不区分字母大小写
-keypress 区分字母大小写
+   1. document.addEventListener('keyup', function(e){})  
+      某个键盘按键被松开时触发
+   2. document.addEventListener('keydown', function(e){})  
+      某个键盘按键被按下时触发
+   3. document.addEventListener('keypress', function(e){})  
+      某个键盘按键被按下时触发,但是它不识别功能键，例如 ctrl、shift、左右箭头等
+
+   e.keyCode 返回对应键盘的 ASC 值
+   keyup 和 keydown 不区分字母大小写
+   keypress 区分字母大小写
 
 ## 事件委托(事件代理)
 

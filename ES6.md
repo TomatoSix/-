@@ -1024,28 +1024,28 @@ Proxy 就像在目标对象之间的一个代理，任何对目标的操作都�
    比如，Object.defineProperty(obj,name,desc)在无法定义属性时，会抛出一个错误，而
    Reflect.defineProperty(obj, name, desc)则会返回 false
 
-```js
-const obj = {
-  id: 'six',
-  age: 18
-}
-const objProxy = new Proxy(obj, {
-  get: function(target, key, receiver) {
-    // return target[key]
-    // 通过语言内部target[key]获取
-    return Reflect.get(target, key)
-  },
-   set: function(target, key, newValue, receiver) {
-     // target[key] = new Value 和下面代码效果相同
-     Reflect.set(target, key, newValue)
-   }
-})
+   ```js
+   const obj = {
+     id: "six",
+     age: 18,
+   };
+   const objProxy = new Proxy(obj, {
+     get: function (target, key, receiver) {
+       // return target[key]
+       // 通过语言内部target[key]获取
+       return Reflect.get(target, key);
+     },
+     set: function (target, key, newValue, receiver) {
+       // target[key] = new Value 和下面代码效果相同
+       Reflect.set(target, key, newValue);
+     },
+   });
 
-objProxy.id = '66'
-console.log(objProxy.name)
+   objProxy.id = "66";
+   console.log(objProxy.name);
 
-通过语言内部target[key]获取
-```
+   // 通过语言内部target[key]获取
+   ```
 
 ## 13 个内置属性
 

@@ -1,6 +1,6 @@
 ## CSS 层叠样式表(Cascading Style Sheets)
 
-**浏览器 CSS 匹配不是从左到右进行查找，而是从右到左进行查找，这是为了尽早过滤掉一些无关的样式规则和元素**
+`浏览器 CSS 匹配不是从左到右进行查找，而是从右到左进行查找，这是为了尽早过滤掉一些无关的样式规则和元素`
 
 # css 引入方式
 
@@ -35,10 +35,10 @@
 
 ## 外部样式分为 <link> 引入和 @import 引入两种方式。这两种方式的区别为：
 
-<link> 是 XHTML 标签，除了可以加载 CSS 外，还可以定义 RSS 等其他事务，通过 <link> 标签中的 href="" 属性来引入外部文件。@import 属于 CSS 范畴，只能加载 CSS ，应该写在 CSS 中，且导入语句应写在样式表的开头，否则无法正确导入外部文件。
-<link> 引用 CSS 时，在页面载入的时候可以同时加载样式，样式加载和结构加载是异步操作。可以防止访问网页时先加载完文字、图片等结构数据，然后再加载样式的问题。@import 需要网页结构完全载入以后加载样式文件。
-<link> 是 XHTML 标签，无兼容问题。@import 是在 CSS2.1 提出的，低版本浏览器不支持。
-<link> 支持使用 JavaScript 控制 DOM 来改变样式。@import 不支持。
+1. <link> 是 XHTML 标签，除了可以加载 CSS 外，还可以定义 RSS 等其他事务，通过 <link> 标签中的 href="" 属性来引入外部文件。@import 属于 CSS 范畴，只能加载 CSS ，应该写在 CSS 中，且导入语句应写在样式表的开头，否则无法正确导入外部文件。
+2. <link> 引用 CSS 时，在页面载入的时候可以同时加载样式，样式加载和结构加载是异步操作。可以防止访问网页时先加载完文字、图片等结构数据，然后再加载样式的问题。@import 需要网页结构完全载入以后加载样式文件。
+3. <link> 是 XHTML 标签，无兼容问题。@import 是在 CSS2.1 提出的，低版本浏览器不支持。
+4. <link> 支持使用 JavaScript 控制 DOM 来改变样式。@import 不支持。
 
 # css 浏览器前缀有哪些？
 
@@ -243,11 +243,11 @@ visibility
 
 `block`元素: `div`, `form`, `table`, `p`, `pre`, `h1~h6`, `dl`, `ol`, `ul`;
 
-`inline`元素: `span`, `a`, `strong`, `em`, `lable`, `input`, `select`, `textarea`, `img`, `br`
+`inline`元素: `span`, `a`, `strong`, `em`, `label`, `input`, `select`, `textarea`, `img`, `br`
 
 `display: block`
 
-(1).block 元素会独占一行，多个 block 元素会各自新起一行; (2). block 元素可以设置 width, height; (3). block 元素可以设置 margin 和 padding
+(1).block 元素会独占一行，多个 block 元素会各自新起一行; (2). block 元素可以设置 width, height， 不设置的时候, 会继承父元素的宽度; (3). block 元素可以设置 margin 和 padding
 
 `display: inline`
 
@@ -292,11 +292,14 @@ opacity：0 则仅仅不可见，但仍可被浏览器发现，也就能触发�
 
 ## flex: 1
 
+Flex 布局详解（含实例代码）--flex: 1 1 auto；flex: 0 0 auto 是什么意思？
+https://juejin.cn/post/7034314491580022820
+
     首先`flex`属性是`flex-grow`, `flex-shrink`, `flex-basis`的简写形式;
 
     `flex-grow`: 定义项目的放大比例，即如果子元素未充满父元素，会按照一定的比例放大各个子元素，默认值为0, 按比例放大
 
-    `flex-shirnk`: 定义项目的缩小比例，即如果子元素的宽度超过父元素的宽度，会按照一定的比例缩小子元素，默认值为0， 根据缩减系数和元素大小来计算
+    `flex-shrink`: 定义项目的缩小比例，即如果子元素的宽度超过父元素的宽度，会按照一定的比例缩小子元素，默认值为0， 根据缩减系数和元素大小来计算
 
     `flex-basis`: 给上面两个属性分配多余空间之前，计算项目是否有多余空间，默认值为auto,即项目本身的大小
 
@@ -306,6 +309,11 @@ opacity：0 则仅仅不可见，但仍可被浏览器发现，也就能触发�
     flex-shrink: 1;
     flex-basis: 0%
     ```
+
+## flex: auto
+
+一文搞懂 flex:0,1,auto,none
+https://juejin.cn/post/7061196914741477383
 
 # grid 布局
 
@@ -333,8 +341,11 @@ inherit: 从父元素继承 position 属性的值
 # margin 塌陷及合并问题
 
 https://juejin.cn/post/6976272394247897101
-塌陷解决方案：父级增加 overflow:hidden bfc
-合并解决方案：margin 取最大值
+
+1. 塌陷 - 父子嵌套的元素垂直方向的 margin 取最大值
+   解决方案：父级增加 overflow:hidden bfc
+2. 合并 - 兄弟元素垂直方向的 margin 取最大值
+   解决方案：margin 取最大值
 
 # 浮动模型及清除浮动的方法
 
@@ -343,6 +354,8 @@ https://juejin.cn/post/6976272394247897101
 脱离文档流，也就是将元素从普通的布局排版中拿走，其他盒子在定位的时候，会当作脱离文档流的元素不存在而进行定位
 
 当容器的高度为 auto，且容器的内容中有浮动的元素，在这种情况下，容器的高度不能自动伸长以适应内容的高度，使得内容溢出到容器外面而影响(甚至破坏)布局的现象叫浮动溢出，为了防止这个现象的出现，叫 CSS 清除浮动
+
+当父元素的高度没有设置时，父元素会被子元素的高度撑开，但是如果子元素变成浮动元素，脱离文档流，父元素没有内容可以适应，所以没有高度
 
 ```css
 .news {
@@ -367,7 +380,9 @@ p {
 .clear {
   clear: both;
 }
+```
 
+```html
 <div class="news">
   <div class="img"></div>
   <p>Some text</p>
@@ -400,21 +415,21 @@ p {
 
 1. 跳转到外部网址
 
-```css
-<a href="http://www.baidu.com" target="_blank">百度</a>
-```
+   ```html
+   <a href="http://www.baidu.com" target="_blank">百度</a>
+   ```
 
 2. 实现本地页面文件跳转
 3. 设置锚点。在网页任意位置添加一个标记，可以由任何地方跳转到这个标记处
    定义锚点时，如果用 a 标签当做锚点，给 a 标签设置 name 属性，如果用其它标签当做锚点，给该标签设置 id 属性
 
-```css
-/* 在HTML文档中插入 id */
-<h3 id="tips">详细说明</h3>
-<p>内容</p>
-/* 在HTML文档中创建一个链接到“详细说明” */
-<a href="#tips">详细说明</a>
-```
+   ```html
+   /* 在HTML文档中插入 id */
+   <h3 id="tips">详细说明</h3>
+   <p>内容</p>
+   /* 在HTML文档中创建一个链接到“详细说明” */
+   <a href="#tips">详细说明</a>
+   ```
 
 # BFC 是什么？
 
@@ -449,33 +464,34 @@ BFC 全称： Block Formatting Context 块级格式化上下文
 
 4. 清除内部浮动(应该就是解决高度塌陷)
 
-```
-<style>
-    .par {
-        border: 5px solid #fcc;
-        width: 300px;
-    }
+```css
+.par {
+  border: 5px solid #fcc;
+  width: 300px;
+}
 
-    .child {
-        border: 5px solid #f66;
-        width:100px;
-        height: 100px;
-        float: left;
-    }
-</style>
+.child {
+  border: 5px solid #f66;
+  width: 100px;
+  height: 100px;
+  float: left;
+}
+```
+
+```html
 <body>
-    <div class="par">
-        <div class="child"></div>
-        <div class="child"></div>
-    </div>
+  <div class="par">
+    <div class="child"></div>
+    <div class="child"></div>
+  </div>
 </body>
 ```
 
 为达到清除内部浮动，我们可以触发 par 生成 BFC，那么 par 在计算高度时，par 内部的浮动元素 child 也会参与计算。
 
-```
+```css
 .par {
-    overflow: hidden;
+  overflow: hidden;
 }
 ```
 
@@ -496,6 +512,14 @@ https://juejin.cn/post/6844903667175260174
 # style 写在 body 前后的区别
 
 写在 body 标签后由于浏览器以逐行方式对 html 文档进行解析，当解析到写在尾部的样式表（外联或写在 style 标签）会导致浏览器停止之前的渲染，等待加载且解析样式表完成之后重新渲染，在 windows 的 IE 下可能会出现 FOUC 现象（即样式失效导致的页面闪烁问题）
+
+# 如何实现响应式布局
+
+响应式布局的常用解决方案对比(媒体查询、百分比、rem 和 vw/vh）
+https://juejin.cn/post/6844903630655471624
+
+前端响应式布局原理与方案（详细版）
+https://juejin.cn/post/6844903814332432397
 
 # 实现对齐
 
@@ -792,7 +816,7 @@ https://juejin.cn/post/6844903667175260174
       }
       ```
 
-   3. `left/right/bottom/top + margin(auto)`
+   3. `left/right/bottom/top + margin(auto)`(前提,inner 必须有宽高)
 
       ```css
       .outer {
@@ -1513,259 +1537,11 @@ https://juejin.cn/post/6844903667175260174
     </div>
     ```
 
+# CSS3
+
+# HTML5
+
 # 原知识点
-
-21. 两栏布局的方法
-
-(1). 方法一: 浮动布局
-
-```
-div {
-  height: 500px;
-}
-
-#aside {
-  width: 300px;
-  background-color: yellow;
-  float: left;
-}
-
-#main {
-  background-color: aqua;
-  margin-left: 300px;
-}
-
-<div id="aside"></div>
-<div id="main"></div>
-```
-
-总结: 左侧栏固定宽度向左浮动，右侧主要内容用`margin-left`留出左侧栏的宽度，默认宽度为 auto，自动填满剩下的宽度
-
-(2). 浮动布局+负外边距(双飞翼布局的两栏版)
-
-```
-div{
-  height:500px;
-}
-#aside{
-  width:300px;
-  background-color:yellow;
-  float:left;
-  margin-right:-100%;
-}
-#main{
-  width:100%;
-  float:left;
-}
-#content{
-  margin-left:300px;
-  background-color:aqua;
-}
-
-
-<div id = "aside"></div>
-<div id = "main">
-  <div id = "content"></div>
-</div>
-```
-
-总结: 左侧固定栏指定一个右侧的 100%的负外边距，为整个屏幕的宽度，这就使得 main 的最左侧与屏幕的最左侧对齐; 此时 main 的宽度是 100%所以需要为其子内容指定左外边距
-
-(3). 绝对定位
-
-```
-#aside {
-  position: absolute;
-  left: 0;
-  width: 200px;
-  background-color: #bfa;
-}
-
-#main {
-  margin-left: 200px;
-  background-color: yellow;
-}
-
-<div id="aside"></div>
-<div id="main">
-  <div id="content"></div>
-</div>
-```
-
-(4). flex
-
-```
-#container{
-    display:flex;
-}
-#aside{
-    flex:0 0 200px;
-}
-#main{
-    flex: 1 1;
-}
-
-<div id="container">
-    <div id = "aside"></div>
-    <div id = "main"></div>
-</div>
-```
-
-22. 三栏布局
-
-(1). 绝对定位
-
-```
-html,body{
-  margin:0;
-  padding:0;
-  height:100%;
-}
-div{
-  height:100%;
-}
-#left{
-  width:200px;
-  background-color:yellow;
-  position:absolute;
-  top:0;
-  left:0;
-}
-#main{
-  background-color:aqua;
-  margin-left:200px;
-  margin-right:300px;
-}
-#right{
-  width:300px;
-  background-color:orange;
-  position:absolute;
-  top:0;
-  right:0;
-}
-
-
-<div id = "left"></div>
-<div id = "main"></div>
-<div id = "right"></div>
-```
-
-总结: 左侧栏和右侧栏分别用绝对定位固定在左侧和右侧，中间栏利用 margin-left 和 margin-right 空出左右栏的位置
-
-(2). 浮动+负外边距
-
-```
-html,body{
-  margin:0;
-  padding:0;
-  height:100%;
-}
-div{
-  height:100%;
-}
-#left{
-  width:200px;
-  background-color:yellow;
-  float:left;
-  margin-left:-100%;
-}
-#main{
-  background-color:aqua;
-  width:100%;
-  float:left;
-}
-#right{
-  width:300px;
-  background-color:orange;
-  float:left;
-  margin-left:-300px;
-}
-
-#content{
-  margin-left:200px;
-  margin-right:300px;
-}
-
-<div id = "main">
-  <div id="content"></div>
-</div>
-<div id = "left">
-</div>
-
-<div id = "right">
-</div>
-
-```
-
-总结: 1). 中间栏的 div 写在最前面,宽度为 100%; 2). 左侧栏左浮动，默认情况下由于前面的元素宽度为 100%，因此左侧栏是在中间栏下方，为左侧栏设置`margin-left`为-100%,即整个屏幕的宽度为 100%，这就令左侧栏跑到中间栏的最左侧; 3). 右侧栏也是左浮动，此时默认情况下也是在中间栏下方一行的，同样利用`margin-left: -300px`,即自身的宽度，使其到上一行最右侧的位置; 4). 中间栏的内容部分则需要利用分别等于左右侧栏宽度的外边距来空出他们的位置
-
-(3). 浮动定位法
-
-```
-*{
-  margin:0;
-  padding:0;
-  height:100%;
-}
-#left{
-  width:300px;
-  background-color:yellow;
-  float:left;
-}
-#right{
-  width:200px;
-  background-color:orange;
-  float:right;
-}
-#main{
-  background-color:aqua;
-  margin-left:300px;
-  margin-right:200px;
-}
-
-<!--左右侧栏的位置可以更改-->
-<div id="left"></div>
-<div id="right"></div>
-<!--中间栏放最后-->
-<div id="main"></div>
-```
-
-总结: 分别另左侧栏和右侧栏向左和向右浮动，中间栏放在最后，再利用左右外边距空出左右栏的位置即可
-
-(4). flexbox
-
-```
-div{
-  display:-webkit-flex;
-  display:flex;
-
-  margin:0;
-  padding:0;
-  height:800px;
-}
-article{
-  flex:1 1;
-  order:2;
-  background-color:yellow;
-}
-
-nav{
-  flex:0 0 200px;
-  order:1;
-  background-color:blue;
-}
-aside{
-  flex:0 0 200px;
-  order:3;
-  background-color:aqua;
-}
-
-<div>
-  <article></article>
-  <nav></nav>
-  <aside></aside>
-</div>
-```
 
 25. CSS 实现一个自适应的正方形
 
@@ -1838,28 +1614,3 @@ CSS3 vw 单位，vw是相对于视口的宽度。视口被均分为100单位的v
 27. script 标签的 async 和 defer 的区别
 
 都是提示浏览器先下载外部文件延迟执行，但是 defer 是顺序执行，async 是乱序的只要保证两个文件之间互相不依赖
-
-28. CSS 实现一个扇形
-
-```
-.outer{
-
-   width:0;
-
-   height:0;
-
-   border-width:100px;
-
-   border-style:solid;
-
-   border-color: red transparent transparent transparent;
-
-   border-radius:50%;
-
-}
-```
-
-29. img 的 title 和 alt 属性
-
-title: 全局属性 作用是提供建议性的信息，通常是鼠标滑动到元素上是显示
-alt: 特有属性 图片内容的等价描述，用于图片无法加载时显示或读屏器阅读图片（帮助盲人了解图片内容）。可提图片高可访问性，除了纯装饰图片外都必须设置有意义的值，搜索引擎会重点分析。
