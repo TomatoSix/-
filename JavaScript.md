@@ -269,6 +269,8 @@ Symbol 直接转换
 
 ## 其他值转为数字值
 
+转为 0 的有 5 种， '', [], null, '0', false
+
 Undefiend 转为 NaN
 null 转为 0
 boolean true 转为 1 ， false 转为 0
@@ -287,6 +289,8 @@ parseInt([1, 2, 3]); // 1
 ```
 
 ## 其他值转为布尔值
+
+转为 false 的有 7 种
 
 undefined 转为 false
 null 转为 false
@@ -390,6 +394,22 @@ https://segmentfault.com/a/1190000022298822 冴羽
 2. 调用 valueOf()
 3. 调用 toString()
 4. 如果都没有返回原始类型，则报错
+
+```js
+var obj = {
+  value: 3,
+  valueOf() {
+    return 4;
+  },
+  toString() {
+    return "5";
+  },
+  [Symbol.toPrimitive]() {
+    return 6;
+  },
+};
+console.log(obj + 1); // 输出7,  内置的toPrimitive没有的话调用valueOf输出5， 最后输出'51'
+```
 
 # 基本数据类型(原始数据类型)和引用数据类型
 

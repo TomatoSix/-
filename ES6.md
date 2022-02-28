@@ -470,6 +470,16 @@ https://juejin.cn/post/6844904077537574919#heading-16
 ## 什么是回调地狱？
 
 ```js
+fs.readFile("1.json", (err, data) => {
+  fs.readFile("2.json", (err, data) => {
+    fs.readFile("3.json", (err, data) => {
+      fs.readFile("4.json", (err, data) => {});
+    });
+  });
+});
+```
+
+```js
 // 套娃
 asyncFunc1(opt, (...args) => {
   asyncFunc2(opt, (...args) => {
