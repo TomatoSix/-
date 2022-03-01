@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button>fetch学习</button>
+  <script>
+    const btn = document.querySelector('button')
+
+    btn.onclick = function() {
+      // 参数 url, {请求方法， 请求头， 请求体等等 }
+      fetch('http://127.0.0.1:8000/fetch-server', {
+        // 设置请求方法
+        method: 'POST',
+        // 设置请求头
+        headers: {
+          name: 'atguigu'
+        },
+        // 设置请求体
+        body: 'username=six&password=admin'
+      }).then(response => {
+        console.log(response, 'response');
+        return response.json()
+      }).then(response => {
+        console.log(response, 'response');
+      })
+    }
+  </script>
+</body>
+</html>
