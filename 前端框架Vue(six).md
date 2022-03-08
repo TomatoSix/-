@@ -942,9 +942,16 @@ bbbbbbbbbbbbbbbbb undefined
 bbbbbbbbbbbbbbbbb 打印出当前组件
 可用于加载中，模拟延迟效果
 
-# vuex 原理
+# 原理
 
-# nextTick 原理
+## vuex 原理
+
+## nextTick 原理
+
+## diff 原理
+
+15 张图，20 分钟吃透 Diff 算法核心原理，我说的！！！
+https://juejin.cn/post/6994959998283907102
 
 # 非单文件组件和单文件组件？
 

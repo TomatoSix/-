@@ -10,24 +10,27 @@
 </head>
 <body>
   <h2>番茄炒小六</h2>
-  <h1></h1>
+  <button>点击获取用户数据</button>
   <script>
 
-    var hNode = document.getElementsByTagName('h2')
-    const x = new XMLHttpRequest
-    x.open("GET",'/data')
-    x.send()
+    var btn = document.getElementsByTagName('button')[0]
+    btn.onclick = function() {
+      const x = new XMLHttpRequest()
+      // 因为是满足同名策略， 所以url可以简写, 是http://127.0.0.1:5500
+      x.open("GET",'/data')
+      x.send()
 
-    x. onreadystatechange = function() {
-      if (x.readyState=== 4) {
-        if (x.status >= 200 &&  x.status < 300) {
-          hNode.innerText = x.response
-          console.log('111');
-          console.log(x.response, '111');
-          console.log(x.responseText, '2222');
+      x. onreadystatechange = function() {
+        if (x.readyState === 4) {
+          if (x.status >= 200 && x.status < 300) {
+            console.log('111');
+            console.log(x.response, '111');
+            console.log(x.responseText, '2222');
+          }
         }
       }
     }
+    
   </script>
 </body>
 </html>
