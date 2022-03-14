@@ -2045,6 +2045,16 @@ https://juejin.cn/post/6844903576309858318
 
 ## 使用
 
+1. 拦截器
+   ```js
+   axios.interceptors.request.use((config) => {
+     return config;
+   });
+   axios.interceptors.response.use((response) => {
+     return response;
+   });
+   ```
+
 # 设计模式
 
 https://github.com/LiangJunrong/document-library/tree/master/%E7%B3%BB%E5%88%97-%E9%9D%A2%E8%AF%95%E8%B5%84%E6%96%99/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F

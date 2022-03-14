@@ -741,9 +741,10 @@ Promise 的状态一经改变就不能再改变
        this.students.push(newStudents);
      }
 
-     // 封装可迭代方法
+     // 封装可迭代方法, [Symbol.iterator]是固定写法
      [Symbol.iterator]() {
        let index = 0;
+
        return {
          next: () => {
            if (index < this.students.length) {
@@ -759,6 +760,11 @@ Promise 的状态一经改变就不能再改变
          },
        };
      }
+
+     //  或者使用生成器
+     // *[Symbol.iterator]() {
+     //   yield* this.students;
+     // }
    }
    const c1 = new Classroom("207", "计算机教室", ["英路", "守护"]);
    // const c2 = new Classroom('231', '酷儿教室', ['英路', '守护'])
@@ -778,9 +784,9 @@ Promise 的状态一经改变就不能再改变
 
 1. 生成器函数与普通函数的区别
 
-   1. 生成器函数需要在 function 的后面加一个符号\*
+   1. 生成器函数需要在 function 的后面加一个符号`*`
    2. 生成器函数可以通过 yield 关键字来控制函数的执行流程
-   3. 生成器函数的返回值是一个 Generator(生成器)
+   3. 生成器函数的返回值是一个 Generator(生成器, 本质是一个迭代器)
 
 2. 如何使用
    以及 next()、 throw()、 return()的使用
@@ -791,12 +797,10 @@ Promise 的状态一经改变就不能再改变
    // next(x) 会把x作为上一个yield的返回值
    function* foo() {
      console.log("函数开始执行");
-
      const value1 = 1;
      console.log("第一段代码", value1);
-
      // yield 会把后面的值value1放到next()返回对象的value中
-     // next(10) 会作为上一个yield的返回值
+     // next(10) 会作为上一个yield的返回值, 即n = 10
      const n = yield value1;
 
      const value2 = 200 * n;
@@ -817,7 +821,9 @@ Promise 的状态一经改变就不能再改变
    const generator = foo();
 
    console.log(generator.next());
-   // 函数开始执行 1 { value: 1, done: false }
+   // 函数开始执行
+   // 第一段代码 1
+   // { value: 1, done: false }
    console.log(generator.next(10));
    // 10 n
    // 第二段代码 2000
@@ -832,7 +838,102 @@ Promise 的状态一经改变就不能再改变
 
 3. 生成器替代迭代器使用
 
-4. yield x == return {done: false, value: x}
+   ```js
+   // 用生成器替代迭代器使用
+   function createArrayIterator(arr) {
+     let index = 0;
+     return {
+       next: function () {
+         if (index < arr.length) {
+           return { done: false, value: arr[index++] };
+         } else {
+           return { done: true, value: undefined };
+         }
+       },
+     };
+   }
+
+   const names = ["abc", "cba", "nba"];
+   const nameIterator = createArrayIterator(names);
+
+   console.log(nameIterator.next()); // { done: false, value: 'abc' }
+   console.log(nameIterator.next()); // { done: false, value: 'cba' }
+   console.log(nameIterator.next()); // { done: false, value: 'nba' }
+   console.log(nameIterator.next()); // { done: true, value: undefined }
+   ```
+
+   ```js
+   function* createArrayIterator(arr) {
+     let index = 0;
+
+     for (const item of arr) {
+       yield item;
+     }
+   }
+
+   const names = ["abc", "cba", "nba"];
+   const nameIterator = createArrayIterator(names);
+
+   console.log(nameIterator.next());
+   console.log(nameIterator.next());
+   console.log(nameIterator.next());
+   console.log(nameIterator.next());
+   ```
+
+4. `yield*`的使用
+   `yield*`要求后面跟上可迭代对象
+
+   ```js
+   // 案例一
+   function* createArrayIterator(arr) {
+     let index = 0;
+
+     // yield*写法：要求后面跟上可迭代对象
+     yield* arr;
+     // 就是下面的语法糖
+     // for (const item of arr) {
+     //   yield item
+     // }
+   }
+
+   const names = ["abc", "cba", "nba"];
+   const nameIterator = createArrayIterator(names);
+
+   console.log(nameIterator.next());
+   console.log(nameIterator.next());
+   console.log(nameIterator.next());
+   console.log(nameIterator.next());
+   ```
+
+   ```js
+   // 案例二: 创建一个函数，这个函数可以迭代一个范围内的数字
+   function* createRangeIterator(start, end) {
+     let index = start;
+
+     while (index < end) {
+       yield index++;
+     }
+     // return {
+     //   next: function() {
+     //     if (index < end) {
+     //       return {done: false, value: index++}
+     //     } else {
+     //       return {done: true, value: undefined}
+     //     }
+     //   }
+     // }
+   }
+
+   const rangeIterator = createRangeIterator(10, 13);
+   console.log(rangeIterator.next()); // { done: false, value: 10 }
+   console.log(rangeIterator.next()); // { done: false, value: 11 }
+   console.log(rangeIterator.next()); // { done: false, value: 12 }
+   console.log(rangeIterator.next()); // { done: true, value: undefined }
+   ```
+
+5. yield x == return {done: false, value: x}
+
+6. 异步处理方案
 
 # Generator 生成器(特殊的迭代器)(six)
 

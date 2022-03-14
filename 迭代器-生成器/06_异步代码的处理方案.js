@@ -1,15 +1,15 @@
 // 模拟利用回调处理异步代码
-function requestData(url, successCb, failureCb) {
-  setTimeout(() => {
-    if (url === 'coderwhy') {
-      let data = '6666'
-      successCb(data)
-    } else {
-      let errMessage = "请求失败， url错误"
-      failureCb(errMessage)
-    }
-  }, 3000)
-}
+// function requestData(url, successCb, failureCb) {
+//   setTimeout(() => {
+//     if (url === 'coderwhy') {
+//       let data = '6666'
+//       successCb(data)
+//     } else {
+//       let errMessage = "请求失败， url错误"
+//       failureCb(errMessage)
+//     }
+//   }, 3000)
+// }
 
 // 用Promise处理异步代码
 function requestData(url) {
@@ -97,7 +97,7 @@ generator.next().value.then(res => {
   })
 })
 
-// 方案二: 自动化执行
+// 方案二: 自动化执行, 参数为生成器函数
 // function execGenerator(genFn) {
 //   // 先拿到生成器
 //   const generator = genFn()

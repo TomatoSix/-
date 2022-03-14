@@ -1,29 +1,25 @@
 let activeReactiveFn = null
-
 function watchFn(fn) {
   activeReactiveFn = fn
-  // fn必须调用一次，这样才会触发Proxy的set操作
   fn()
   activeReactiveFn = null
+
 }
 
 class Depend {
   constructor() {
-    this.reactiveFns = new Set()
+    this.creativeFns = new Set()
   }
 
   depend() {
     if (activeReactiveFn) {
-      this.reactiveFns.add(activeReactiveFn)
-
+      this.creativeFns.add(activeReactiveFn)
     }
   }
 
   notify() {
-    this.reactiveFns.forEach(fn => {
-      console.log(fn, 'fn');
-      fn()
-    })
+    
+      this.creativeFns.forEach(fn => fn())
   }
 }
 
@@ -45,18 +41,18 @@ function getDepend(target, key) {
 function creative(obj) {
   return new Proxy(obj, {
     get: function(target, key, receiver) {
-      let depend = getDepend(target, key) 
+      let depend = getDepend(target, key)
       depend.depend()
-      return Reflect.get(target, key)
+
+      return Reflect.get(target, key, receiver)
     },
     set: function(target, key, value, receiver) {
       Reflect.set(target, key, value, receiver)
-      let depend = getDepend(target, key) 
+      let depend = getDepend(target, key)
       depend.notify()
     }
   })
 }
-
 
 
 
