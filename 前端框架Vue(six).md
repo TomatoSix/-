@@ -4,28 +4,512 @@ https://juejin.cn/post/6984210440276410399
 最全的 Vue 面试题+详解答案
 https://juejin.cn/post/6961222829979697165
 
-# 什么是观察者模式？
+1. 什么是 SPA 单页面应用？
 
-一个对象维持一系列依赖于它的对象，将有关状态的任何变更自动通知给它们
+   SPA( single-page application)
 
-# 什么是 SPA 单页面应用？
+   1. 概念：
+      仅在 Web 页面初始化时加载相应的 HTML、JavaScript 和 CSS。一旦页面加载完成，SPA 不会因为用户的操作而进行页面的重新加载或跳转；取而代之的是利用路由机制实现 HTML 内容的变换，UI 与用户的交互，避免页面的重新加载。
 
-SPA( single-page application)
+   2. 优点：
 
-- 概念：
-  仅在 Web 页面初始化时加载相应的 HTML、JavaScript 和 CSS。一旦页面加载完成，SPA 不会因为用户的操作而进行页面的重新加载或跳转；取而代之的是利用路由机制实现 HTML 内容的变换，UI 与用户的交互，避免页面的重新加载。
+      1. 用户体验好、快，内容的改变不需要重新加载整个页面，避免了不必要的跳转和重复渲染；
+      2. 基于上面一点，SPA 相对对服务器压力小；
+      3. 前后端职责分离，架构清晰，前端进行交互逻辑，后端负责数据处理；
 
-- 优点：
+   3. 缺点：
 
-1. 用户体验好、快，内容的改变不需要重新加载整个页面，避免了不必要的跳转和重复渲染；
-2. 基于上面一点，SPA 相对对服务器压力小；
-3. 前后端职责分离，架构清晰，前端进行交互逻辑，后端负责数据处理；
+      1. 初次加载耗时多：为实现单页 Web 应用功能及显示效果，需要在加载页面的时候将 JavaScript、CSS 统一加载，部分页面按需加载；
+      2. 前进后退路由管理：由于单页应用在一个页面中显示所有的内容，所以不能使用浏览器的前进后退功能，所有的页面切换需要自己建立堆栈管理；
+      3. SEO 难度较大：由于所有的内容都在一个页面中动态替换显示，所以在 SEO 上其有着天然的弱势。
 
-- 缺点：
+2. 为什么 vue 组件中 data 必须是一个函数？
 
-1. 初次加载耗时多：为实现单页 Web 应用功能及显示效果，需要在加载页面的时候将 JavaScript、CSS 统一加载，部分页面按需加载；
-2. 前进后退路由管理：由于单页应用在一个页面中显示所有的内容，所以不能使用浏览器的前进后退功能，所有的页面切换需要自己建立堆栈管理；
-3. SEO 难度较大：由于所有的内容都在一个页面中动态替换显示，所以在 SEO 上其有着天然的弱势。
+对象为引用类型，当复用组件时，由于数据对象都指向同一个 data 对象，当在一个组件中修改 data 时，其他重用的组件中的 data 会同时被修改；而使用返回对象的函数，由于每次返回的都是一个新对象（Object 的实例），引用地址不同，则不会出现这个问题。
+
+3. vue 组件通讯方式
+   vue 中 8 种组件通信方式, 值得收藏!
+   https://juejin.cn/post/6844903887162310669
+
+   Vue3 的 8 种和 Vue2 的 12 种组件通信，值得收藏
+   https://juejin.cn/post/6999687348120190983
+
+   1. props/$emit
+      $emit 绑定一个自定义事件, 当这个语句被执行时, 就会将参数 arg 传递给父组件,父组件通过 v-on 监听并接收参数。
+
+      ```js
+      // 父组件
+      <article :article="articleList">
+      export default {
+        data() {
+          return {
+            articleList: ['西游记', '红楼梦']
+          }
+        }
+      }
+      ```
+
+      ```js
+      // 子组件
+      export default {
+        props: ["article"],
+      };
+      ```
+
+   2. $parent/$child
+      父实例使用 this.$children访问子实例，
+      子实例使用 this.$parent 访问父实例
+   3. provide/inject
+
+      ```js
+      provide: function() {
+        return {
+          getIndexRef: () => {
+            // 返回一整个父组件
+            return this
+          }
+        }
+      }
+      ```
+
+      ```js
+      inject: ["getIndexRef"];
+      // 调用getIndexRef函数获取父组件
+      this.getIndexRef();
+      ```
+
+   4. $attrs/$listeners
+   5. $refs
+      1. 设置 ref，给组件打标识
+         `ref="组件名"`
+      2. 如何获取
+         `this.$refs.组件名`|`this.$refs['组件名']`
+   6. eventBus
+      `vc.prototype.proto` === `vue.prototype` vc 是 VueComponent 的实例对象
+      $on $emit $off 都在 vue 的原型对象上
+
+      1. 安装全局事件总线
+
+         ```javascript
+         const vm = new Vue({
+           el: "#app",
+           render: (h) => h(App),
+           beforeCreate() {
+             Vue.prototype.$bus = this; //安装全局事件总线
+           },
+         });
+         ```
+
+      2. 使用与解绑
+
+         ```javascript
+         const data = {
+           name: "six",
+           age: 18,
+         };
+         this.$bus.$emit("hello", data);
+         ```
+
+      3. 全局事件总线要解绑
+
+         ```javascript
+         mounted() {
+           this.$bus.$on('hello', (data) => {
+             console.log('我们认识吗')
+           })
+         }
+         beforeDestroy() {
+           this.$bus.$off('hello')
+         }
+         ```
+
+   7. vuex
+
+      1. state：用于数据的存储，是 store 中的唯一数据源
+      2. getters：如 vue 中的计算属性一样，基于 state 数据的二次包装，常用于数据的筛选和多个数据的相关性计算
+      3. mutations：类似函数，改变 state 数据的唯一途径，且不能用于处理异步事件
+      4. actions：类似于 mutation，用于提交 mutation 来改变状态，而不直接变更状态，可以包含任意异步操作
+      5. modules：类似于命名空间，用于项目中将各个模块的状态分开定义和操作，便于维护
+
+   8. localStorage/sessionStorage
+
+4. vue 的声明周期
+   8 个分别为
+
+   1. beforeCreate vue 实例的挂载元素 el 和数据对象 data 都为 undefined; methods 还未初始化
+   2. created vue 实例的数据对象 data 有了，methods 中配置的方法，el 为 undefined,还未初始化
+
+   3. beforeMount vue 实例的挂载元素 el 和 data 都初始化了，但挂在之前为虚拟的 dom 节点，data.message 还未替换, 模板尚未挂载到页面中
+
+   4. mounted
+      vue 被新创建的 vm.$el 替换，表示整个 Vue 实例已经初始化完毕，data.message 成功渲染
+
+   5. beforeUpdate 当 data 变化时，会触发 beforeUpdate 和 updated 方法，data 数据是最新的，但是页面尚未和最新的数据保持同步
+
+   6. updated 执行时，页面和 data 数据已经保持同步
+
+   7. beforeDestroy 当执行 beforeDestroy 的时候，实例身上所有的 data 和所有的 methods 以及过滤器、指令都处于可用状态，此时还未真正执行销毁的过程
+
+   8. destroyed 对 data 的改变不会再触发周期函数，此时 vue 实例已经解除了事件监听和 DOM 的绑定，但是 dom 结构依然存在
+
+   9. activated keep-alive 专属，组件被激活时调用
+   10. deactivated keep-alive 专属，组件被销毁时调用
+
+5. v-if 和 v-show 的区别
+
+   1. v-if 真正的条件渲染，它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。
+
+   适用于不需要频繁切换条件的场景
+
+   2. v-show 仅在初始化时加载一次，操作的是样式(display),切换当前样式的显示与隐藏，
+
+   适用于需要频繁切换条件的场景
+
+6. v-if 和 v-for 为什么不建议一起使用
+   因为 v-for 的优先级比 v-if 高会，先循环渲染出数据后才会进行条件渲染判断 造成性能浪费
+   v-for 和 v-if 不要在同一个标签中使用,因为解析时先解析 v-for 再解析 v-if。如果遇到需要同时使用时可以考虑写成计算属性的方式。
+
+7. vue 内部指令
+
+8. vue 的修饰符
+
+9. computed 和 watch 的区别和运用场景
+
+   1. computed
+      计算属性，依赖其他属性计算值，并且 computed 的值有缓存，只有当计算值变化才会返回内容，它可以设置 getter 和 setter。
+      计算属性一般用在模板渲染中，某个值是依赖了其它的响应式对象甚至是计算属性计算而来；
+
+      ```javascript
+      const app = new Vue({
+        el: '#app',
+        data: {
+          firstName: 'Kobe',
+          lastName: 'Bryant'
+        },
+        // computed简写形式,只设置get方法，为只读属性
+        // 计算属性的字段类似于放到data中
+        computed: {
+          fullName: function() {
+            return this.firstName + ' ' + this.lastName
+          }
+        }
+
+        //  计算属性的get和set方法
+        computed: {
+          fullName: {
+            set: function(newValue) {
+              const names = newValue.split(' ')
+              this.firstName = name[0]
+              this.lastName = name[1]
+            },
+            get: function() {
+              return this.firstName + ' ' + this.lastName
+            }
+          }
+        }
+      })
+      ```
+
+   2. watch
+      监听到值的变化就会执行回调，在回调中可以进行一些逻辑操作。
+      适用于观测某个值的变化去完成一段复杂的业务逻辑
+
+      ```js
+      new Vue({
+        el: "#root",
+        data: {
+          cityName: { id: 1, name: "shanghai" },
+        },
+        watch: {
+          // 1. watch简写形式
+          // cityName(newName, oldName) {}
+          // 2. watch完整形式
+          cityName: {
+            handler(newName, oldName) {
+              // ...
+            },
+            deep: true, //deep表示深度监听，用于监听对象内部属性的改变
+            immediate: true, //immediate表示立刻监听，当值第一次绑定的时候，不会执行监听函数，只有值发生改变才会执行，使用该属性表示会立刻监听
+          },
+        },
+      });
+      ```
+
+10. vue2 响应式数据的原理
+
+    整体思路是数据劫持+观察者模式
+    对象内部通过 defineReactive 方法，使用 Object.defineProperty 将属性进行劫持（只会劫持已经存在的属性），数组则是通过重写数组方法来实现。当页面使用对应属性时，每个属性都拥有自己的 dep 属性，存放他所依赖的 watcher（依赖收集），当属性变化后会通知自己对应的 watcher 去更新(派发更新)。
+
+    ```js
+    let activeReactiveFn = null;
+
+    // 定义函数收集的类
+    class Depend {
+      constructor() {
+        this.reactiveFns = new Set();
+      }
+
+      // addDepend(reactiveFn) {
+      //   this.reactiveFns.push(reactiveFn)
+      // }
+
+      notify() {
+        this.reactiveFns.forEach((fn) => {
+          fn();
+        });
+      }
+
+      depend() {
+        if (activeReactiveFn) {
+          this.reactiveFns.add(activeReactiveFn);
+        }
+      }
+    }
+    const depend = new Depend();
+
+    // 封装一个收集需要调用的函数
+    function watchFn(fn) {
+      // 把需要响应的函数放入正确的依赖中
+      // 1. 找到depend对象
+      activeReactiveFn = fn;
+      fn();
+      activeReactiveFn = null;
+    }
+
+    // 封装一个获取depend的函数
+    const targetMap = new WeakMap();
+    function getDepend(target, key) {
+      // 根据target获取Map
+      let map = targetMap.get(target);
+      if (!map) {
+        // 初次使用不存在map
+        map = new Map();
+        targetMap.set(target, map);
+      }
+
+      let depend = map.get(key);
+      if (!depend) {
+        depend = new Depend();
+        map.set(key, depend);
+      }
+      return depend;
+    }
+
+    function reactive(obj) {
+      Object.keys(obj).forEach((key) => {
+        let value = obj[key];
+        Object.defineProperty(obj, key, {
+          get: function () {
+            const depend = getDepend(obj, key);
+            depend.depend();
+            return value;
+          },
+          set: function (newValue) {
+            value = newValue;
+            const depend = getDepend(obj, key);
+            depend.notify();
+          },
+        });
+      });
+      return obj;
+    }
+    ```
+
+11. vue3 响应式原理
+
+    ```js
+    let activeReactiveFn = null;
+
+    class Depend {
+      constructor() {
+        this.reactiveFns = new Set();
+      }
+
+      depend() {
+        if (activeReactiveFn) {
+          this.reactiveFns.add(activeReactiveFn);
+        }
+      }
+
+      notify() {
+        this.reactiveFns.forEach((fn) => fn());
+      }
+    }
+
+    function watchFn(fn) {
+      activeReactiveFn = fn;
+      fn();
+      activeReactiveFn = null;
+    }
+
+    let wk = new WeakMap();
+    function getDepend(target, key) {
+      let map = wk.get(target);
+      if (!map) {
+        map = new Map();
+        wk.set(target, map);
+      }
+      let depend = map.get(key);
+      if (!depend) {
+        depend = new Depend();
+        map.set(key, depend);
+      }
+      return depend;
+    }
+
+    function reactive(obj) {
+      return new Proxy(obj, {
+        get: function (target, key, receiver) {
+          let depend = getDepend(target, key);
+          depend.depend();
+          return Reflect.get(target, key, receiver);
+        },
+        set: function (target, key, value, receiver) {
+          Reflect.set(target, key, value, receiver);
+          let depend = getDepend(target, key);
+          depend.notify();
+        },
+      });
+    }
+
+    const obj = {
+      name: "six",
+      age: 18,
+    };
+
+    const objProxy = reactive(obj);
+
+    watchFn(() => {
+      console.log(objProxy.name, "已自动监听该函数");
+      console.log(objProxy.name, "第二次输出");
+    });
+
+    objProxy.name = "番茄";
+    ```
+
+12. 什么是虚拟 DOM
+
+    虚拟 DOM 指的是用 JS 模拟的 DOM 结构，
+    本质上是 Javascript 对象
+    虚拟 DOM 提升性能的点在于 DOM 发生变化的时候，通过 diff 算法比对 JavaScript 原生对象，计算出需要变更的 DOM，然后只对变化的 DOM 进行操作，而不是更新整个视图。
+
+    1. DOM 结构
+
+    ```html
+    <ul id="list">
+      <li class="item">Item1</li>
+      <li class="item">Item2</li>
+    </ul>
+    ```
+
+    2. 映射成的虚拟 DOM 如下
+
+    ```js
+    var vDOM = {
+      tag: "ul",
+      attrs: {
+        id: "list",
+      },
+      children: [
+        {
+          tag: "li",
+          attrs: { className: "item" },
+          children: ["Item1"],
+        },
+        {
+          tag: "li",
+          attrs: { className: "item" },
+          children: ["Item2"],
+        },
+      ],
+    };
+    ```
+
+13. v-model 原理
+
+    v-model 指令在表单 <input>、<textarea> 及 <select> 元素上创建双向数据绑定。
+
+    1. text 和 textarea 元素使用 value property 和 input 事件；
+    2. checkbox 和 radio 使用 checked property 和 change 事件；
+    3. select 字段将 value 作为 prop 并将 change 作为事件。
+
+    ```html
+    <body>
+      <div id="app">
+        <!-- v-model实现双向绑定 -->
+        <!-- <input type="text" v-model="message"> -->
+
+        <!-- 实现双向绑定方法二 -->
+        <input type="text" :value="message" @input="valueChange" />
+
+        <!-- 实现双向绑定方法三 -->
+        <input
+          type="text"
+          :value="message"
+          @input="message = $event.target.value"
+        />
+
+        <h2>{{message}}</h2>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+      <script>
+        const app = new Vue({
+          el: "#app",
+          data: {
+            message: "你好啊",
+          },
+          methods: {
+            // 会默认传入一个event参数
+            valueChange(event) {
+              this.message = event.target.value;
+            },
+          },
+        });
+      </script>
+    </body>
+    ```
+
+14. v-for 为什么要加 key
+
+15. vue-router 路由钩子有哪些? 执行顺序
+
+    1. 路由钩子
+    2. 执行顺序
+       导航被触发。
+       在失活的组件里调用 beforeRouteLeave 守卫。
+       调用全局的 beforeEach 守卫。
+       在重用的组件里调用 beforeRouteUpdate 守卫 (2.2+)。
+       在路由配置里调用 beforeEnter。
+       解析异步路由组件。
+       在被激活的组件里调用 beforeRouteEnter。
+       调用全局的 beforeResolve 守卫 (2.5+)。
+       导航被确认。
+       调用全局的 afterEach 钩子。
+       触发 DOM 更新。
+       调用 beforeRouteEnter 守卫中传给 next 的回调函数，创建好的组件实例会作为回调函数的参数传入。
+
+16. vue-router 动态路由
+
+17. vuex 的使用
+
+18. diff 算法原理
+
+19. Vue.mixin 的使用场景和原理
+
+20. nextTick 的使用场景和原理
+
+21. keep-alive 使用场景和原理
+
+22. Vue.set 原理
+
+23. Vue.extend 作用和原理
+
+24. 自定义指令使用和原理
+
+25. Vue 模板编译原理
+
+26. vue-router 路由模式实现原理
 
 # MVC/MVP/MVVM 模式-都是常见的软件架构设计模式
 
@@ -51,73 +535,31 @@ Model-View-ViewModel(MVVM)是一种软件架构设计模式
 
 1. MVVM 模型, 包括 DOM Listeners 和 Data Bindings
 
-   1. View 层(视图)
-      视图层，即用户界面，由 HTML 和 CSS 构建
-   2. Model 层(模型)
-      指数据模型，即后端提供的 API 接口，指后端进行的各种业务逻辑处理和数据操控
-   3. ViewModel 层(视图模型)
-      视图数据层，View 和 Model 层的桥梁
+1. View 层(视图)
+   视图层，即用户界面，由 HTML 和 CSS 构建
+1. Model 层(模型)
+   指数据模型，即后端提供的 API 接口，指后端进行的各种业务逻辑处理和数据操控
+1. ViewModel 层(视图模型)
+   视图数据层，View 和 Model 层的桥梁
 
-   4. 模型转换成视图, 即将后端传递的数据转换成看到的页面，实现方式是数据绑定
-   5. 视图转换成模型，即将看到的页面转换成后端的数据，实现方式是 DOM 事件监听
-      两个方向都实现, 就称为数据的双向绑定
+1. 模型转换成视图, 即将后端传递的数据转换成看到的页面，实现方式是数据绑定
+1. 视图转换成模型，即将看到的页面转换成后端的数据，实现方式是 DOM 事件监听
+   两个方向都实现, 就称为数据的双向绑定
 
-2. MVC 和 MVVM 最大的区别
+1. MVC 和 MVVM 最大的区别
 
-   1. MVVM 实现了数据与页面的双向绑定，MVC 只实现了 Model 和 View 的单向绑定。
-   2. MVVM 实现了页面业务逻辑和渲染之间的解耦，也实现了数据与视图的解耦，并且可以组件化开发。
+1. MVVM 实现了数据与页面的双向绑定，MVC 只实现了 Model 和 View 的单向绑定。
+1. MVVM 实现了页面业务逻辑和渲染之间的解耦，也实现了数据与视图的解耦，并且可以组件化开发。
 
-3. vue 如何体现 MVVM 思想
-   1. mustache 语法，实现了数据与视图的绑定
-   2. v-on 事件绑定，通过事件操作数据, v-model 会发生响应的变化
+1. vue 如何体现 MVVM 思想
+1. mustache 语法，实现了数据与视图的绑定
+1. v-on 事件绑定，通过事件操作数据, v-model 会发生响应的变化
 
 # 什么是双向绑定
 
 当 Model 发生变化，ViewModel 就会自动更新；ViewModel 变化，Model 也会更新。
 双向绑定： 数据变化更新视图，视图变化更新数据
 即：输入框的内容发生变化时， data 中的数据同步变化； data 中的数据变化时，文本节点的内容同步变化
-
-# 什么是虚拟 DOM
-
-虚拟 DOM 指的是用 JS 模拟的 DOM 结构，
-本质上是 Javascript 对象
-虚拟 DOM 提升性能的点在于 DOM 发生变化的时候，通过 diff 算法比对 JavaScript 原生对象，计算出需要变更的 DOM，然后只对变化的 DOM 进行操作，而不是更新整个视图。
-
-1. DOM 结构
-
-```html
-<ul id="list">
-  <li class="item">Item1</li>
-  <li class="item">Item2</li>
-</ul>
-```
-
-2. 映射成的虚拟 DOM 如下
-
-```js
-var vDOM = {
-  tag: "ul",
-  attrs: {
-    id: "list",
-  },
-  children: [
-    {
-      tag: "li",
-      attrs: { className: "item" },
-      children: ["Item1"],
-    },
-    {
-      tag: "li",
-      attrs: { className: "item" },
-      children: ["Item2"],
-    },
-  ],
-};
-```
-
-# Vue2 的响应式数据原理
-
-数据劫持 + 观察者模式
 
 # Object.defineProperty
 
@@ -213,6 +655,10 @@ function Observer(obj) {
   });
 }
 ```
+
+# 什么是观察者模式？
+
+一个对象维持一系列依赖于它的对象，将有关状态的任何变更自动通知给它们
 
 # key 的作用与原理
 
@@ -337,116 +783,7 @@ methods： {
 
 https://github.com/lgwebdream/FE-Interview/issues/139
 
-# Vue 的生命周期
-
-8 个分别为
-
-1. beforeCreate vue 实例的挂载元素 el 和数据对象 data 都为 undefined; methods 还未初始化
-2. created vue 实例的数据对象 data 有了，methods 中配置的方法，el 为 undefined,还未初始化
-
-3. beforeMount vue 实例的挂载元素 el 和 data 都初始化了，但挂在之前为虚拟的 dom 节点，data.message 还未替换, 模板尚未挂载到页面中
-
-4. mounted
-   vue 被新创建的 vm.$el 替换，表示整个 Vue 实例已经初始化完毕，data.message 成功渲染
-
-5. beforeUpdate 当 data 变化时，会触发 beforeUpdate 和 updated 方法，data 数据是最新的，但是页面尚未和最新的数据保持同步
-
-6. updated 执行时，页面和 data 数据已经保持同步
-
-7. activated keep-alive 专属，组件被激活时调用
-8. deactivated keep-alive 专属，组件被销毁时调用
-
-9. beforeDestroy 当执行 beforeDestroy 的时候，实例身上所有的 data 和所有的 methods 以及过滤器、指令都处于可用状态，此时还未真正执行销毁的过程
-
-10. destroyed 对 data 的改变不会再触发周期函数，此时 vue 实例已经解除了事件监听和 DOM 的绑定，但是 dom 结构依然存在
-
-# v-show 和 v-if 的区别？
-
-相同点： 当条件不成立时，其所对应的标签元素都不可见
-
-不同点：
-
-1. v-if 真正的条件渲染，它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。
-
-   适用于不需要频繁切换条件的场景
-
-2. v-show 仅在初始化时加载一次，操作的是样式(display),切换当前样式的显示与隐藏，
-
-   适用于需要频繁切换条件的场景
-
-# v-if 和 v-for 为什么不建议一起使用
-
-v-for 和 v-if 不要在同一个标签中使用,因为解析时先解析 v-for 再解析 v-if。如果遇到需要同时使用时可以考虑写成计算属性的方式。
-
 # vue.config.js 修改 webpack 配置
-
-# computed 和 watch 的区别？
-
-- 计算属性 computed：
-
-  1. 支持缓存，只有依赖数据发生改变，才会重新进行计算不支持异步，当 computed 内有异步操作时无效，无法监听数据的变化 computed 属性值会默认走缓存
-  2. 计算属性是基于它们的响应式依赖进行缓存的，也就是基于 data 中声明过或者父组件传递的 props 中的数据通过计算得到的值。如果一个属性是由其他属性计算而来的，这个属性依赖其他属性，是一个多对一或者一对一，一般用 computed。如果 computed 属性属性值是函数，那么默认会走 get 方法；函数的返回值就是属性的属性值；在 computed 中的，属性都有一个 get 和一个 set 方法，当数据变化时，调用 set 方法。
-  3. 每个计算属性都包含一个 getter 和一个 setter 方法
-     例如
-
-  ```javascript
-  const app = new Vue({
-    el: '#app',
-    data: {
-      firstName: 'Kobe',
-      lastName: 'Bryant'
-    },
-    // computed简写形式,只设置get方法，为只读属性
-    // 计算属性的字段类似于放到data中
-    computed: {
-      fullName: function() {
-        return this.firstName + ' ' + this.lastName
-      }
-    }
-
-    //  计算属性的get和set方法
-    computed: {
-      fullName: {
-        set: function(newValue) {
-          const names = newValue.split(' ')
-          this.firstName = name[0]
-          this.lastName = name[1]
-        },
-        get: function() {
-          return this.firstName + ' ' + this.lastName
-        }
-      }
-    }
-  })
-  ```
-
-- 侦听属性 watch：
-  > 不支持缓存，数据变，直接会触发相应的操作；
-  > watch 支持异步；
-  > 监听的函数接收两个参数，第一个参数是最新的值；
-  > 第二个参数是输入之前的值；
-  > 当一个属性发生变化时，需要执行对应的操作；一对多；
-  > 监听数据必须是 data 中声明过或者父组件传递过来的 props 中的数据，当数据变化时，触发其他操作，函数有两个参数
-  > 数组的变化不需要通过深度监听，对象数组中对象的属性变化则需要 deep 深度监听
-  ```javascript
-  new Vue({
-    el: "#root",
-    data: {
-      cityName: { id: 1, name: "shanghai" },
-    },
-    watch: {
-      //简写形式
-      //cityName(newName, oldName) {}
-      cityName: {
-        handler(newName, oldName) {
-          // ...
-        },
-        deep: true, //deep表示深度监听，用于监听对象内部属性的改变
-        immediate: true, //immediate表示立刻监听，当值第一次绑定的时候，不会执行监听函数，只有值发生改变才会执行，使用该属性表示会立刻监听
-      },
-    },
-  });
-  ```
 
 # class 与 style 的动态绑定
 
@@ -599,48 +936,6 @@ https://juejin.cn/post/6981628129089421326
 </body>
 ```
 
-# 为什么 vue 组件中 data 必须是一个函数？
-
-对象为引用类型，当复用组件时，由于数据对象都指向同一个 data 对象，当在一个组件中修改 data 时，其他重用的组件中的 data 会同时被修改；而使用返回对象的函数，由于每次返回的都是一个新对象（Object 的实例），引用地址不同，则不会出现这个问题。
-
-# v-model 的原理
-
-v-model 指令在表单 <input>、<textarea> 及 <select> 元素上创建双向数据绑定。
-
-1.  text 和 textarea 元素使用 value property 和 input 事件；
-2.  checkbox 和 radio 使用 checked property 和 change 事件；
-3.  select 字段将 value 作为 prop 并将 change 作为事件。
-
-```js
-<body>
-  <div id="app">
-    <!-- v-model实现双向绑定 -->
-    <!-- <input type="text" v-model="message"> -->
-
-    <!-- 实现双向绑定方法二 -->
-    <!-- <input type="text" :value="message" @input="valueChange"> -->
-    <input type="text" :value="message" @input="message = $event.target.value">
-    <h2>{{message}}</h2>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <script>
-    const app = new Vue({
-      el: '#app',
-      data: {
-        message: '你好啊'
-      },
-      methods: {
-        // 会默认传入一个event参数
-        valueChange(event) {
-          this.message = event.target.value
-        }
-      },
-    })
-  </script>
-</body>
-```
-
 # 消息订阅与发布
 
 pubsub-js(publish-subscribe-js) 消息订阅与发布插件 实现任意组件间通信
@@ -680,7 +975,7 @@ this.getIndexRef();
 
 ## 全局事件总线
 
-vc.prototype.**proto** === vue.prototype vc 是 VueComponent 的实例对象
+`vc.prototype.proto` === `vue.prototype` vc 是 VueComponent 的实例对象
 $on $emit $off 都在 vue 的原型对象上
 
 - 安装全局事件总线
@@ -698,7 +993,11 @@ const vm = new Vue({
 - 使用与解绑
 
 ```javascript
-this.$bus.$emit("hello", 数据data);
+const data = {
+  name: "six",
+  age: 18,
+};
+this.$bus.$emit("hello", data);
 ```
 
 全局事件总线要解绑
@@ -801,11 +1100,15 @@ export default new Vuex.Store({
 
 ## 路由
 
-方法一
-to 表示路由 active-class 当前切换路由效果
+1. 方法一
+
+```js
+// to 表示路由 active-class 当前切换路由效果
 <router-link to="/about" active-class="active"> </router-link>
-指定组件的呈现位置实现路由切换
+// 指定组件的呈现位置实现路由切换
 <router-view></router-view>
+```
+
 方法二 编程式路由导航
 
 ## 嵌套路由
@@ -817,11 +1120,12 @@ routes: [
     component: About,
   },
   {
-    path: "./home",
+    path: "/home",
     component: Home,
     children: [
       {
-        path: "new", //子路由不需要加'/'
+        // 子路由不需要加'/' 或者写全路径 '/home/new'
+        path: "new",
         component: News,
       },
     ],
@@ -832,17 +1136,105 @@ routes: [
 方法一
 
 ```javascript
-// 跳转必须把路径写全
+// 跳转必须把路径写全, 会从一级路由开始匹配
 <router-link to="/home/news" active-class="active"></router-link>
 ```
-
-方法二
 
 ## 路由传参
 
 <router-link> 中的 to 字符串写法和对象写法
 query 参数 放在请求体中 可以 name，也可以 path
 params 参数 1. 放在链接中 必须和 name 命名路由一起 2.props 配置(三种)
+
+1. 携带 query 参数(写在 Url 中&连接, 例如`/message/detail?id=003&title=11`)
+
+   1. 字符串写法
+
+   ```
+   <router-link
+      :to="`/home/message/detail?id=${m.id}&title=${m.title}`"
+   >
+   ```
+
+   2. 对象写法, 可以写 path(路径要写全)或者写 name
+
+   ```
+   <router-link
+    :to="{
+      path:'/home/message/detail',
+      query: {
+        id: m.id,
+        title: m.title
+      }
+   }">
+   ```
+
+2. 携带 params 参数(写在 url 中, 用`/`连接, 例如`/detail/1/你好`中的 1 是 id, 你好是 title)
+   params 参数一定要和 name 搭配
+
+   1. 写法一
+
+   ```js
+   // 写法一
+   routes: [
+     {
+       path: "/detail/:id/:title",
+       name: "detail",
+       component: Detail,
+     },
+   ];
+   ```
+
+   ```
+   // params一定要和name搭配
+   <router-link :to="{
+     name: "detail",
+     params: {
+       id: m.id,
+       title: m.title
+     }
+   }">
+   ```
+
+3. props 配置
+
+   1. 路由的 Props 配置
+
+   ```js
+   routes: [
+     {
+       path: "/detail/:id/:title",
+       name: "detail",
+
+       component: Detail,
+
+       // props写法一 传递params
+       // 值为对象，该对象中的所有key-value都会以props的形式传给detail使用, 组件用props接收
+       props: { a: 1, b: "hello" },
+
+       // props写法二 传递params
+       // 值为布尔值，为true,就会把该路由组件收到的所有Params参数以props传给组件detail
+       props: true,
+
+       // props写法三 传递query
+       props($route) {
+         return {
+           id: $route.query.id,
+           title: $route.query.title,
+         };
+       },
+     },
+   ];
+   ```
+
+   ```js
+   // detail组件，
+
+   // 1. props接收params
+   props: ["a", "b"];
+
+   // 2. 使用this.$route.params获取
+   ```
 
 ## 编程式路由导航
 
@@ -859,41 +1251,190 @@ this.$router.go(1); //前进一步
 
 ## 缓存路由导航
 
-include 包含的路由组件会缓存,不会被销毁
-<keep-alive include="News">
-<router-view></router-view>
-<keep-alive>
+`keep-alive`让不展示的路由组件保持挂载，不被销毁
+`include` 填组件名称
+包含的路由组件的内容会缓存,该组件不会被销毁
 
-## 路由钩子
+1. 缓存一个组件
+   <keep-alive include="News">
+   <router-view></router-view>
+   <keep-alive>
+2. 缓存多个组件
+   <keep-alive :include="['News', 'Message']">
+   <router-view></router-view>
+   <keep-alive>
+
+## 路由钩子-生命周期
+
+在 keep-alive 中的组件不会被销毁,所以重新展示该组件时不触发 beforeDestroy()和 mounted()
 
 1. activated() {} //表示激活时
 2. deactivated() {} //表示销毁时
 
-## 路由守卫
+## 路由守卫有哪些
 
-1. 全局前置守卫
+1. 全局守卫 beforeEach/afterEach
    <!-- 全局前置路由守卫——初始化、每次路由切换之前被调用 -->
 
-   router.beforeEach(to, from, next){}
-   to 点击的路由
-   from 上一个路由
-   next() 放行
+   1. 全局前置守卫
+      router.beforeEach(to, from, next){}
+      to 点击的路由信息
+      from 上一个路由信息
+      next() 放行
 
-2. 全局后置守卫
-   <!-- 全局后置路由守卫——初始化、每次路由切换之前被调用 -->
+      ```js
+      const router = export default new VueRouter({
+        routes: [
+          {
+            name: "About",
+            path: "/about",
+            component: About,
+          },
+          {
+            name: "Home",
+            path: "/home",
+            component: Home,
+            children: [],
+          },
+        ],
+      });
 
-   router.afterEach(to, from){} 可以用来修改窗口名 window.title
-   to 点击的路由
-   from 上一个路由
+      router.beforeEach((to, from, next) => {
+        // 如果前往的不是登录页， 就跳转到首页
+        if (to.path !== '/login') {
+          const token = localCache.getCache('token')
+          // 如果没有token, 就跳转回首页
+          if (!token) {
+            router.push('/login')
+          }
+        }
+      })
+      ```
 
-3. 独享路由守卫 beforeEnter(写在路由里)
+   2. 全局后置守卫
+      <!-- 全局后置路由守卫——初始化、每次路由切换之后被调用 -->
+
+      router.afterEach(to, from){}
+      可以用来修改窗口名 window.title
+      to 点击的路由
+      from 上一个路由
+
+      ```js
+        const router = export default new VueRouter({
+          routes: [
+            {
+              name: "About",
+              path: "/about",
+              component: About,
+              meta: {title: '关于'}
+            },
+            {
+              name: "Home",
+              path: "/home",
+              component: Home,
+              meta: {title: '主页'}
+              children: [
+                {
+                  name: 'xinwen',
+                  path: 'news',
+                  component: News,
+                  meta: {isAuth: true, title: '新闻'}
+                },
+                {
+                  name: 'xiaoxi',
+                  path: 'message',
+                  component: Message,
+                  meta: {isAuth: false, title: '消息'}
+                }
+              ],
+            },
+          ],
+        });
+        // 后置路由守卫
+        router.afterEach((to, from) => {
+          // 可以用来修改页签title
+          document.title = to.meta.title || '前端小册系统'
+        })
+      ```
+
+2. (独享)路由守卫 beforeEnter(写在路由里)
+   针对某个单独的路由设置的守卫
    beforeEnter(to, from , next)
 
-4. 组件内路由守卫
-   <!-- 通过路由规则，进入该组件时被调用 -->
-   beforeRouterEnter(to, from, next) {}
-   <!-- 通过路由规则，离开该组件时被调用 -->
-   beforeRouterLeave(to, from, next) {}
+   ```js
+    const router = export default new VueRouter({
+      routes: [
+        {
+          name: "About",
+          path: "/about",
+          component: About,
+          meta: {title: '关于', isAuth: true}，
+        },
+        {
+          name: "Home",
+          path: "/home",
+          component: Home,
+          meta: {title: '主页'}
+          children: [
+            {
+              name: 'xinwen',
+              path: 'news',
+              component: News,
+              meta: {isAuth: true, title: '新闻'},
+              beforeEnter: (to, from, next) => {
+                // 判断是否需要鉴权
+                if (to.meta.isAuth) {
+                  next()
+                } else {
+                  console.log("无权限查看")
+                }
+              }
+            },
+            {
+              name: 'xiaoxi',
+              path: 'message',
+              component: Message,
+              meta: {isAuth: false, title: '消息'}
+            }
+          ],
+        },
+      ],
+    });
+
+   ```
+
+3. 组件守卫 beforeRouteEnter/beforeRouteLeave
+
+   1. beforeRouteEnter
+      <!-- 通过路由规则，进入该组件时被调用 -->
+
+      beforeRouteEnter(to, from, next) {}
+
+      ```js
+      export default {
+        name: "About",
+        mounted() {
+
+        }
+        // 通过路由规则，进入该组件时被调用
+        beforeRouteEnter(to, from, next) {
+          // 判断是否需要鉴权
+          if (to.meta.isAuth) {
+            next();
+          } else {
+            alert("无权限");
+          }
+        },
+        // 通过路由规则，离开该组件时被调用
+        beforeRouteLeave(to, from, next) {
+          next()
+        },
+      };
+      ```
+
+   2. beforeRouteLeave
+      <!-- 通过路由规则，离开该组件时被调用 -->
+      beforeRouteLeave(to, from, next) {}
 
 ## history 模式和 hash 模式
 

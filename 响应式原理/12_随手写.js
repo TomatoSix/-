@@ -1,31 +1,30 @@
 let activeReactiveFn = null
-function watchFn(fn) {
-  activeReactiveFn = fn
-  fn()
-  activeReactiveFn = null
 
-}
-
-class Depend {
+class Depend{
   constructor() {
-    this.creativeFns = new Set()
+    this.reactiveFns = new Set()
   }
 
   depend() {
     if (activeReactiveFn) {
-      this.creativeFns.add(activeReactiveFn)
+      this.reactiveFns.add(activeReactiveFn)
     }
   }
 
   notify() {
-    
-      this.creativeFns.forEach(fn => fn())
+    this.reactiveFns.forEach(fn => fn())
   }
+}
+
+function watchFn(fn) {
+  activeReactiveFn = fn
+  fn()
+  activeReactiveFn = null
 }
 
 let wk = new WeakMap()
 function getDepend(target, key) {
-  let map = wk.get(target)
+  let map = wk.get(target) 
   if (!map) {
     map = new Map()
     wk.set(target, map)
@@ -38,17 +37,16 @@ function getDepend(target, key) {
   return depend
 }
 
-function creative(obj) {
+function reactive(obj) {
   return new Proxy(obj, {
     get: function(target, key, receiver) {
       let depend = getDepend(target, key)
       depend.depend()
-
       return Reflect.get(target, key, receiver)
     },
     set: function(target, key, value, receiver) {
       Reflect.set(target, key, value, receiver)
-      let depend = getDepend(target, key)
+      let depend = getDepend(target, key) 
       depend.notify()
     }
   })
@@ -62,7 +60,7 @@ const obj = {
   age: 18
 }
 
-const objProxy = creative(obj)
+const objProxy = reactive(obj)
 
 watchFn(() => {
   console.log(objProxy.name, '已自动监听该函数');
