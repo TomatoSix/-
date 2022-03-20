@@ -25,7 +25,7 @@ https://juejin.cn/post/6961222829979697165
 
 2. 为什么 vue 组件中 data 必须是一个函数？
 
-对象为引用类型，当复用组件时，由于数据对象都指向同一个 data 对象，当在一个组件中修改 data 时，其他重用的组件中的 data 会同时被修改；而使用返回对象的函数，由于每次返回的都是一个新对象（Object 的实例），引用地址不同，则不会出现这个问题。
+   对象为引用类型，当复用组件时，由于数据对象都指向同一个 data 对象，当在一个组件中修改 data 时，其他重用的组件中的 data 会同时被修改；而使用返回对象的函数，由于每次返回的都是一个新对象（Object 的实例），引用地址不同，则不会出现这个问题。
 
 3. vue 组件通讯方式
    vue 中 8 种组件通信方式, 值得收藏!
@@ -237,83 +237,88 @@ https://juejin.cn/post/6961222829979697165
 
 10. vue2 响应式数据的原理
 
-    整体思路是数据劫持+观察者模式
-    对象内部通过 defineReactive 方法，使用 Object.defineProperty 将属性进行劫持（只会劫持已经存在的属性），数组则是通过重写数组方法来实现。当页面使用对应属性时，每个属性都拥有自己的 dep 属性，存放他所依赖的 watcher（依赖收集），当属性变化后会通知自己对应的 watcher 去更新(派发更新)。
+    1. 整体思路是数据劫持+观察者模式
+       对象内部通过 defineReactive 方法，使用 Object.defineProperty 将属性进行劫持（只会劫持已经存在的属性），数组则是通过重写数组方法来实现。当页面使用对应属性时，每个属性都拥有自己的 dep 属性，存放他所依赖的 watcher（依赖收集），当属性变化后会通知自己对应的 watcher 去更新(派发更新)。
 
-    ```js
-    let activeReactiveFn = null;
+    2. 不足之处
+       虽然我们通过 Object.defineProperty 方法实现了对 object 数据的可观测，但是这个方法仅仅只能观测到 object 数据的取值及设置值，当我们向 object 数据里添加一对新的 key/value 或删除一对已有的 key/value 时，它是无法观测到的，导致当我们对 object 数据添加或删除值时，无法通知依赖，无法驱动视图进行响应式更新。
 
-    // 定义函数收集的类
-    class Depend {
-      constructor() {
-        this.reactiveFns = new Set();
-      }
+       当然，Vue 也注意到了这一点，为了解决这一问题，Vue 增加了两个全局 API:Vue.set 和 Vue.delete，
 
-      // addDepend(reactiveFn) {
-      //   this.reactiveFns.push(reactiveFn)
-      // }
+       ```js
+       let activeReactiveFn = null;
 
-      notify() {
-        this.reactiveFns.forEach((fn) => {
-          fn();
-        });
-      }
+       // 定义函数收集的类
+       class Depend {
+         constructor() {
+           this.reactiveFns = new Set();
+         }
 
-      depend() {
-        if (activeReactiveFn) {
-          this.reactiveFns.add(activeReactiveFn);
-        }
-      }
-    }
-    const depend = new Depend();
+         // addDepend(reactiveFn) {
+         //   this.reactiveFns.push(reactiveFn)
+         // }
 
-    // 封装一个收集需要调用的函数
-    function watchFn(fn) {
-      // 把需要响应的函数放入正确的依赖中
-      // 1. 找到depend对象
-      activeReactiveFn = fn;
-      fn();
-      activeReactiveFn = null;
-    }
+         notify() {
+           this.reactiveFns.forEach((fn) => {
+             fn();
+           });
+         }
 
-    // 封装一个获取depend的函数
-    const targetMap = new WeakMap();
-    function getDepend(target, key) {
-      // 根据target获取Map
-      let map = targetMap.get(target);
-      if (!map) {
-        // 初次使用不存在map
-        map = new Map();
-        targetMap.set(target, map);
-      }
+         depend() {
+           if (activeReactiveFn) {
+             this.reactiveFns.add(activeReactiveFn);
+           }
+         }
+       }
+       const depend = new Depend();
 
-      let depend = map.get(key);
-      if (!depend) {
-        depend = new Depend();
-        map.set(key, depend);
-      }
-      return depend;
-    }
+       // 封装一个收集需要调用的函数
+       function watchFn(fn) {
+         // 把需要响应的函数放入正确的依赖中
+         // 1. 找到depend对象
+         activeReactiveFn = fn;
+         fn();
+         activeReactiveFn = null;
+       }
 
-    function reactive(obj) {
-      Object.keys(obj).forEach((key) => {
-        let value = obj[key];
-        Object.defineProperty(obj, key, {
-          get: function () {
-            const depend = getDepend(obj, key);
-            depend.depend();
-            return value;
-          },
-          set: function (newValue) {
-            value = newValue;
-            const depend = getDepend(obj, key);
-            depend.notify();
-          },
-        });
-      });
-      return obj;
-    }
-    ```
+       // 封装一个获取depend的函数
+       const targetMap = new WeakMap();
+       function getDepend(target, key) {
+         // 根据target获取Map
+         let map = targetMap.get(target);
+         if (!map) {
+           // 初次使用不存在map
+           map = new Map();
+           targetMap.set(target, map);
+         }
+
+         let depend = map.get(key);
+         if (!depend) {
+           depend = new Depend();
+           map.set(key, depend);
+         }
+         return depend;
+       }
+
+       function reactive(obj) {
+         Object.keys(obj).forEach((key) => {
+           let value = obj[key];
+           Object.defineProperty(obj, key, {
+             get: function () {
+               const depend = getDepend(obj, key);
+               depend.depend();
+               return value;
+             },
+             set: function (newValue) {
+               value = newValue;
+               const depend = getDepend(obj, key);
+               depend.notify();
+             },
+           });
+         });
+         return obj;
+       }
+       ```
 
 11. vue3 响应式原理
 
@@ -425,6 +430,23 @@ https://juejin.cn/post/6961222829979697165
     };
     ```
 
+    3. VNode 的作用
+       我们在视图渲染之前，把写好的 template 模板先编译成 VNode 并缓存下来，等到数据发生变化页面需要重新渲染的时候，我们把数据发生变化后生成的 VNode 与前一次缓存下来的 VNode 进行对比，找出差异，然后有差异的 VNode 对应的真实 DOM 节点就是需要重新渲染的节点，最后根据有差异的 VNode 创建出真实的 DOM 节点再插入到视图中，最终完成一次视图更新。
+
+    4. 为什么需要虚拟 DOM
+
+       1. Vue 是数据驱动视图的，数据发生变化视图就要随之更新，在更新视图的时候难免要操作 DOM,而操作真实 DOM 又是非常耗费性能的
+       2. 那如何在更新视图的时候尽可能少的操作 DOM 呢？最直观的思路就是我们不要盲目的去更新视图，而是通过对比数据变化前后的状态，计算出视图中哪些地方需要更新，只更新需要更新的地方，而不需要更新的地方则不需关心，这样我们就可以尽可能少的操作 DOM 了。这也就是上面所说的用 JS 的计算性能来换取操作 DOM 的性能。
+       3. 当数据发生变化时，我们对比变化前后的虚拟 DOM 节点，通过 DOM-Diff 算法计算出需要更新的地方，然后去更新需要更新的视图。
+
+    5. VNode 的类型
+       1. 注释节点
+       2. 文本节点
+       3. 元素节点
+       4. 组件节点
+       5. 函数式组件节点
+       6. 克隆节点
+
 13. v-model 原理
 
     v-model 指令在表单 <input>、<textarea> 及 <select> 元素上创建双向数据绑定。
@@ -475,6 +497,9 @@ https://juejin.cn/post/6961222829979697165
 15. vue-router 路由钩子有哪些? 执行顺序
 
     1. 路由钩子
+       1. 全局守卫 beforeEach/afterEach
+       2. 独享路由守卫 beforeEnter
+       3. 组件守卫 beforeRouteEnter/beforeRouteLeave
     2. 执行顺序
        导航被触发。
        在失活的组件里调用 beforeRouteLeave 守卫。
@@ -493,13 +518,300 @@ https://juejin.cn/post/6961222829979697165
 
 17. vuex 的使用
 
-18. diff 算法原理
+    ```js
+    // .vue文件
+    export default {
+      data() {
+        return {
+          n:1
+        }
+      }
+      methods: {
+        add() {
+          this.$store.dispatch('jia', this.n)
+        }
+      }
+    }
 
-19. Vue.mixin 的使用场景和原理
+    ```
+
+    ```js
+    // store index.js
+    import Vue from "vue";
+    //引入Vuex
+    import Vuex from "vuex";
+    //应用Vuex插件
+    Vue.use(Vuex);
+
+    action = {
+      // context表示上下文环境 ，有很多内容
+      jia(context, value) {
+        context.commit("JIA", value);
+      },
+    };
+    mutations = {
+      JIA(state, value) {
+        state.sum += value;
+      },
+    };
+    state = {
+      sum: 1,
+    };
+    getters = {
+      bigSum(state) {
+        return state.sum * 10;
+      },
+    };
+
+    //创建并暴露store
+    export default new Vuex.Store({
+      actions,
+      mutations,
+      state,
+      getters,
+    });
+    ```
+
+18. diff 算法原理
+    https://vue-js.com/learn-vue/virtualDOM/patch.html#_1-%E5%89%8D%E8%A8%80
+    DOM-diffing 过程叫做 patch 过程。以新的 VNode 为基准，改造旧的 oldVNode 使之成为跟新的 VNode 一样。
+
+    1. 创建节点
+       VNode 类可以描述 6 中类型的节点，实际上只有 3 中类型的节点能够被创建并插入到 DOM 中，它们是元素节点、文本节点、注释节点。需要判断节点类型
+       1. 元素节点-是否有 tag 标签-是调用 createElement 方法创建元素节点，递归遍历子节点，将所有子节点创建好之后插入到当前元素节点里面，最后把当前元素节点插入到 DOM 中
+       2. 注释节点-是否判断 isComment 为 true,是调用 createComment 方法创建文本节点
+       3. 文本节点-调用 createTextNode 方法创建文本节点
+    2. 删除节点
+       只需在删除节点的父元素上调用 removeChild 方法即可
+    3. 更新节点
+
+       1. VNode 和 oldVNode 均为静态节点，直接跳过
+          `<p>我是不会变化的文字</p>`
+       2. VNode 是文本节点
+          1. oldVNode 也是文本节点，判断两个文本是否相同
+          2. oldVNode 不是文本节点，调用 setTextNode 方法改成文本节点
+       3. VNode 是元素节点
+          1. 新节点包含子节点
+             1. 旧节点包含子节点
+                递归对比更新子节点，调用 updateChildren 方法
+             2. 旧节点不包含子节点
+                1. 旧节点是空节点
+                   新节点的子节点创建一份插入到旧节点里
+                2. 旧节点是文本节点
+                   文本清空，新节点的子节点创建一份插入到旧节点里
+          2. 新节点不包含子节点
+             说明该节点是空节点，直接清空 oldVNode 节点内容
+
+    4. 新旧节点都包含子节点的逻辑
+
+       - 把新的 VNode 上的子节点数组记为 newChildren，把旧的 oldVNode 上的子节点数组记为 oldChildren
+       - 外层循环 newChildren 数组，内层循环 oldChildren 数组，每循环外层 newChildren 数组里的一个子节点，就去内层 oldChildren 数组里找看有没有与之相同的子节点
+
+       1. 创建节点
+          如果 newChildren 里面的某个子节点在 oldChildren 里找不到与之相同的子节点
+          把新创建的节点插入到所有未处理节点之前
+       2. 删除子节点
+          oldChildren 还存在未处理的子节点，将这些节点删除
+
+       3. 更新子节点
+          如果 newChildren 里面的某个子节点在 oldChildren 里找到了与之相同的子节点，并且所处的位置也相同，那么就更新 oldChildren 里该节点，使之与 newChildren 里的该节点相同。
+       4. 移动子节点
+          如果 newChildren 里面的某个子节点在 oldChildren 里找到了与之相同的子节点，但是所处的位置不同，这说明此次变化需要调整该子节点的位置，那就以 newChildren 里子节点的位置为基准，调整 oldChildren 里该节点的位置，使之与在 newChildren 里的位置相同。
+
+    5. 更新子节点优化逻辑
+       newChildren 数组里的所有未处理子节点的第一个子节点称为：新前；
+       newChildren 数组里的所有未处理子节点的最后一个子节点称为：新后；
+       oldChildren 数组里的所有未处理子节点的第一个子节点称为：旧前；
+       oldChildren 数组里的所有未处理子节点的最后一个子节点称为：旧后；
+
+       1. 新前与旧前
+          若相同，无需进行节点移动操作
+       2. 新后与旧后
+          若相同，无需进行节点移动操作
+       3. 新后与旧前
+          若相同， 我们要把 oldChildren 数组里把第一个子节点移动到数组中所有未处理节点之后。
+       4. 新前与旧后
+          若相同，我们要把 oldChildren 数组里把最后一个子节点移动到数组中所有未处理节点之前。
+       5. 继续下一轮循环
+
+       ```js
+       // 循环更新子节点
+       function updateChildren(
+         parentElm,
+         oldCh,
+         newCh,
+         insertedVnodeQueue,
+         removeOnly
+       ) {
+         let oldStartIdx = 0; // oldChildren开始索引
+         let oldEndIdx = oldCh.length - 1; // oldChildren结束索引
+         let oldStartVnode = oldCh[0]; // oldChildren中所有未处理节点中的第一个
+         let oldEndVnode = oldCh[oldEndIdx]; // oldChildren中所有未处理节点中的最后一个
+
+         let newStartIdx = 0; // newChildren开始索引
+         let newEndIdx = newCh.length - 1; // newChildren结束索引
+         let newStartVnode = newCh[0]; // newChildren中所有未处理节点中的第一个
+         let newEndVnode = newCh[newEndIdx]; // newChildren中所有未处理节点中的最后一个
+
+         let oldKeyToIdx, idxInOld, vnodeToMove, refElm;
+
+         // removeOnly is a special flag used only by <transition-group>
+         // to ensure removed elements stay in correct relative positions
+         // during leaving transitions
+         const canMove = !removeOnly;
+
+         if (process.env.NODE_ENV !== "production") {
+           checkDuplicateKeys(newCh);
+         }
+
+         // 以"新前"、"新后"、"旧前"、"旧后"的方式开始比对节点
+         while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
+           if (isUndef(oldStartVnode)) {
+             oldStartVnode = oldCh[++oldStartIdx]; // 如果oldStartVnode不存在，则直接跳过，比对下一个
+           } else if (isUndef(oldEndVnode)) {
+             oldEndVnode = oldCh[--oldEndIdx];
+           } else if (sameVnode(oldStartVnode, newStartVnode)) {
+             // 如果新前与旧前节点相同，就把两个节点进行patch更新
+             patchVnode(oldStartVnode, newStartVnode, insertedVnodeQueue);
+             oldStartVnode = oldCh[++oldStartIdx];
+             newStartVnode = newCh[++newStartIdx];
+           } else if (sameVnode(oldEndVnode, newEndVnode)) {
+             // 如果新后与旧后节点相同，就把两个节点进行patch更新
+             patchVnode(oldEndVnode, newEndVnode, insertedVnodeQueue);
+             oldEndVnode = oldCh[--oldEndIdx];
+             newEndVnode = newCh[--newEndIdx];
+           } else if (sameVnode(oldStartVnode, newEndVnode)) {
+             // Vnode moved right
+             // 如果新后与旧前节点相同，先把两个节点进行patch更新，然后把旧前节点移动到oldChilren中所有未处理节点之后
+             patchVnode(oldStartVnode, newEndVnode, insertedVnodeQueue);
+             canMove &&
+               nodeOps.insertBefore(
+                 parentElm,
+                 oldStartVnode.elm,
+                 nodeOps.nextSibling(oldEndVnode.elm)
+               );
+             oldStartVnode = oldCh[++oldStartIdx];
+             newEndVnode = newCh[--newEndIdx];
+           } else if (sameVnode(oldEndVnode, newStartVnode)) {
+             // Vnode moved left
+             // 如果新前与旧后节点相同，先把两个节点进行patch更新，然后把旧后节点移动到oldChilren中所有未处理节点之前
+             patchVnode(oldEndVnode, newStartVnode, insertedVnodeQueue);
+             canMove &&
+               nodeOps.insertBefore(
+                 parentElm,
+                 oldEndVnode.elm,
+                 oldStartVnode.elm
+               );
+             oldEndVnode = oldCh[--oldEndIdx];
+             newStartVnode = newCh[++newStartIdx];
+           } else {
+             // 如果不属于以上四种情况，就进行常规的循环比对patch
+             if (isUndef(oldKeyToIdx))
+               oldKeyToIdx = createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx);
+             idxInOld = isDef(newStartVnode.key)
+               ? oldKeyToIdx[newStartVnode.key]
+               : findIdxInOld(newStartVnode, oldCh, oldStartIdx, oldEndIdx);
+             // 如果在oldChildren里找不到当前循环的newChildren里的子节点
+             if (isUndef(idxInOld)) {
+               // New element
+               // 新增节点并插入到合适位置
+               createElm(
+                 newStartVnode,
+                 insertedVnodeQueue,
+                 parentElm,
+                 oldStartVnode.elm,
+                 false,
+                 newCh,
+                 newStartIdx
+               );
+             } else {
+               // 如果在oldChildren里找到了当前循环的newChildren里的子节点
+               vnodeToMove = oldCh[idxInOld];
+               // 如果两个节点相同
+               if (sameVnode(vnodeToMove, newStartVnode)) {
+                 // 调用patchVnode更新节点
+                 patchVnode(vnodeToMove, newStartVnode, insertedVnodeQueue);
+                 oldCh[idxInOld] = undefined;
+                 // canmove表示是否需要移动节点，如果为true表示需要移动，则移动节点，如果为false则不用移动
+                 canMove &&
+                   nodeOps.insertBefore(
+                     parentElm,
+                     vnodeToMove.elm,
+                     oldStartVnode.elm
+                   );
+               } else {
+                 // same key but different element. treat as new element
+                 createElm(
+                   newStartVnode,
+                   insertedVnodeQueue,
+                   parentElm,
+                   oldStartVnode.elm,
+                   false,
+                   newCh,
+                   newStartIdx
+                 );
+               }
+             }
+             newStartVnode = newCh[++newStartIdx];
+           }
+         }
+         if (oldStartIdx > oldEndIdx) {
+           /**
+            * 如果oldChildren比newChildren先循环完毕，
+            * 那么newChildren里面剩余的节点都是需要新增的节点，
+            * 把[newStartIdx, newEndIdx]之间的所有节点都插入到DOM中
+            */
+           refElm = isUndef(newCh[newEndIdx + 1])
+             ? null
+             : newCh[newEndIdx + 1].elm;
+           addVnodes(
+             parentElm,
+             refElm,
+             newCh,
+             newStartIdx,
+             newEndIdx,
+             insertedVnodeQueue
+           );
+         } else if (newStartIdx > newEndIdx) {
+           /**
+            * 如果newChildren比oldChildren先循环完毕，
+            * 那么oldChildren里面剩余的节点都是需要删除的节点，
+            * 把[oldStartIdx, oldEndIdx]之间的所有节点都删除
+            */
+           removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx);
+         }
+       }
+       ```
+
+19. Vue.mixin(混入) 的使用场景和原理
+
+    ```js
+    Vue.mixin = function (mixin: Object) {
+      // 将传入的mixin对象与this.options合并，并返回给this.options
+      this.options = mergeOptions(this.options, mixin);
+      // 传给之后所有vue实例
+      return this;
+    };
+    ```
 
 20. nextTick 的使用场景和原理
+    在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。
 
 21. keep-alive 使用场景和原理
+
+    1. 对 keep-alive 的了解
+
+       是 Vue 内置的一个组件，可以使被包含的组件保留状态，避免重新渲染
+
+       1. 一般结合路由和动态组件一起使用，用于缓存组件
+       2. 提供 include 和 exclude 属性，两者都支持字符串或正则表达式  
+          include 表示只有名称匹配的组件会被缓存，
+          exclude 表示任何名称匹配的组件都不会被缓存 ，其中 exclude 的优先级比 include 高；
+       3. 对应两个钩子函数 activated 和 deactivated  
+          当组件被激活时，触发钩子函数 activated，当组件被移除时，触发钩子函数 deactivated。
+
+    2. 原理
+       缓存淘汰策略 LRU(最近最少使用)
 
 22. Vue.set 原理
 
@@ -1017,12 +1329,16 @@ beforeDestroy() {
 
 Vuex：专为 Vue.js 应用程序开发的状态管理模式
 格式：
+
+```js
 const store = new Vuex.Store({
-state:{},
-getters:{},
-mutations:{},
-actions:{}
-})
+  state: {},
+  getters: {},
+  mutations: {},
+  actions: {},
+});
+```
+
 主要模块为
 state:用于设置默认的初始状态  
 getters:相当于 Vue 中的计算属性 computed，getter 的返回值会根据它的依赖被缓存起来，
@@ -1045,16 +1361,19 @@ modules: 允许将单一的 store 拆分成多个 store 且同时保存在单一
 
 ```js
 // .vue文件
-data() {
-  return {
-    n:1
+export default {
+  data() {
+    return {
+      n:1
+    }
+  }
+  methods: {
+    add() {
+      this.$store.dispatch('jia', this.n)
+    }
   }
 }
-methods: {
-  add() {
-    this.$store.dispatch('jia', this.n)
-  }
-}
+
 ```
 
 ```js
@@ -1093,8 +1412,6 @@ export default new Vuex.Store({
   getters,
 });
 ```
-
-### vue-router
 
 # vue-router
 
@@ -1440,17 +1757,6 @@ this.$router.go(1); //前进一步
 
 mode: history
 
-# 对 keep-alive 的了解
-
-是 Vue 内置的一个组件，可以使被包含的组件保留状态，避免重新渲染
-
-1. 一般结合路由和动态组件一起使用，用于缓存组件
-2. 提供 include 和 exclude 属性，两者都支持字符串或正则表达式  
-   include 表示只有名称匹配的组件会被缓存，
-   exclude 表示任何名称匹配的组件都不会被缓存 ，其中 exclude 的优先级比 include 高；
-3. 对应两个钩子函数 activated 和 deactivated  
-   当组件被激活时，触发钩子函数 activated，当组件被移除时，触发钩子函数 deactivated。
-
 # assets 和 static 的区别？
 
 assets 中的文件在运行 npm run build 的时候会打包，简单来说就是会被压缩体积，代码格式化之类的。打包之后也会放到 static 中。
@@ -1484,10 +1790,6 @@ bbbbbbbbbbbbbbbbb 打印出当前组件
 可用于加载中，模拟延迟效果
 
 # 原理
-
-## vuex 原理
-
-## nextTick 原理
 
 ## diff 原理
 
