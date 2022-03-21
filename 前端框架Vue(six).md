@@ -4,321 +4,336 @@ https://juejin.cn/post/6984210440276410399
 最全的 Vue 面试题+详解答案
 https://juejin.cn/post/6961222829979697165
 
-1. 什么是 SPA 单页面应用？
+1.  什么是 SPA 单页面应用？
 
-   SPA( single-page application)
+    SPA( single-page application)
 
-   1. 概念：
-      仅在 Web 页面初始化时加载相应的 HTML、JavaScript 和 CSS。一旦页面加载完成，SPA 不会因为用户的操作而进行页面的重新加载或跳转；取而代之的是利用路由机制实现 HTML 内容的变换，UI 与用户的交互，避免页面的重新加载。
+    1. 概念：
+       仅在 Web 页面初始化时加载相应的 HTML、JavaScript 和 CSS。一旦页面加载完成，SPA 不会因为用户的操作而进行页面的重新加载或跳转；取而代之的是利用路由机制实现 HTML 内容的变换，UI 与用户的交互，避免页面的重新加载。
 
-   2. 优点：
+    2. 优点：
 
-      1. 用户体验好、快，内容的改变不需要重新加载整个页面，避免了不必要的跳转和重复渲染；
-      2. 基于上面一点，SPA 相对对服务器压力小；
-      3. 前后端职责分离，架构清晰，前端进行交互逻辑，后端负责数据处理；
+       1. 用户体验好、快，内容的改变不需要重新加载整个页面，避免了不必要的跳转和重复渲染；
+       2. 基于上面一点，SPA 相对对服务器压力小；
+       3. 前后端职责分离，架构清晰，前端进行交互逻辑，后端负责数据处理；
 
-   3. 缺点：
+    3. 缺点：
 
-      1. 初次加载耗时多：为实现单页 Web 应用功能及显示效果，需要在加载页面的时候将 JavaScript、CSS 统一加载，部分页面按需加载；
-      2. 前进后退路由管理：由于单页应用在一个页面中显示所有的内容，所以不能使用浏览器的前进后退功能，所有的页面切换需要自己建立堆栈管理；
-      3. SEO 难度较大：由于所有的内容都在一个页面中动态替换显示，所以在 SEO 上其有着天然的弱势。
+       1. 初次加载耗时多：为实现单页 Web 应用功能及显示效果，需要在加载页面的时候将 JavaScript、CSS 统一加载，部分页面按需加载；
+       2. 前进后退路由管理：由于单页应用在一个页面中显示所有的内容，所以不能使用浏览器的前进后退功能，所有的页面切换需要自己建立堆栈管理；
+       3. SEO 难度较大：由于所有的内容都在一个页面中动态替换显示，所以在 SEO 上其有着天然的弱势。
 
-2. 为什么 vue 组件中 data 必须是一个函数？
+2.  为什么 vue 组件中 data 必须是一个函数？
 
-   对象为引用类型，当复用组件时，由于数据对象都指向同一个 data 对象，当在一个组件中修改 data 时，其他重用的组件中的 data 会同时被修改；而使用返回对象的函数，由于每次返回的都是一个新对象（Object 的实例），引用地址不同，则不会出现这个问题。
+    对象为引用类型，当复用组件时，由于数据对象都指向同一个 data 对象，当在一个组件中修改 data 时，其他重用的组件中的 data 会同时被修改；而使用返回对象的函数，由于每次返回的都是一个新对象（Object 的实例），引用地址不同，则不会出现这个问题。
 
-3. vue 组件通讯方式
-   vue 中 8 种组件通信方式, 值得收藏!
-   https://juejin.cn/post/6844903887162310669
+3.  vue 组件通讯方式
+    vue 中 8 种组件通信方式, 值得收藏!
+    https://juejin.cn/post/6844903887162310669
 
-   Vue3 的 8 种和 Vue2 的 12 种组件通信，值得收藏
-   https://juejin.cn/post/6999687348120190983
+    Vue3 的 8 种和 Vue2 的 12 种组件通信，值得收藏
+    https://juejin.cn/post/6999687348120190983
 
-   1. props/$emit
+    1. props/$emit
       $emit 绑定一个自定义事件, 当这个语句被执行时, 就会将参数 arg 传递给父组件,父组件通过 v-on 监听并接收参数。
 
-      ```js
-      // 父组件
-      <article :article="articleList">
-      export default {
-        data() {
-          return {
-            articleList: ['西游记', '红楼梦']
-          }
-        }
-      }
-      ```
-
-      ```js
-      // 子组件
-      export default {
-        props: ["article"],
-      };
-      ```
-
-   2. $parent/$child
-      父实例使用 this.$children访问子实例，
-      子实例使用 this.$parent 访问父实例
-   3. provide/inject
-
-      ```js
-      provide: function() {
-        return {
-          getIndexRef: () => {
-            // 返回一整个父组件
-            return this
-          }
-        }
-      }
-      ```
-
-      ```js
-      inject: ["getIndexRef"];
-      // 调用getIndexRef函数获取父组件
-      this.getIndexRef();
-      ```
-
-   4. $attrs/$listeners
-   5. $refs
-      1. 设置 ref，给组件打标识
-         `ref="组件名"`
-      2. 如何获取
-         `this.$refs.组件名`|`this.$refs['组件名']`
-   6. eventBus
-      `vc.prototype.proto` === `vue.prototype` vc 是 VueComponent 的实例对象
-      $on $emit $off 都在 vue 的原型对象上
-
-      1. 安装全局事件总线
-
-         ```javascript
-         const vm = new Vue({
-           el: "#app",
-           render: (h) => h(App),
-           beforeCreate() {
-             Vue.prototype.$bus = this; //安装全局事件总线
-           },
-         });
-         ```
-
-      2. 使用与解绑
-
-         ```javascript
-         const data = {
-           name: "six",
-           age: 18,
-         };
-         this.$bus.$emit("hello", data);
-         ```
-
-      3. 全局事件总线要解绑
-
-         ```javascript
-         mounted() {
-           this.$bus.$on('hello', (data) => {
-             console.log('我们认识吗')
-           })
-         }
-         beforeDestroy() {
-           this.$bus.$off('hello')
-         }
-         ```
-
-   7. vuex
-
-      1. state：用于数据的存储，是 store 中的唯一数据源
-      2. getters：如 vue 中的计算属性一样，基于 state 数据的二次包装，常用于数据的筛选和多个数据的相关性计算
-      3. mutations：类似函数，改变 state 数据的唯一途径，且不能用于处理异步事件
-      4. actions：类似于 mutation，用于提交 mutation 来改变状态，而不直接变更状态，可以包含任意异步操作
-      5. modules：类似于命名空间，用于项目中将各个模块的状态分开定义和操作，便于维护
-
-   8. localStorage/sessionStorage
-
-4. vue 的声明周期
-   8 个分别为
-
-   1. beforeCreate vue 实例的挂载元素 el 和数据对象 data 都为 undefined; methods 还未初始化
-   2. created vue 实例的数据对象 data 有了，methods 中配置的方法，el 为 undefined,还未初始化
-
-   3. beforeMount vue 实例的挂载元素 el 和 data 都初始化了，但挂在之前为虚拟的 dom 节点，data.message 还未替换, 模板尚未挂载到页面中
-
-   4. mounted
-      vue 被新创建的 vm.$el 替换，表示整个 Vue 实例已经初始化完毕，data.message 成功渲染
-
-   5. beforeUpdate 当 data 变化时，会触发 beforeUpdate 和 updated 方法，data 数据是最新的，但是页面尚未和最新的数据保持同步
-
-   6. updated 执行时，页面和 data 数据已经保持同步
-
-   7. beforeDestroy 当执行 beforeDestroy 的时候，实例身上所有的 data 和所有的 methods 以及过滤器、指令都处于可用状态，此时还未真正执行销毁的过程
-
-   8. destroyed 对 data 的改变不会再触发周期函数，此时 vue 实例已经解除了事件监听和 DOM 的绑定，但是 dom 结构依然存在
-
-   9. activated keep-alive 专属，组件被激活时调用
-   10. deactivated keep-alive 专属，组件被销毁时调用
-
-5. v-if 和 v-show 的区别
-
-   1. v-if 真正的条件渲染，它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。
-
-   适用于不需要频繁切换条件的场景
-
-   2. v-show 仅在初始化时加载一次，操作的是样式(display),切换当前样式的显示与隐藏，
-
-   适用于需要频繁切换条件的场景
-
-6. v-if 和 v-for 为什么不建议一起使用
-   因为 v-for 的优先级比 v-if 高会，先循环渲染出数据后才会进行条件渲染判断 造成性能浪费
-   v-for 和 v-if 不要在同一个标签中使用,因为解析时先解析 v-for 再解析 v-if。如果遇到需要同时使用时可以考虑写成计算属性的方式。
-
-7. vue 内部指令
-
-8. vue 的修饰符
-
-9. computed 和 watch 的区别和运用场景
-
-   1. computed
-      计算属性，依赖其他属性计算值，并且 computed 的值有缓存，只有当计算值变化才会返回内容，它可以设置 getter 和 setter。
-      计算属性一般用在模板渲染中，某个值是依赖了其它的响应式对象甚至是计算属性计算而来；
-
-      ```javascript
-      const app = new Vue({
-        el: '#app',
-        data: {
-          firstName: 'Kobe',
-          lastName: 'Bryant'
-        },
-        // computed简写形式,只设置get方法，为只读属性
-        // 计算属性的字段类似于放到data中
-        computed: {
-          fullName: function() {
-            return this.firstName + ' ' + this.lastName
-          }
-        }
-
-        //  计算属性的get和set方法
-        computed: {
-          fullName: {
-            set: function(newValue) {
-              const names = newValue.split(' ')
-              this.firstName = name[0]
-              this.lastName = name[1]
-            },
-            get: function() {
-              return this.firstName + ' ' + this.lastName
-            }
-          }
-        }
-      })
-      ```
-
-   2. watch
-      监听到值的变化就会执行回调，在回调中可以进行一些逻辑操作。
-      适用于观测某个值的变化去完成一段复杂的业务逻辑
-
-      ```js
-      new Vue({
-        el: "#root",
-        data: {
-          cityName: { id: 1, name: "shanghai" },
-        },
-        watch: {
-          // 1. watch简写形式
-          // cityName(newName, oldName) {}
-          // 2. watch完整形式
-          cityName: {
-            handler(newName, oldName) {
-              // ...
-            },
-            deep: true, //deep表示深度监听，用于监听对象内部属性的改变
-            immediate: true, //immediate表示立刻监听，当值第一次绑定的时候，不会执行监听函数，只有值发生改变才会执行，使用该属性表示会立刻监听
-          },
-        },
-      });
-      ```
-
-10. vue2 响应式数据的原理
-
-    1. 整体思路是数据劫持+观察者模式
-       对象内部通过 defineReactive 方法，使用 Object.defineProperty 将属性进行劫持（只会劫持已经存在的属性），数组则是通过重写数组方法来实现。当页面使用对应属性时，每个属性都拥有自己的 dep 属性，存放他所依赖的 watcher（依赖收集），当属性变化后会通知自己对应的 watcher 去更新(派发更新)。
-
-    2. 不足之处
-       虽然我们通过 Object.defineProperty 方法实现了对 object 数据的可观测，但是这个方法仅仅只能观测到 object 数据的取值及设置值，当我们向 object 数据里添加一对新的 key/value 或删除一对已有的 key/value 时，它是无法观测到的，导致当我们对 object 数据添加或删除值时，无法通知依赖，无法驱动视图进行响应式更新。
-
-       当然，Vue 也注意到了这一点，为了解决这一问题，Vue 增加了两个全局 API:Vue.set 和 Vue.delete，
-
        ```js
-       let activeReactiveFn = null;
-
-       // 定义函数收集的类
-       class Depend {
-         constructor() {
-           this.reactiveFns = new Set();
-         }
-
-         // addDepend(reactiveFn) {
-         //   this.reactiveFns.push(reactiveFn)
-         // }
-
-         notify() {
-           this.reactiveFns.forEach((fn) => {
-             fn();
-           });
-         }
-
-         depend() {
-           if (activeReactiveFn) {
-             this.reactiveFns.add(activeReactiveFn);
+       // 父组件
+       <article :article="articleList">
+       export default {
+         data() {
+           return {
+             articleList: ['西游记', '红楼梦']
            }
          }
        }
-       const depend = new Depend();
+       ```
 
-       // 封装一个收集需要调用的函数
-       function watchFn(fn) {
-         // 把需要响应的函数放入正确的依赖中
-         // 1. 找到depend对象
-         activeReactiveFn = fn;
-         fn();
-         activeReactiveFn = null;
-       }
+       ```js
+       // 子组件
+       export default {
+         props: ["article"],
+       };
+       ```
 
-       // 封装一个获取depend的函数
-       const targetMap = new WeakMap();
-       function getDepend(target, key) {
-         // 根据target获取Map
-         let map = targetMap.get(target);
-         if (!map) {
-           // 初次使用不存在map
-           map = new Map();
-           targetMap.set(target, map);
+    2. $parent/$child
+       父实例使用 this.$children访问子实例，
+      子实例使用 this.$parent 访问父实例
+    3. provide/inject
+
+       ```js
+       provide: function() {
+         return {
+           getIndexRef: () => {
+             // 返回一整个父组件
+             return this
+           }
          }
-
-         let depend = map.get(key);
-         if (!depend) {
-           depend = new Depend();
-           map.set(key, depend);
-         }
-         return depend;
-       }
-
-       function reactive(obj) {
-         Object.keys(obj).forEach((key) => {
-           let value = obj[key];
-           Object.defineProperty(obj, key, {
-             get: function () {
-               const depend = getDepend(obj, key);
-               depend.depend();
-               return value;
-             },
-             set: function (newValue) {
-               value = newValue;
-               const depend = getDepend(obj, key);
-               depend.notify();
-             },
-           });
-         });
-         return obj;
        }
        ```
+
+       ```js
+       inject: ["getIndexRef"];
+       // 调用getIndexRef函数获取父组件
+       this.getIndexRef();
+       ```
+
+    4. $attrs/$listeners
+    5. $refs
+       1. 设置 ref，给组件打标识
+          `ref="组件名"`
+       2. 如何获取
+          `this.$refs.组件名`|`this.$refs['组件名']`
+    6. eventBus
+       `vc.prototype.proto` === `vue.prototype` vc 是 VueComponent 的实例对象
+       $on $emit $off 都在 vue 的原型对象上
+
+       1. 安装全局事件总线
+
+          ```javascript
+          const vm = new Vue({
+            el: "#app",
+            render: (h) => h(App),
+            beforeCreate() {
+              Vue.prototype.$bus = this; //安装全局事件总线
+            },
+          });
+          ```
+
+       2. 使用与解绑
+
+          ```javascript
+          const data = {
+            name: "six",
+            age: 18,
+          };
+          this.$bus.$emit("hello", data);
+          ```
+
+       3. 全局事件总线要解绑
+
+          ```javascript
+          mounted() {
+            this.$bus.$on('hello', (data) => {
+              console.log('我们认识吗')
+            })
+          }
+          beforeDestroy() {
+            this.$bus.$off('hello')
+          }
+          ```
+
+    7. vuex
+
+       1. state：用于数据的存储，是 store 中的唯一数据源
+       2. getters：如 vue 中的计算属性一样，基于 state 数据的二次包装，常用于数据的筛选和多个数据的相关性计算
+       3. mutations：类似函数，改变 state 数据的唯一途径，且不能用于处理异步事件
+       4. actions：类似于 mutation，用于提交 mutation 来改变状态，而不直接变更状态，可以包含任意异步操作
+       5. modules：类似于命名空间，用于项目中将各个模块的状态分开定义和操作，便于维护
+
+    8. localStorage/sessionStorage
+
+4.  vue 的声明周期
+    8 个分别为
+
+    1. beforeCreate vue 实例的挂载元素 el 和数据对象 data 都为 undefined; methods 还未初始化
+    2. created vue 实例的数据对象 data 有了，methods 中配置的方法，el 为 undefined,还未初始化
+
+    3. beforeMount vue 实例的挂载元素 el 和 data 都初始化了，但挂在之前为虚拟的 dom 节点，data.message 还未替换, 模板尚未挂载到页面中
+
+    4. mounted
+       vue 被新创建的 vm.$el 替换，表示整个 Vue 实例已经初始化完毕，data.message 成功渲染
+
+    5. beforeUpdate 当 data 变化时，会触发 beforeUpdate 和 updated 方法，data 数据是最新的，但是页面尚未和最新的数据保持同步
+
+    6. updated 执行时，页面和 data 数据已经保持同步
+
+    7. beforeDestroy 当执行 beforeDestroy 的时候，实例身上所有的 data 和所有的 methods 以及过滤器、指令都处于可用状态，此时还未真正执行销毁的过程
+
+    8. destroyed 对 data 的改变不会再触发周期函数，此时 vue 实例已经解除了事件监听和 DOM 的绑定，但是 dom 结构依然存在
+
+    9. activated keep-alive 专属，组件被激活时调用
+    10. deactivated keep-alive 专属，组件被销毁时调用
+
+5.  v-if 和 v-show 的区别
+
+    1. v-if 真正的条件渲染，它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。
+
+    适用于不需要频繁切换条件的场景
+
+    2. v-show 仅在初始化时加载一次，操作的是样式(display),切换当前样式的显示与隐藏，
+
+    适用于需要频繁切换条件的场景
+
+6.  v-if 和 v-for 为什么不建议一起使用
+    因为 v-for 的优先级比 v-if 高会，先循环渲染出数据后才会进行条件渲染判断 造成性能浪费
+    v-for 和 v-if 不要在同一个标签中使用,因为解析时先解析 v-for 再解析 v-if。如果遇到需要同时使用时可以考虑写成计算属性的方式。
+
+7.  vue 内部指令
+
+    1. v-if/v-else/v-else-if
+    2. v-show
+    3. v-for
+    4. v-on 用于监听 DOM 事件
+    5. v-bind 动态绑定属性
+    6. v-model 双向绑定
+    7. v-slot
+    8. v-once 元素和组件只渲染一次
+    9. v-text 向其所在的节点渲染文本内容，会全部替换节点中的内容 v-text='name'类似于{{name}}
+
+8.  vue 的修饰符
+
+9.  computed 和 watch 的区别和运用场景
+
+    1. computed
+       计算属性，依赖其他属性计算值，并且 computed 的值有缓存，只有当计算值变化才会返回内容，它可以设置 getter 和 setter。
+       计算属性一般用在模板渲染中，某个值是依赖了其它的响应式对象甚至是计算属性计算而来；
+
+       ```javascript
+       const app = new Vue({
+         el: '#app',
+         data: {
+           firstName: 'Kobe',
+           lastName: 'Bryant'
+         },
+         // computed简写形式,只设置get方法，为只读属性
+         // 计算属性的字段类似于放到data中
+         computed: {
+           fullName: function() {
+             return this.firstName + ' ' + this.lastName
+           }
+         }
+
+         //  计算属性的get和set方法
+         computed: {
+           fullName: {
+             set: function(newValue) {
+               const names = newValue.split(' ')
+               this.firstName = name[0]
+               this.lastName = name[1]
+             },
+             get: function() {
+               return this.firstName + ' ' + this.lastName
+             }
+           }
+         }
+       })
+       ```
+
+    2. watch
+       监听到值的变化就会执行回调，在回调中可以进行一些逻辑操作。
+       适用于观测某个值的变化去完成一段复杂的业务逻辑
+
+       ```js
+       new Vue({
+         el: "#root",
+         data: {
+           cityName: { id: 1, name: "shanghai" },
+         },
+         watch: {
+           // 1. watch简写形式
+           // cityName(newName, oldName) {}
+           // 2. watch完整形式
+           cityName: {
+             handler(newName, oldName) {
+               // ...
+             },
+             deep: true, //deep表示深度监听，用于监听对象内部属性的改变
+             immediate: true, //immediate表示立刻监听，当值第一次绑定的时候，不会执行监听函数，只有值发生改变才会执行，使用该属性表示会立刻监听
+           },
+         },
+       });
+       ```
+
+10. vue2 响应式数据的原理
+
+    1.  整体思路是数据劫持+观察者模式
+        对象内部通过 defineReactive 方法，使用 Object.defineProperty 将属性进行劫持（只会劫持已经存在的属性），数组则是通过重写数组方法来实现。当页面使用对应属性时，每个属性都拥有自己的 dep 属性，存放他所依赖的 watcher（依赖收集），当属性变化后会通知自己对应的 watcher 去更新(派发更新)。
+
+        ```js
+        let activeReactiveFn = null;
+
+        // 定义函数收集的类
+        class Depend {
+          constructor() {
+            this.reactiveFns = new Set();
+          }
+
+          // addDepend(reactiveFn) {
+          // this.reactiveFns.push(reactiveFn)
+          // }
+
+          notify() {
+            this.reactiveFns.forEach((fn) => {
+              fn();
+            });
+          }
+
+          depend() {
+            if (activeReactiveFn) {
+              this.reactiveFns.add(activeReactiveFn);
+            }
+          }
+        }
+        const depend = new Depend();
+
+        // 封装一个收集需要调用的函数
+        function watchFn(fn) {
+          // 把需要响应的函数放入正确的依赖中
+          // 1. 找到 depend 对象
+          activeReactiveFn = fn;
+          fn();
+          activeReactiveFn = null;
+        }
+
+        // 封装一个获取 depend 的函数
+        const targetMap = new WeakMap();
+        function getDepend(target, key) {
+          // 根据 target 获取 Map
+          let map = targetMap.get(target);
+          if (!map) {
+            // 初次使用不存在 map
+            map = new Map();
+            targetMap.set(target, map);
+          }
+
+          let depend = map.get(key);
+          if (!depend) {
+            depend = new Depend();
+            map.set(key, depend);
+          }
+          return depend;
+        }
+
+        function reactive(obj) {
+          Object.keys(obj).forEach((key) => {
+            let value = obj[key];
+            Object.defineProperty(obj, key, {
+              get: function () {
+                const depend = getDepend(obj, key);
+                depend.depend();
+                return value;
+              },
+              set: function (newValue) {
+                value = newValue;
+                const depend = getDepend(obj, key);
+                depend.notify();
+              },
+            });
+          });
+          return obj;
+        }
+        ```
+
+    2.  不足之处
+
+        1. 无法检测新增属性或删除属性
+           虽然我们通过 Object.defineProperty 方法实现了对 object 数据的可观测，但是这个方法仅仅只能观测到 object 数据的取值及设置值，当我们向 object 数据里添加一对新的 key/value 或删除一对已有的 key/value 时，它是无法观测到的，导致当我们对 object 数据添加或删除值时，无法通知依赖，无法驱动视图进行响应式更新。
+
+           当然，Vue 也注意到了这一点，为了解决这一问题，Vue 增加了两个全局 API:Vue.set 和 Vue.delete，
+
+        2. 无法检测数组中根据索引修改元素
+           选择对 7 种数组（push,shift,pop,splice,unshift,sort,reverse）方法进行重写(AOP 切片思想)
 
 11. vue3 响应式原理
 
@@ -493,6 +508,7 @@ https://juejin.cn/post/6961222829979697165
     ```
 
 14. v-for 为什么要加 key
+    如果不使用 key，Vue 会使用一种最大限度减少动态元素并且尽可能的尝试就地修改/复用相同类型元素的算法。key 是为 Vue 中 vnode 的唯一标记，通过这个 key，我们的 diff 操作可以更准确、更快速
 
 15. vue-router 路由钩子有哪些? 执行顺序
 
@@ -504,11 +520,11 @@ https://juejin.cn/post/6961222829979697165
        导航被触发。
        在失活的组件里调用 beforeRouteLeave 守卫。
        调用全局的 beforeEach 守卫。
-       在重用的组件里调用 beforeRouteUpdate 守卫 (2.2+)。
+       <!-- 在重用的组件里调用 beforeRouteUpdate 守卫 (2.2+)。 -->
        在路由配置里调用 beforeEnter。
        解析异步路由组件。
        在被激活的组件里调用 beforeRouteEnter。
-       调用全局的 beforeResolve 守卫 (2.5+)。
+       <!-- 调用全局的 beforeResolve 守卫 (2.5+)。 -->
        导航被确认。
        调用全局的 afterEach 钩子。
        触发 DOM 更新。
@@ -516,7 +532,22 @@ https://juejin.cn/post/6961222829979697165
 
 16. vue-router 动态路由
 
-17. vuex 的使用
+    1. params 参数 例如`/:id`
+    2. query 参数 例如`/detail/name="six"&age=18`
+
+17. 两种路由模式的区别
+
+    1. hash 模式
+       1. 地址中永远带着#，不美观
+       2. #后面的内容不会带给服务器
+       3. 若以后将地址通过第三方手机 app 分享，若 app 校验严格，则地址会被标记为不合法
+       4. 兼容性较好
+    2. history 模式
+       1. 地址美观
+       2. 兼容性略差
+       3. 应用部署上线需要后端人员支持，解决刷新页面服务端 404 的问题
+
+18. vuex 的使用
 
     ```js
     // .vue文件
@@ -572,7 +603,7 @@ https://juejin.cn/post/6961222829979697165
     });
     ```
 
-18. diff 算法原理
+19. diff 算法原理
     https://vue-js.com/learn-vue/virtualDOM/patch.html#_1-%E5%89%8D%E8%A8%80
     DOM-diffing 过程叫做 patch 过程。以新的 VNode 为基准，改造旧的 oldVNode 使之成为跟新的 VNode 一样。
 
@@ -783,7 +814,7 @@ https://juejin.cn/post/6961222829979697165
        }
        ```
 
-19. Vue.mixin(混入) 的使用场景和原理
+20. Vue.mixin(混入) 的使用场景和原理
 
     ```js
     Vue.mixin = function (mixin: Object) {
@@ -794,10 +825,10 @@ https://juejin.cn/post/6961222829979697165
     };
     ```
 
-20. nextTick 的使用场景和原理
+21. nextTick 的使用场景和原理
     在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。
 
-21. keep-alive 使用场景和原理
+22. keep-alive 使用场景和原理
 
     1. 对 keep-alive 的了解
 
@@ -813,15 +844,13 @@ https://juejin.cn/post/6961222829979697165
     2. 原理
        缓存淘汰策略 LRU(最近最少使用)
 
-22. Vue.set 原理
+23. Vue.set 原理
 
-23. Vue.extend 作用和原理
+24. Vue.extend 作用和原理
 
-24. 自定义指令使用和原理
+25. 自定义指令使用和原理
 
-25. Vue 模板编译原理
-
-26. vue-router 路由模式实现原理
+26. Vue 模板编译原理
 
 # MVC/MVP/MVVM 模式-都是常见的软件架构设计模式
 

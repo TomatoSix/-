@@ -252,6 +252,12 @@ Object.defineProperty(p, "age", {
    ref 定义的数据： 操作数据需要 ×××.value， 读取数据时模板中直接读取不需要.value
    reactive 定义的数据：操作数据与读取数据均不需要.value
 
+# v-model
+
+`<input v-model="searchText" /> `
+本质上就是
+`<input :value="searchText" @input="searchText = $event.target.value">`
+
 # computed
 
 ```js
